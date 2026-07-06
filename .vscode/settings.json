@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.md": "markdown",
+    "hugo.toml": "toml"
+  },
+  "markdown.validate.enabled": true,
+  "markdown.preview.breaks": true,
+  "editor.rulers": [100],
+  "editor.wordWrap": "on",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true
+}

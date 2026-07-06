@@ -1,0 +1,14 @@
+<article class="post-card">
+    <div class="post-card-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+        {{ range .Params.categories }}
+        <span class="chip chip-category">{{ . }}</span>
+        {{ end }}
+        {{ range .Params.subcategories }}
+        <span class="chip chip-subcategory">{{ . }}</span>
+        {{ end }}
+    </div>
+    <h3><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h3>
+    <p>{{ .Summary | plainify | truncate 170 }}</p>
+    <a class="read-link" href="{{ partial "internal-link.html" .RelPermalink }}">read article</a>
+</article>

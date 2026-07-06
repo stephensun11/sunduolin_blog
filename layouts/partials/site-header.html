@@ -1,0 +1,15 @@
+<header class="site-header">
+    <div class="terminal-line">
+        <span class="prompt">sunduolin@blog</span>
+        <span class="muted">:</span>
+        <span class="path">~/knowledge-base</span>
+        <span class="cursor"></span>
+    </div>
+    <a class="site-title" href="{{ partial "internal-link.html" "/" }}">{{ .Site.Title }}</a>
+    <p class="site-description">{{ .Site.Params.description }}</p>
+    <div class="status-strip" aria-label="site stats">
+        <span>STATUS: ONLINE</span>
+        <span>POSTS: {{ len .Site.RegularPages }}</span>
+        <span>STACK: HUGO / MARKDOWN</span>
+    </div>
+</header>

@@ -4,43 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>开发基础 - 我的算法博客</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
-        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
-        .main-content { flex: 1; min-width: 0; }
-        h1 { color: #333; margin-bottom: 1.5rem; }
-        .post-list { display: flex; flex-direction: column; gap: 1rem; }
-        .post-item { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .post-item h2 { color: #333; margin-bottom: 0.5rem; }
-        .post-item h2 a { color: #333; text-decoration: none; }
-        .post-item h2 a:hover { color: #667eea; }
-        .meta { color: #666; font-size: 0.9rem; margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
-        .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
-        .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
-        .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
-        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
-        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
-    </style>
+    <meta name="description" content="分享AI技术、论文解读和技术心得">
+    <link rel="stylesheet" href="../../css/site.css">
 </head>
+
 <body>
-    <header>
-        <h1>我的算法博客</h1>
-    </header>
-    <style>
-    nav { background: #333; padding: 0; position: relative; }
-    nav .nav-inner { display: flex; align-items: stretch; }
-    nav .nav-item { position: relative; }
-    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
-    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
-    nav .nav-link.active { color: #667eea; }
-    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-    nav .nav-item:hover .dropdown { display: block; }
-    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
-    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
-</style>
-<nav>
+    <header class="site-header">
+    <div class="terminal-line">
+        <span class="prompt">sunduolin@blog</span>
+        <span class="muted">:</span>
+        <span class="path">~/knowledge-base</span>
+        <span class="cursor"></span>
+    </div>
+    <a class="site-title" href="../../index.html">我的算法博客</a>
+    <p class="site-description">分享AI技术、论文解读和技术心得</p>
+    <div class="status-strip" aria-label="site stats">
+        <span>STATUS: ONLINE</span>
+        <span>POSTS: 7</span>
+        <span>STACK: HUGO / MARKDOWN</span>
+    </div>
+</header>
+
+    <nav class="site-nav" aria-label="main navigation">
     <div class="nav-inner">
         
         
@@ -122,106 +107,79 @@
     </div>
 </nav>
 
-    <div class="main-layout">
+    <main class="site-shell">
         <div class="main-content">
-            <h1>子分类：开发基础</h1>
+            <header class="taxonomy-header">
+                <h1>开发基础</h1>
+                <p>Filtered notes from the knowledge base.</p>
+            </header>
             <div class="post-list">
                 
-                <div class="post-item">
-                    <h2><a href="../../cstech/python-practical-start/index.html">Python 实用入门：把重复工作写成脚本</a></h2>
-                    <div class="meta">
-                        <span>2026-07-06</span>
-                        
-                        <span class="category">CSTech</span>
-                        
-                        
-                        <span class="subcategory">Python</span>
-                        
-                        
-                        <span class="tag">Python</span>
-                        
-                        <span class="tag">脚本</span>
-                        
-                        <span class="tag">自动化</span>
-                        
-                        <span class="tag">开发基础</span>
-                        
-                    </div>
-                    <p>Python 最适合作为第一门实用脚本语言来学。
+                <article class="post-card">
+    <div class="post-card-meta">
+        <time datetime="2026-07-06">2026-07-06</time>
+        
+        <span class="chip chip-category">CSTech</span>
+        
+        
+        <span class="chip chip-subcategory">Python</span>
+        
+    </div>
+    <h3><a href="../../cstech/python-practical-start/index.html">Python 实用入门：把重复工作写成脚本</a></h3>
+    <p>Python 最适合作为第一门实用脚本语言来学。
 它的语法不重，标准库够丰富，写几行代码就能处理文件、整理数据、调用命令、生成报告。对个人博客、AI 实验和日常开发来说，Python 很像一把随手能拿起来的小工具。
 这篇文章不追求讲完 Python，而是帮你建立一个能立刻动手的最小知识框架。
-安装与版本检查 安装完成后，先确认 Python 是否可用。
-python --version 有些系统里命令叫 python3。
-python3 --version 进入交互环境：
-python 执行脚本：
-python hello.py 一个最小脚本如下。
-print(&#34;Hello, Python&#34;) 虚拟环境 写 Python 项目时，建议每个项目使用独立虚拟环境。这样不同项目的依赖不会互相污染。
-创建虚拟环境：
-python -m venv .venv 激活虚拟环境。
-Windows PowerShell：
-.\.venv\Scripts\Activate.ps1 Linux / macOS：
-source .venv/bin/activate 安装依赖：
-pip install requests 导出依赖：
-pip freeze &gt; requirements.txt 下次恢复环境：
-pip install -r requirements.txt 变量和基本类型 Python 里常见的数据类型很直接。
-name = &#34;Alice&#34; age = 18 score = 95.5 is_active = True tags = [&#34;AI&#34;, &#34;Python&#34;, &#34;Blog&#34;] profile = {&#34;name&#34;: name, &#34;age&#34;: age} 列表适合保存一组有顺序的数据。</p>
-                </div>
+安装与版本检查 安装完成后， …</p>
+    <a class="read-link" href="../../cstech/python-practical-start/index.html">read article</a>
+</article>
+
                 
             </div>
         </div>
-        <style>
-    .sidebar { width: 240px; flex-shrink: 0; }
-    .sidebar-section { background: white; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 1rem; }
-    .sidebar-section h3 { color: #667eea; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f0f0ff; }
-    .sidebar-section h3 a { color: #667eea; text-decoration: none; }
-    .sidebar-section h3 a:hover { text-decoration: underline; }
-    .sidebar-links { display: flex; flex-direction: column; gap: 0.35rem; }
-    .sidebar-links a { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 16px; font-size: 0.85rem; text-decoration: none; color: #555; background: #f5f5f5; transition: all 0.2s; }
-    .sidebar-links a:hover { background: #667eea; color: white; }
-    .sidebar-links a.active { background: #667eea; color: white; }
-</style>
-<aside class="sidebar">
+        <aside class="sidebar" aria-label="section index">
     
-    <div class="sidebar-section">
+    
+    <section class="sidebar-section">
         <h3><a href="../../cstech/index.html">CSTech - 计算机技术</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </div>
+    </section>
     
-    <div class="sidebar-section">
+    
+    <section class="sidebar-section">
         <h3><a href="../../ainews/index.html">AiNews - AI资讯</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </div>
+    </section>
     
-    <div class="sidebar-section">
+    
+    <section class="sidebar-section">
         <h3><a href="../../aitech/index.html">AiTech - AI技术</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </div>
+    </section>
     
-    <div class="sidebar-section">
+    
+    <section class="sidebar-section">
         <h3><a href="../../paperreading/index.html">PaperReading - 论文解读</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </div>
-    
-    <div class="sidebar-section">
-        <h3><a href="../../search/index.html">搜索</a></h3>
-        <div class="sidebar-links">
-            
-        </div>
-    </div>
+    </section>
     
 </aside>
 
+    </main>
+    <footer class="site-footer">
+    <div class="footer-inner">
+        <span>&copy; 2026 我的算法博客</span>
+        <span>Powered by Hugo</span>
+        <span>Write in Markdown. Ship as static HTML.</span>
     </div>
-    <footer>
-        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
-    </footer>
+</footer>
+
 </body>
 </html>

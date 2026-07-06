@@ -1,0 +1,2 @@
+{{- $keys := dict "ainews" "AiNews" "aitech" "AiTech" "cstech" "CSTech" "paperreading" "PaperReading" -}}
+{{- index $keys .Section | default .Title -}}

@@ -1,47 +1,26 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .Title }} - {{ .Site.Title }}</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
-        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
-        .main-content { flex: 1; min-width: 0; }
-        h1 { color: #333; margin-bottom: 1.5rem; }
-        .terms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-        .term-card { background: white; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; transition: transform 0.2s; }
-        .term-card:hover { transform: translateY(-2px); }
-        .term-card a { color: #667eea; text-decoration: none; font-size: 1.1rem; font-weight: 500; }
-        .term-card a:hover { text-decoration: underline; }
-        .term-card .count { color: #999; font-size: 0.85rem; margin-top: 0.25rem; }
-        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
-        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
-    </style>
-</head>
+{{ partial "head.html" . }}
 <body>
-    <header>
-        <h1>{{ .Site.Title }}</h1>
-    </header>
+    {{ partial "site-header.html" . }}
     {{ partial "nav.html" . }}
-    <div class="main-layout">
+    <main class="site-shell">
         <div class="main-content">
-            <h1>{{ .Title }}</h1>
+            <header class="taxonomy-header">
+                <h1>{{ .Title }}</h1>
+                <p>Browse by taxonomy term.</p>
+            </header>
             <div class="terms-grid">
                 {{ range .Data.Terms }}
-                <div class="term-card">
+                <article class="term-card">
                     <a href="{{ partial "internal-link.html" .Page.RelPermalink }}">{{ .Page.Title }}</a>
                     <div class="count">{{ .Count }} 篇文章</div>
-                </div>
+                </article>
                 {{ end }}
             </div>
         </div>
         {{ partial "sidebar.html" . }}
-    </div>
-    <footer>
-        <p>&copy; {{ now.Year }} {{ .Site.Title }}. Powered by Hugo.</p>
-    </footer>
+    </main>
+    {{ partial "footer.html" . }}
 </body>
 </html>

@@ -1,0 +1,79 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Blog: Preview (drafts)",
+      "type": "shell",
+      "command": "hugo server -D --disableFastRender",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Blog: Build public",
+      "type": "shell",
+      "command": "hugo --cleanDestinationDir",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Blog: New Post",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/new-post.ps1",
+        "-Section",
+        "${input:section}",
+        "-Slug",
+        "${input:slug}",
+        "-Title",
+        "${input:title}",
+        "-Subcategory",
+        "${input:subcategory}",
+        "-Tags",
+        "${input:tags}"
+      ],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "section",
+      "type": "pickString",
+      "description": "文章栏目",
+      "options": [
+        "cstech",
+        "aitech",
+        "ainews",
+        "paperreading"
+      ],
+      "default": "cstech"
+    },
+    {
+      "id": "slug",
+      "type": "promptString",
+      "description": "文章文件名 slug，例如 linux-process-notes"
+    },
+    {
+      "id": "title",
+      "type": "promptString",
+      "description": "文章标题"
+    },
+    {
+      "id": "subcategory",
+      "type": "promptString",
+      "description": "子分类，例如 Git、Python、Linux、tmux、NLP、行业动态"
+    },
+    {
+      "id": "tags",
+      "type": "promptString",
+      "description": "标签，用英文逗号分隔，例如 Linux,Shell,服务器"
+    }
+  ]
+}
