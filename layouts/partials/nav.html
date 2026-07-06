@@ -1,4 +1,16 @@
-<nav class="site-nav" aria-label="main navigation">
+<style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
     <div class="nav-inner">
         {{ range .Site.Menus.main }}
         {{ if .HasChildren }}

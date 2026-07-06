@@ -93,25 +93,6 @@ tags: ["Transformer", "PyTorch"]
 
 写作完成后，将 `draft` 改为 `false`，再运行 `hugo` 构建发布版本。
 
-## VSCode 写作
-
-仓库内置了 VSCode 写作辅助配置：
-
-- `.vscode/tasks.json`：新建文章、本地预览、构建 `public/`
-- `.vscode/blog.code-snippets`：常用 Hugo front matter 和代码块片段
-- `.vscode/extensions.json`：Markdown、Hugo、TOML 推荐插件
-- `scripts/new-post.ps1`：不依赖 Hugo 的新文章创建脚本
-
-在 VSCode 中打开命令面板，运行 `Tasks: Run Task`，常用任务如下：
-
-```text
-Blog: New Post
-Blog: Preview (drafts)
-Blog: Build public
-```
-
-更详细的说明见 `docs/writing-in-vscode.md`。
-
 ## 分类与导航
 
 本项目启用了三类 taxonomy：

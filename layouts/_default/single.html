@@ -1,41 +1,72 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-{{ partial "head.html" . }}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} - {{ .Site.Title }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
 <body>
-    {{ partial "site-header.html" . }}
+    <header>
+        <h1>{{ .Site.Title }}</h1>
+    </header>
     {{ partial "nav.html" . }}
-    <main class="site-shell">
-        <article class="main-content post">
-            <h1>{{ .Title }}</h1>
-            <div class="meta">
-                <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-                {{ range .Params.categories }}
-                <span class="category">{{ . }}</span>
-                {{ end }}
-                {{ range .Params.subcategories }}
-                <a class="subcategory" href="{{ partial "internal-link.html" (printf "/subcategories/%s/" (urlize .)) }}">{{ . }}</a>
-                {{ end }}
-                {{ range .Params.tags }}
-                <span class="tag"><a href="{{ partial "internal-link.html" (printf "/tags/%s/" (urlize .)) }}">{{ . }}</a></span>
-                {{ end }}
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>{{ .Title }}</h1>
+                <div class="meta">
+                    <span>{{ .Date.Format "2006-01-02" }}</span>
+                    {{ range .Params.categories }}
+                    <span class="category">{{ . }}</span>
+                    {{ end }}
+                    {{ range .Params.subcategories }}
+                    <a class="subcategory" href="{{ partial "internal-link.html" (printf "/subcategories/%s/" (urlize .)) }}">{{ . }}</a>
+                    {{ end }}
+                    {{ range .Params.tags }}
+                    <span class="tag"><a href="{{ partial "internal-link.html" (printf "/tags/%s/" (urlize .)) }}">{{ . }}</a></span>
+                    {{ end }}
+                </div>
+                <div class="post-content">
+                    {{ .Content }}
+                </div>
             </div>
-            <div class="post-content">
-                {{ .Content }}
-            </div>
-        </article>
-        <aside class="article-aside" aria-label="article tools">
-            <section class="toc-panel panel">
-                <h2>outline</h2>
-                {{ .TableOfContents }}
-            </section>
-            <section class="writer-panel">
-                <h2>local writing</h2>
-                <p><code>Ctrl+Shift+B</code> 运行 VSCode 任务。</p>
-                <p><code>Blog: New Post</code> 创建文章草稿。</p>
-                <p><code>Blog: Preview</code> 本地预览。</p>
-            </section>
-        </aside>
-    </main>
-    {{ partial "footer.html" . }}
+        </div>
+        {{ partial "sidebar.html" . }}
+    </div>
+    <footer>
+        <p>&copy; {{ now.Year }} {{ .Site.Title }}. Powered by Hugo.</p>
+    </footer>
 </body>
 </html>

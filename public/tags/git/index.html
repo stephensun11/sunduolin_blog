@@ -4,28 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Git - 我的算法博客</title>
-    <meta name="description" content="分享AI技术、论文解读和技术心得">
-    <link rel="stylesheet" href="../../css/site.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        h1 { color: #333; margin-bottom: 1.5rem; }
+        .post-list { display: flex; flex-direction: column; gap: 1rem; }
+        .post-item { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post-item h2 { color: #333; margin-bottom: 0.5rem; }
+        .post-item h2 a { color: #333; text-decoration: none; }
+        .post-item h2 a:hover { color: #667eea; }
+        .meta { color: #666; font-size: 0.9rem; margin-bottom: 0.75rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
 </head>
-
 <body>
-    <header class="site-header">
-    <div class="terminal-line">
-        <span class="prompt">sunduolin@blog</span>
-        <span class="muted">:</span>
-        <span class="path">~/knowledge-base</span>
-        <span class="cursor"></span>
-    </div>
-    <a class="site-title" href="../../index.html">我的算法博客</a>
-    <p class="site-description">分享AI技术、论文解读和技术心得</p>
-    <div class="status-strip" aria-label="site stats">
-        <span>STATUS: ONLINE</span>
-        <span>POSTS: 7</span>
-        <span>STACK: HUGO / MARKDOWN</span>
-    </div>
-</header>
-
-    <nav class="site-nav" aria-label="main navigation">
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
     <div class="nav-inner">
         
         
@@ -107,79 +122,102 @@
     </div>
 </nav>
 
-    <main class="site-shell">
+    <div class="main-layout">
         <div class="main-content">
-            <header class="taxonomy-header">
-                <h1>Git</h1>
-                <p>Filtered notes from the knowledge base.</p>
-            </header>
+            <h1>子分类：Git</h1>
             <div class="post-list">
                 
-                <article class="post-card">
-    <div class="post-card-meta">
-        <time datetime="2026-07-06">2026-07-06</time>
-        
-        <span class="chip chip-category">CSTech</span>
-        
-        
-        <span class="chip chip-subcategory">Git</span>
-        
-    </div>
-    <h3><a href="../../cstech/git-practical-guide/index.html">Git 实用入门：从提交到分支协作</a></h3>
-    <p>Git 最重要的能力不是“保存代码”，而是让你敢于修改代码。
+                <div class="post-item">
+                    <h2><a href="../../cstech/git-practical-guide/index.html">Git 实用入门：从提交到分支协作</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">CSTech</span>
+                        
+                        
+                        <span class="subcategory">Git</span>
+                        
+                        
+                        <span class="tag">Git</span>
+                        
+                        <span class="tag">版本控制</span>
+                        
+                        <span class="tag">开发工具</span>
+                        
+                    </div>
+                    <p>Git 最重要的能力不是“保存代码”，而是让你敢于修改代码。
 很多人刚开始学 Git，会被一堆命令吓住：add、commit、branch、merge、rebase、stash。其实入门时不需要把它们全部背下来。先理解 Git 在记录什么，再记住一条稳定的日常工作流，就能覆盖大多数开发场景。
 Git 在解决什么问题 写代码最怕两件事。
-第 …</p>
-    <a class="read-link" href="../../cstech/git-practical-guide/index.html">read article</a>
-</article>
-
+第一是不知道自己改了什么。今天改一点，明天改一点，三天后发现程序坏了，却不知道是哪一步引入的问题。
+第二是不敢尝试。想重构一个函数，想换一种实现方式，但又担心改坏以后回不去。
+Git 的价值就在这里：它把项目的每一次关键变化记录成一个提交。你可以查看差异，可以回到过去，也可以开一个分支大胆试验。
+四个基本区域 理解 Git，先记住四个区域。
+working tree 工作区：你正在编辑的文件 staging area 暂存区：准备进入下一次提交的改动 repository 本地仓库：已经保存为 commit 的历史 remote 远程仓库：GitHub / GitLab 等远端副本 日常命令基本都围绕这四个区域移动文件状态。
+查看当前状态：
+git status 查看具体改动：
+git diff 把改动放入暂存区：
+git add file.md git add . 提交到本地仓库：
+git commit -m &#34;Add tmux guide&#34; 推送到远程仓库：
+git push 第一次使用 Git 第一次使用时，先配置提交身份。
+git config --global user.name &#34;你的名字&#34; git config --global user.email &#34;you@example.com&#34; 克隆已有仓库：
+git clone https://github.</p>
+                </div>
                 
             </div>
         </div>
-        <aside class="sidebar" aria-label="section index">
+        <style>
+    .sidebar { width: 240px; flex-shrink: 0; }
+    .sidebar-section { background: white; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .sidebar-section h3 { color: #667eea; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f0f0ff; }
+    .sidebar-section h3 a { color: #667eea; text-decoration: none; }
+    .sidebar-section h3 a:hover { text-decoration: underline; }
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.35rem; }
+    .sidebar-links a { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 16px; font-size: 0.85rem; text-decoration: none; color: #555; background: #f5f5f5; transition: all 0.2s; }
+    .sidebar-links a:hover { background: #667eea; color: white; }
+    .sidebar-links a.active { background: #667eea; color: white; }
+</style>
+<aside class="sidebar">
     
-    
-    <section class="sidebar-section">
+    <div class="sidebar-section">
         <h3><a href="../../cstech/index.html">CSTech - 计算机技术</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </section>
+    </div>
     
-    
-    <section class="sidebar-section">
+    <div class="sidebar-section">
         <h3><a href="../../ainews/index.html">AiNews - AI资讯</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </section>
+    </div>
     
-    
-    <section class="sidebar-section">
+    <div class="sidebar-section">
         <h3><a href="../../aitech/index.html">AiTech - AI技术</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </section>
+    </div>
     
-    
-    <section class="sidebar-section">
+    <div class="sidebar-section">
         <h3><a href="../../paperreading/index.html">PaperReading - 论文解读</a></h3>
         <div class="sidebar-links">
             
         </div>
-    </section>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="../../search/index.html">搜索</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
     
 </aside>
 
-    </main>
-    <footer class="site-footer">
-    <div class="footer-inner">
-        <span>&copy; 2026 我的算法博客</span>
-        <span>Powered by Hugo</span>
-        <span>Write in Markdown. Ship as static HTML.</span>
     </div>
-</footer>
-
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
 </body>
 </html>
