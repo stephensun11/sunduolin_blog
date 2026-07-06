@@ -3,7 +3,7 @@ title: "Tmux 实用入门：让终端会话不再怕断线"
 date: 2026-07-06T22:00:00+08:00
 draft: false
 categories: ["CSTech"]
-subcategories: ["终端工具"]
+subcategories: ["tmux"]
 tags: ["tmux", "Linux", "终端", "效率工具"]
 ---
 

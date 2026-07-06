@@ -10,7 +10,7 @@
 | --- | --- | --- | --- |
 | AiNews | `content/ainews/` | 行业动态、产品发布、政策法规 | AI 行业新闻、产品发布和政策观察 |
 | AiTech | `content/aitech/` | LLM基本原理、LLM最新技术、部署实践 | AI 技术实践、模型原理和工程部署 |
-| CSTech | `content/cstech/` | Git、Python | 计算机基础技术和开发经验 |
+| CSTech | `content/cstech/` | Git、Python、tmux | 计算机基础技术和开发经验 |
 | PaperReading | `content/paperreading/` | NLP、CV、多模态、RL | 经典与前沿论文解读 |
 
 站点导航、分类和子分类映射主要配置在 `hugo.toml` 中；页面模板与样式位于 `layouts/`。

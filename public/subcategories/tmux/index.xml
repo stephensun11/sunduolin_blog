@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>终端工具 on 我的算法博客</title>
-    <link>https://example.com/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/</link>
-    <description>Recent content in 终端工具 on 我的算法博客</description>
+    <title>tmux on 我的算法博客</title>
+    <link>https://example.com/subcategories/tmux/</link>
+    <description>Recent content in tmux on 我的算法博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Mon, 06 Jul 2026 22:00:00 +0800</lastBuildDate>
-    <atom:link href="https://example.com/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://example.com/subcategories/tmux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Tmux 实用入门：让终端会话不再怕断线</title>
       <link>https://example.com/cstech/tmux-practical-guide/</link>

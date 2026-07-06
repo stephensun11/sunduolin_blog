@@ -15,7 +15,7 @@ relativeURLs = true
   [params.section_subcategories]
     AiNews = ["行业动态", "产品发布", "政策法规"]
     AiTech = ["LLM基本原理", "LLM最新技术", "部署实践"]
-    CSTech = ["Git", "Python", "终端工具"]
+    CSTech = ["Git", "Python", "tmux"]
     PaperReading = ["NLP", "CV", "多模态", "RL"]
 
 [[menu.main]]
@@ -90,9 +90,9 @@ relativeURLs = true
   parent = "cstech"
 
 [[menu.main]]
-  name = "终端工具"
+  name = "tmux"
   weight = 3
-  url = "/subcategories/终端工具/"
+  url = "/subcategories/tmux/"
   parent = "cstech"
 
 [[menu.main]]

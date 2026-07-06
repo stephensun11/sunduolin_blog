@@ -23,6 +23,9 @@
     <loc>https://example.com/tags/tmux/</loc>
     <lastmod>2026-07-06T22:00:00+08:00</lastmod>
   </url><url>
+    <loc>https://example.com/subcategories/tmux/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
     <loc>https://example.com/cstech/tmux-practical-guide/</loc>
     <lastmod>2026-07-06T22:00:00+08:00</lastmod>
   </url><url>
@@ -33,9 +36,6 @@
     <lastmod>2026-07-06T22:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/%E7%BB%88%E7%AB%AF/</loc>
-    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2026-07-06T22:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/categories/ainews/</loc>
