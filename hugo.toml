@@ -14,7 +14,7 @@ title = '我的算法博客'
   [params.section_subcategories]
     AiNews = ["行业动态", "产品发布", "政策法规"]
     AiTech = ["LLM基本原理", "LLM最新技术", "部署实践"]
-    CSTech = ["Git", "Python"]
+    CSTech = ["Git", "Python", "终端工具"]
     PaperReading = ["NLP", "CV", "多模态", "RL"]
 
 [[menu.main]]
@@ -86,6 +86,12 @@ title = '我的算法博客'
   name = "Python"
   weight = 2
   url = "/subcategories/python/"
+  parent = "cstech"
+
+[[menu.main]]
+  name = "终端工具"
+  weight = 3
+  url = "/subcategories/终端工具/"
   parent = "cstech"
 
 [[menu.main]]

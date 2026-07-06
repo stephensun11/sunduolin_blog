@@ -1,111 +1,157 @@
 # 我的算法博客
 
-基于Hugo搭建的个人博客，专门用于分享AI技术、论文解读和技术心得。
+这是一个基于 [Hugo](https://gohugo.io/) 搭建的个人静态博客，用于整理和分享 AI 技术、论文解读、行业动态以及计算机基础技术笔记。
 
-## 博客栏目
+## 项目概览
 
-- **AiNews**: 分享AI行业最新动态和新闻
-- **PaperReading**: 深度解读经典和前沿论文
-- **AiTech**: 技术实践和代码分享
-- 可轻松添加更多栏目
+博客当前按栏目组织内容，每个栏目都有独立的内容目录、文章模板和导航入口。
 
-## 本地开发工作流
+| 栏目 | 内容目录 | 默认子分类 | 说明 |
+| --- | --- | --- | --- |
+| AiNews | `content/ainews/` | 行业动态、产品发布、政策法规 | AI 行业新闻、产品发布和政策观察 |
+| AiTech | `content/aitech/` | LLM基本原理、LLM最新技术、部署实践 | AI 技术实践、模型原理和工程部署 |
+| CSTech | `content/cstech/` | Git、Python | 计算机基础技术和开发经验 |
+| PaperReading | `content/paperreading/` | NLP、CV、多模态、RL | 经典与前沿论文解读 |
 
-### 1. 克隆仓库到本地
-```bash
-git clone https://github.com/yourusername/myblog.git
-cd myblog
+站点导航、分类和子分类映射主要配置在 `hugo.toml` 中；页面模板与样式位于 `layouts/`。
+
+## 目录结构
+
+```text
+.
+├── archetypes/          # Hugo 文章模板
+├── content/             # Markdown 内容源文件
+│   ├── ainews/
+│   ├── aitech/
+│   ├── cstech/
+│   ├── paperreading/
+│   └── search/
+├── layouts/             # 自定义页面模板和局部模板
+│   ├── _default/
+│   └── partials/
+├── public/              # Hugo 构建输出，可由 nginx 等静态服务托管
+├── deploy.sh            # 服务器部署脚本
+├── hugo.toml            # Hugo 站点配置
+└── README.md
 ```
 
-### 2. 添加新文章
-```bash
-# 在content/posts/目录下创建新的Markdown文件
-# 文件头部需要包含frontmatter
+## 本地开发
 
+### 1. 安装 Hugo
+
+请先安装 Hugo，并确认命令可用：
+
+```bash
+hugo version
+```
+
+### 2. 启动本地预览
+
+```bash
+hugo server -D
+```
+
+启动后访问：
+
+```text
+http://localhost:1313
+```
+
+`-D` 表示预览草稿文章，适合写作和本地检查。
+
+### 3. 构建静态文件
+
+```bash
+hugo
+```
+
+构建结果会输出到 `public/` 目录。
+
+## 写作流程
+
+使用对应栏目的 archetype 创建文章：
+
+```bash
+hugo new ainews/my-ai-news.md
+hugo new aitech/my-llm-note.md
+hugo new cstech/my-git-note.md
+hugo new paperreading/my-paper-reading.md
+```
+
+新文章会自动带上基础 front matter，例如：
+
+```yaml
 ---
 title: "文章标题"
 date: 2026-07-05T10:00:00+08:00
-draft: false
-categories: ["AiNews"]
-tags: ["AI", "标签"]
+draft: true
+categories: ["AiTech"]
+subcategories: ["LLM基本原理"]
+tags: ["Transformer", "PyTorch"]
 ---
-
-文章内容...
 ```
 
-### 3. 本地预览
-```bash
-hugo server -D
-# 访问 http://localhost:1313
-```
+写作完成后，将 `draft` 改为 `false`，再运行 `hugo` 构建发布版本。
 
-### 4. 提交并推送到GitHub
-```bash
-git add .
-git commit -m "添加新文章"
-git push origin main
-```
+## 分类与导航
 
-### 5. 服务器自动更新
-GitHub Actions会自动构建并部署到服务器。
+本项目启用了三类 taxonomy：
 
-或者手动在服务器上执行：
-```bash
-/var/www/myblog/myblog-site/deploy.sh
-```
-
-## 服务器配置
-
-### 目录结构
-```
-/var/www/myblog/
-└── myblog-site/
-    ├── content/          # 博客内容
-    │   └── posts/        # 文章存放目录
-    ├── layouts/          # 自定义模板
-    ├── public/           # 构建输出 (由nginx提供)
-    ├── hugo.toml         # Hugo配置文件
-    └── deploy.sh         # 部署脚本
-```
-
-### nginx配置
-nginx已配置为提供 `/var/www/myblog/myblog-site/public` 目录的内容。
-
-## 添加新栏目
-
-1. 在文章的frontmatter中添加新的分类：
-```yaml
-categories: ["你的新栏目"]
-```
-
-2. 在 `hugo.toml` 中添加导航菜单项：
 ```toml
-[[menu.main]]
-  name = "你的新栏目"
-  weight = 6
-  url = "/categories/你的栏目英文名/"
+[taxonomies]
+  category = "categories"
+  subcategory = "subcategories"
+  tag = "tags"
 ```
 
-## 技术栈
+添加新栏目时，通常需要同步更新三处：
 
-- **Hugo**: 静态网站生成器
-- **Nginx**: Web服务器
-- **GitHub**: 代码托管和CI/CD
-- **Markdown**: 文章格式
+1. 在 `content/` 下创建栏目目录，并添加 `_index.md`。
+2. 在 `hugo.toml` 的 `[[menu.main]]` 中添加导航入口。
+3. 在 `hugo.toml` 的 `[params.section_subcategories]` 中维护栏目和子分类映射。
+
+添加新子分类时，需要确保文章 front matter 中的 `subcategories` 与 `hugo.toml` 中的导航和映射保持一致。
+
+## 部署
+
+仓库包含 `deploy.sh`，用于服务器侧部署。脚本会执行以下操作：
+
+1. 进入站点目录 `/var/www/myblog/myblog-site`。
+2. 如有需要，初始化 Git 仓库并绑定远程地址。
+3. 从远程仓库拉取 `main` 或 `master` 的最新内容。
+4. 执行 `hugo` 构建站点。
+5. 将 `public/` 目录权限设置为 `755`。
+
+默认远程仓库地址可以通过环境变量覆盖：
+
+```bash
+GIT_REPO="https://github.com/yourusername/myblog.git" ./deploy.sh
+```
+
+服务器上的 nginx 或其他 Web 服务应指向：
+
+```text
+/var/www/myblog/myblog-site/public
+```
 
 ## 常用命令
 
 ```bash
-# 构建站点
-hugo
-
-# 启动本地开发服务器
+# 本地预览，包括草稿
 hugo server -D
 
-# 创建新文章
-hugo new posts/your-article.md
+# 构建生产静态文件
+hugo
+
+# 创建 AiTech 文章
+hugo new aitech/article-slug.md
+
+# 创建论文解读文章
+hugo new paperreading/paper-slug.md
 ```
 
-## 自定义样式
+## 维护提示
 
-所有样式都在 `layouts/` 目录下的HTML模板中内联定义，可以直接修改CSS样式。
+- `public/` 是构建产物，修改站点内容时优先编辑 `content/`、`layouts/` 和 `hugo.toml`。
+- 样式目前主要内联在 `layouts/` 下的模板文件中。
+- 修改菜单、栏目或子分类后，建议重新运行 `hugo server -D` 检查导航、侧边栏和 taxonomy 页面。
