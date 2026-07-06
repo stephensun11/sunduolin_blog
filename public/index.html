@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta name="generator" content="Hugo 0.133.0"><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+	<meta name="generator" content="Hugo 0.121.2">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的算法博客</title>
@@ -103,6 +103,8 @@
                 
                 <a href="/subcategories/python/">Python</a>
                 
+                <a href="/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/">终端工具</a>
+                
             </div>
         </div>
         
@@ -139,12 +141,21 @@
             <div class="section-cards">
                 
                 <div class="section-card">
+                    <h2>CSTech - 计算机技术</h2>
+                    <p>Git、Python、终端工具等计算机基础技术分享</p>
+                    <div class="sub-links">
+                        
+                    </div>
+                    <a class="more-link" href="https://example.com/cstech/">查看全部 →</a>
+                </div>
+                
+                <div class="section-card">
                     <h2>AiNews - AI资讯</h2>
                     <p>分享AI行业最新动态、产品发布和政策法规</p>
                     <div class="sub-links">
                         
                     </div>
-                    <a class="more-link" href="http://localhost:1313/ainews/">查看全部 →</a>
+                    <a class="more-link" href="https://example.com/ainews/">查看全部 →</a>
                 </div>
                 
                 <div class="section-card">
@@ -153,7 +164,7 @@
                     <div class="sub-links">
                         
                     </div>
-                    <a class="more-link" href="http://localhost:1313/aitech/">查看全部 →</a>
+                    <a class="more-link" href="https://example.com/aitech/">查看全部 →</a>
                 </div>
                 
                 <div class="section-card">
@@ -162,16 +173,7 @@
                     <div class="sub-links">
                         
                     </div>
-                    <a class="more-link" href="http://localhost:1313/paperreading/">查看全部 →</a>
-                </div>
-                
-                <div class="section-card">
-                    <h2>CSTech - 计算机技术</h2>
-                    <p>Git、Python等计算机基础技术分享</p>
-                    <div class="sub-links">
-                        
-                    </div>
-                    <a class="more-link" href="http://localhost:1313/cstech/">查看全部 →</a>
+                    <a class="more-link" href="https://example.com/paperreading/">查看全部 →</a>
                 </div>
                 
                 <div class="section-card">
@@ -180,7 +182,7 @@
                     <div class="sub-links">
                         
                     </div>
-                    <a class="more-link" href="http://localhost:1313/search/">查看全部 →</a>
+                    <a class="more-link" href="https://example.com/search/">查看全部 →</a>
                 </div>
                 
             </div>
@@ -192,13 +194,38 @@
                 <div class="card">
                     <div class="meta">
                         
+                        <span class="category">CSTech</span>
+                        
+                        
+                        <span class="subcategory">终端工具</span>
+                        
+                    </div>
+                    <h3><a href="https://example.com/cstech/tmux-practical-guide/">Tmux 实用入门：让终端会话不再怕断线</a></h3>
+                    <div class="date">2026-07-06</div>
+                    <div class="summary">如果你经常通过 SSH 登录服务器，tmux 是一个非常值得尽早掌握的工具。
+它解决的问题很朴素：终端窗口关掉了、网络断了、笔记本合上了，服务器上的任务还能不能继续跑？没有 tmux 时，很多命令会跟着 SSH 会话一起结束；有了 tmux，会话可以留在服务器后台，等你重新登录后再接回去。
+这篇文章参考了阮一峰老师的《Tmux 使用教程》，但会按照我日常使用服务器和开发环境的习惯，整理成一份更偏实战的入门笔记。
+tmux 到底在管什么 理解 tmux，先记住三个概念。
+Session 是会话。你可以把它理解成一组长期存在的终端工作区。即使终端窗口关闭，session 也可以继续留在后台。
+Window 是窗口。一个 session 里可以有多个 window，比如一个用来跑服务，一个用来查看日志，一个用来编辑文件。
+Pane 是窗格。一个 window 可以继续拆成多个 pane，比如左边跑程序，右边看日志，下面开一个临时命令行。
+所以 tmux 的层级大致是：
+session └── window └── pane 日常使用时，不需要一开始就记住所有命令。先把 session 用熟，就已经能解决 80% 的断线焦虑。
+安装 tmux 不同系统的安装方式略有差别。
+# Ubuntu / Debian sudo apt-get install tmux # CentOS / Fedora sudo yum install tmux # macOS brew install tmux 安装完成后，确认版本：
+tmux -V 最小可用流程 第一次使用 tmux，我建议只记这一组命令。</div>
+                </div>
+                
+                <div class="card">
+                    <div class="meta">
+                        
                         <span class="category">PaperReading</span>
                         
                         
                         <span class="subcategory">NLP</span>
                         
                     </div>
-                    <h3><a href="http://localhost:1313/paperreading/attention-is-all-you-need/">Attention Is All You Need 论文解读</a></h3>
+                    <h3><a href="https://example.com/paperreading/attention-is-all-you-need/">Attention Is All You Need 论文解读</a></h3>
                     <div class="date">2026-07-05</div>
                     <div class="summary">论文简介 《Attention Is All You Need》是由Google团队在2017年提出的开创性论文，提出了Transformer架构。
 核心贡献 自注意力机制: 无需RNN即可处理序列数据 多头注意力: 同时关注不同位置的信息 位置编码: 注入序列位置信息 代码示例 import torch import torch.nn as nn class MultiHeadAttention(nn.Module): def __init__(self, d_model, num_heads): super().__init__() self.d_model = d_model self.num_heads = num_heads def forward(self, q, k, v): # 实现细节... pass 总结 Transformer已成为现代NLP和AI的基石。</div>
@@ -213,7 +240,7 @@
                         <span class="subcategory">LLM基本原理</span>
                         
                     </div>
-                    <h3><a href="http://localhost:1313/aitech/transformer-tutorial/">Transformer 实战教程</a></h3>
+                    <h3><a href="https://example.com/aitech/transformer-tutorial/">Transformer 实战教程</a></h3>
                     <div class="date">2026-07-05</div>
                     <div class="summary">环境准备 pip install torch torchvision pip install transformers 快速开始 from transformers import pipeline # 使用预训练模型 classifier = pipeline(&#34;sentiment-analysis&#34;) result = classifier(&#34;Hello, I&#39;m learning AI!&#34;) print(result) 训练自己的模型 准备数据集 配置训练参数 开始训练 评估模型性能 下一步 关注本栏目获取更多实战技巧！</div>
                 </div>
@@ -227,7 +254,7 @@
                         <span class="subcategory">行业动态</span>
                         
                     </div>
-                    <h3><a href="http://localhost:1313/ainews/first-post/">欢迎来到我的博客</a></h3>
+                    <h3><a href="https://example.com/ainews/first-post/">欢迎来到我的博客</a></h3>
                     <div class="date">2026-07-05</div>
                     <div class="summary">欢迎来到我的算法博客！这里我会分享最新的AI资讯、论文解读和技术心得。
 本博客栏目 AiNews: 分享AI行业最新动态和新闻 行业动态 | 产品发布 | 政策法规 PaperReading: 深度解读经典和前沿论文 NLP | CV | 多模态 | RL AiTech: 技术实践和代码分享 LLM基本原理 | LLM最新技术 | Git | Python | 部署实践 期待与大家交流学习！</div>
@@ -249,35 +276,35 @@
 <aside class="sidebar">
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/ainews/">AiNews - AI资讯</a></h3>
+        <h3><a href="https://example.com/cstech/">CSTech - 计算机技术</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/aitech/">AiTech - AI技术</a></h3>
+        <h3><a href="https://example.com/ainews/">AiNews - AI资讯</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/paperreading/">PaperReading - 论文解读</a></h3>
+        <h3><a href="https://example.com/aitech/">AiTech - AI技术</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/cstech/">CSTech - 计算机技术</a></h3>
+        <h3><a href="https://example.com/paperreading/">PaperReading - 论文解读</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/search/">搜索</a></h3>
+        <h3><a href="https://example.com/search/">搜索</a></h3>
         <div class="sidebar-links">
             
         </div>

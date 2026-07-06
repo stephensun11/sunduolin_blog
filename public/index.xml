@@ -2,31 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>我的算法博客</title>
-    <link>http://localhost:1313/</link>
+    <link>https://example.com/</link>
     <description>Recent content on 我的算法博客</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tmux 实用入门：让终端会话不再怕断线</title>
+      <link>https://example.com/cstech/tmux-practical-guide/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/cstech/tmux-practical-guide/</guid>
+      <description>如果你经常通过 SSH 登录服务器，tmux 是一个非常值得尽早掌握的工具。&#xA;它解决的问题很朴素：终端窗口关掉了、网络断了、笔记本合上了，服务器上的任务还能不能继续跑？没有 tmux 时，很多命令会跟着 SSH 会话一起结束；有了 tmux，会话可以留在服务器后台，等你重新登录后再接回去。&#xA;这篇文章参考了阮一峰老师的《Tmux 使用教程》，但会按照我日常使用服务器和开发环境的习惯，整理成一份更偏实战的入门笔记。&#xA;tmux 到底在管什么 理解 tmux，先记住三个概念。&#xA;Session 是会话。你可以把它理解成一组长期存在的终端工作区。即使终端窗口关闭，session 也可以继续留在后台。&#xA;Window 是窗口。一个 session 里可以有多个 window，比如一个用来跑服务，一个用来查看日志，一个用来编辑文件。&#xA;Pane 是窗格。一个 window 可以继续拆成多个 pane，比如左边跑程序，右边看日志，下面开一个临时命令行。&#xA;所以 tmux 的层级大致是：&#xA;session └── window └── pane 日常使用时，不需要一开始就记住所有命令。先把 session 用熟，就已经能解决 80% 的断线焦虑。&#xA;安装 tmux 不同系统的安装方式略有差别。&#xA;# Ubuntu / Debian sudo apt-get install tmux # CentOS / Fedora sudo yum install tmux # macOS brew install tmux 安装完成后，确认版本：&#xA;tmux -V 最小可用流程 第一次使用 tmux，我建议只记这一组命令。</description>
+    </item>
     <item>
       <title>Attention Is All You Need 论文解读</title>
-      <link>http://localhost:1313/paperreading/attention-is-all-you-need/</link>
+      <link>https://example.com/paperreading/attention-is-all-you-need/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/paperreading/attention-is-all-you-need/</guid>
+      <guid>https://example.com/paperreading/attention-is-all-you-need/</guid>
       <description>论文简介 《Attention Is All You Need》是由Google团队在2017年提出的开创性论文，提出了Transformer架构。&#xA;核心贡献 自注意力机制: 无需RNN即可处理序列数据 多头注意力: 同时关注不同位置的信息 位置编码: 注入序列位置信息 代码示例 import torch import torch.nn as nn class MultiHeadAttention(nn.Module): def __init__(self, d_model, num_heads): super().__init__() self.d_model = d_model self.num_heads = num_heads def forward(self, q, k, v): # 实现细节... pass 总结 Transformer已成为现代NLP和AI的基石。</description>
     </item>
     <item>
       <title>Transformer 实战教程</title>
-      <link>http://localhost:1313/aitech/transformer-tutorial/</link>
+      <link>https://example.com/aitech/transformer-tutorial/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/aitech/transformer-tutorial/</guid>
+      <guid>https://example.com/aitech/transformer-tutorial/</guid>
       <description>环境准备 pip install torch torchvision pip install transformers 快速开始 from transformers import pipeline # 使用预训练模型 classifier = pipeline(&amp;#34;sentiment-analysis&amp;#34;) result = classifier(&amp;#34;Hello, I&amp;#39;m learning AI!&amp;#34;) print(result) 训练自己的模型 准备数据集 配置训练参数 开始训练 评估模型性能 下一步 关注本栏目获取更多实战技巧！</description>
     </item>
     <item>
       <title>欢迎来到我的博客</title>
-      <link>http://localhost:1313/ainews/first-post/</link>
+      <link>https://example.com/ainews/first-post/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/ainews/first-post/</guid>
+      <guid>https://example.com/ainews/first-post/</guid>
       <description>欢迎来到我的算法博客！这里我会分享最新的AI资讯、论文解读和技术心得。&#xA;本博客栏目 AiNews: 分享AI行业最新动态和新闻 行业动态 | 产品发布 | 政策法规 PaperReading: 深度解读经典和前沿论文 NLP | CV | 多模态 | RL AiTech: 技术实践和代码分享 LLM基本原理 | LLM最新技术 | Git | Python | 部署实践 期待与大家交流学习！</description>
     </item>
   </channel>

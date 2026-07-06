@@ -2,71 +2,93 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/categories/ainews/</loc>
+    <loc>https://example.com/categories/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/cstech/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/cstech/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/linux/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/tmux/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/cstech/tmux-practical-guide/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E7%BB%88%E7%AB%AF/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2026-07-06T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/ainews/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/ainews/</loc>
+    <loc>https://example.com/ainews/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/aitech/</loc>
+    <loc>https://example.com/categories/aitech/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/aitech/</loc>
+    <loc>https://example.com/aitech/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/attention/</loc>
+    <loc>https://example.com/tags/attention/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/paperreading/attention-is-all-you-need/</loc>
+    <loc>https://example.com/paperreading/attention-is-all-you-need/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://example.com/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</loc>
+    <loc>https://example.com/tags/nlp/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/nlp/</loc>
+    <loc>https://example.com/subcategories/nlp/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/subcategories/nlp/</loc>
+    <loc>https://example.com/categories/paperreading/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/paperreading/</loc>
+    <loc>https://example.com/paperreading/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/paperreading/</loc>
+    <loc>https://example.com/tags/pytorch/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/pytorch/</loc>
+    <loc>https://example.com/tags/transformer/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/subcategories/</loc>
+    <loc>https://example.com/aitech/transformer-tutorial/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://example.com/tags/%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/transformer/</loc>
+    <loc>https://example.com/ainews/first-post/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/aitech/transformer-tutorial/</loc>
+    <loc>https://example.com/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
-    <lastmod>2026-07-05T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/%E6%95%99%E7%A8%8B/</loc>
-    <lastmod>2026-07-05T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/ainews/first-post/</loc>
-    <lastmod>2026-07-05T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/</loc>
-    <lastmod>2026-07-05T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/cstech/</loc>
-  </url><url>
-    <loc>http://localhost:1313/search/</loc>
+    <loc>https://example.com/search/</loc>
   </url>
 </urlset>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSTech - 计算机技术 - 我的算法博客</title>
@@ -97,6 +97,8 @@
                 
                 <a href="/subcategories/python/">Python</a>
                 
+                <a href="/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/">终端工具</a>
+                
             </div>
         </div>
         
@@ -131,18 +133,52 @@
         <div class="main-content">
             <div class="section-header">
                 <h1>CSTech - 计算机技术</h1>
-                <p>Git、Python等计算机基础技术分享</p>
+                <p>Git、Python、终端工具等计算机基础技术分享</p>
             </div>
 
             
             <div class="subcategory-filter">
-                <a href="http://localhost:1313/cstech/" class="active">全部</a>
+                <a href="https://example.com/cstech/" class="active">全部</a>
                 
             </div>
 
             <div class="post-list">
                 
-                <div class="empty-hint">该栏目暂无文章，敬请期待！</div>
+                
+                <div class="post-item">
+                    <h2><a href="https://example.com/cstech/tmux-practical-guide/">Tmux 实用入门：让终端会话不再怕断线</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">CSTech</span>
+                        
+                        
+                        <span class="subcategory">终端工具</span>
+                        
+                        
+                        <span class="tag">tmux</span>
+                        
+                        <span class="tag">Linux</span>
+                        
+                        <span class="tag">终端</span>
+                        
+                        <span class="tag">效率工具</span>
+                        
+                    </div>
+                    <div class="summary">如果你经常通过 SSH 登录服务器，tmux 是一个非常值得尽早掌握的工具。
+它解决的问题很朴素：终端窗口关掉了、网络断了、笔记本合上了，服务器上的任务还能不能继续跑？没有 tmux 时，很多命令会跟着 SSH 会话一起结束；有了 tmux，会话可以留在服务器后台，等你重新登录后再接回去。
+这篇文章参考了阮一峰老师的《Tmux 使用教程》，但会按照我日常使用服务器和开发环境的习惯，整理成一份更偏实战的入门笔记。
+tmux 到底在管什么 理解 tmux，先记住三个概念。
+Session 是会话。你可以把它理解成一组长期存在的终端工作区。即使终端窗口关闭，session 也可以继续留在后台。
+Window 是窗口。一个 session 里可以有多个 window，比如一个用来跑服务，一个用来查看日志，一个用来编辑文件。
+Pane 是窗格。一个 window 可以继续拆成多个 pane，比如左边跑程序，右边看日志，下面开一个临时命令行。
+所以 tmux 的层级大致是：
+session └── window └── pane 日常使用时，不需要一开始就记住所有命令。先把 session 用熟，就已经能解决 80% 的断线焦虑。
+安装 tmux 不同系统的安装方式略有差别。
+# Ubuntu / Debian sudo apt-get install tmux # CentOS / Fedora sudo yum install tmux # macOS brew install tmux 安装完成后，确认版本：
+tmux -V 最小可用流程 第一次使用 tmux，我建议只记这一组命令。</div>
+                </div>
+                
                 
             </div>
         </div>
@@ -160,35 +196,35 @@
 <aside class="sidebar">
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/ainews/">AiNews - AI资讯</a></h3>
+        <h3><a href="https://example.com/cstech/">CSTech - 计算机技术</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/aitech/">AiTech - AI技术</a></h3>
+        <h3><a href="https://example.com/ainews/">AiNews - AI资讯</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/paperreading/">PaperReading - 论文解读</a></h3>
+        <h3><a href="https://example.com/aitech/">AiTech - AI技术</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/cstech/">CSTech - 计算机技术</a></h3>
+        <h3><a href="https://example.com/paperreading/">PaperReading - 论文解读</a></h3>
         <div class="sidebar-links">
             
         </div>
     </div>
     
     <div class="sidebar-section">
-        <h3><a href="http://localhost:1313/search/">搜索</a></h3>
+        <h3><a href="https://example.com/search/">搜索</a></h3>
         <div class="sidebar-links">
             
         </div>

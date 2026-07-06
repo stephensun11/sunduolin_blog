@@ -2,31 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Subcategories on 我的算法博客</title>
-    <link>http://localhost:1313/subcategories/</link>
+    <link>https://example.com/subcategories/</link>
     <description>Recent content in Subcategories on 我的算法博客</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/subcategories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/subcategories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>终端工具</title>
+      <link>https://example.com/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/%E7%BB%88%E7%AB%AF%E5%B7%A5%E5%85%B7/</guid>
+      <description></description>
+    </item>
     <item>
       <title>LLM基本原理</title>
-      <link>http://localhost:1313/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</link>
+      <link>https://example.com/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</guid>
+      <guid>https://example.com/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</guid>
       <description></description>
     </item>
     <item>
       <title>NLP</title>
-      <link>http://localhost:1313/subcategories/nlp/</link>
+      <link>https://example.com/subcategories/nlp/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/subcategories/nlp/</guid>
+      <guid>https://example.com/subcategories/nlp/</guid>
       <description></description>
     </item>
     <item>
       <title>行业动态</title>
-      <link>http://localhost:1313/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/</link>
+      <link>https://example.com/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/</guid>
+      <guid>https://example.com/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/</guid>
       <description></description>
     </item>
   </channel>

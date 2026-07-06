@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>AiNews on 我的算法博客</title>
-    <link>http://localhost:1313/categories/ainews/</link>
+    <link>https://example.com/categories/ainews/</link>
     <description>Recent content in AiNews on 我的算法博客</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/ainews/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://example.com/categories/ainews/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>欢迎来到我的博客</title>
-      <link>http://localhost:1313/ainews/first-post/</link>
+      <link>https://example.com/ainews/first-post/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/ainews/first-post/</guid>
+      <guid>https://example.com/ainews/first-post/</guid>
       <description>欢迎来到我的算法博客！这里我会分享最新的AI资讯、论文解读和技术心得。&#xA;本博客栏目 AiNews: 分享AI行业最新动态和新闻 行业动态 | 产品发布 | 政策法规 PaperReading: 深度解读经典和前沿论文 NLP | CV | 多模态 | RL AiTech: 技术实践和代码分享 LLM基本原理 | LLM最新技术 | Git | Python | 部署实践 期待与大家交流学习！</description>
     </item>
   </channel>

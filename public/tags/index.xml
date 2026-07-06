@@ -2,45 +2,73 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 我的算法博客</title>
-    <link>http://localhost:1313/tags/</link>
+    <link>https://example.com/tags/</link>
     <description>Recent content in Tags on 我的算法博客</description>
-    <generator>Hugo</generator>
+    <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux</title>
+      <link>https://example.com/tags/linux/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>tmux</title>
+      <link>https://example.com/tags/tmux/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/tmux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>效率工具</title>
+      <link>https://example.com/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E6%95%88%E7%8E%87%E5%B7%A5%E5%85%B7/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>终端</title>
+      <link>https://example.com/tags/%E7%BB%88%E7%AB%AF/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E7%BB%88%E7%AB%AF/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Attention</title>
-      <link>http://localhost:1313/tags/attention/</link>
+      <link>https://example.com/tags/attention/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/attention/</guid>
+      <guid>https://example.com/tags/attention/</guid>
       <description></description>
     </item>
     <item>
       <title>NLP</title>
-      <link>http://localhost:1313/tags/nlp/</link>
+      <link>https://example.com/tags/nlp/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/nlp/</guid>
+      <guid>https://example.com/tags/nlp/</guid>
       <description></description>
     </item>
     <item>
       <title>PyTorch</title>
-      <link>http://localhost:1313/tags/pytorch/</link>
+      <link>https://example.com/tags/pytorch/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/pytorch/</guid>
+      <guid>https://example.com/tags/pytorch/</guid>
       <description></description>
     </item>
     <item>
       <title>Transformer</title>
-      <link>http://localhost:1313/tags/transformer/</link>
+      <link>https://example.com/tags/transformer/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/transformer/</guid>
+      <guid>https://example.com/tags/transformer/</guid>
       <description></description>
     </item>
     <item>
       <title>教程</title>
-      <link>http://localhost:1313/tags/%E6%95%99%E7%A8%8B/</link>
+      <link>https://example.com/tags/%E6%95%99%E7%A8%8B/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>http://localhost:1313/tags/%E6%95%99%E7%A8%8B/</guid>
+      <guid>https://example.com/tags/%E6%95%99%E7%A8%8B/</guid>
       <description></description>
     </item>
   </channel>
