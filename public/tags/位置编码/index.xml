@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>位置编码 on 我的算法博客</title>
+    <link>https://example.com/tags/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</link>
+    <description>Recent content in 位置编码 on 我的算法博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 06 Jul 2026 22:15:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>位置编码入门：Transformer 如何理解顺序</title>
+      <link>https://example.com/aitech/positional-encoding-basics/</link>
+      <pubDate>Mon, 06 Jul 2026 22:15:00 +0800</pubDate>
+      <guid>https://example.com/aitech/positional-encoding-basics/</guid>
+      <description>Transformer 的注意力机制本身不天然知道顺序。&#xA;如果只看一组 token 向量，Self-Attention 更像是在处理一个集合：它能计算 token 之间的关系，但不知道谁在前、谁在后。语言显然需要顺序，所以模型必须额外加入位置信息。&#xA;为什么顺序重要 看两个句子：&#xA;猫追狗。 狗追猫。 词一样，顺序不同，意思完全反过来。&#xA;如果模型不能感知位置，就很难区分这两句话。位置编码的作用就是告诉模型：每个 token 在序列里的相对或绝对位置是什么。&#xA;绝对位置编码 原始 Transformer 使用正弦余弦位置编码。&#xA;它为每个位置生成一个固定向量，再加到 token embedding 上。&#xA;token embedding + position embedding 这样，第 1 个位置、第 2 个位置、第 100 个位置都会有不同的位置信号。&#xA;这种方法简单有效，但也有局限。模型训练时见过的最大长度有限，推理时如果超出训练长度，泛化可能变差。&#xA;可学习位置编码 一些模型使用可学习的位置 embedding。&#xA;也就是说，每个位置对应一个可训练向量，和词向量一样在训练中更新。&#xA;这种方法灵活，但同样受最大长度限制。模型训练时只学到了固定范围内的位置向量，超长外推并不自然。&#xA;相对位置编码 语言里很多关系不只依赖绝对位置，更依赖相对距离。&#xA;例如“前一个词”“后面三个词”“同一句里的主语”都带有相对关系。相对位置编码让模型关注 token 之间的距离，而不是只关心每个 token 的绝对编号。&#xA;这类方法在长文本建模里更自然。&#xA;RoPE 的直觉 RoPE 是现在很多 LLM 使用的位置编码方法。&#xA;它的核心做法是把位置信息编码进向量旋转里。不同位置会让 Q、K 向量发生不同角度的旋转。这样，当 Q 和 K 做点积时，相对位置信息就会进入注意力分数。&#xA;你不需要一开始就记住数学细节。先抓住这个直觉：RoPE 不是简单把位置向量加上去，而是让注意力计算本身带上相对位置信号。&#xA;长上下文和位置编码 长上下文模型经常会讨论 RoPE scaling、插值、外推等技巧。&#xA;它们背后的问题是：模型训练时可能只见过 4k 或 8k 长度，但推理时希望支持 32k、128k 甚至更长上下文。位置编码必须能在更长范围内保持相对稳定，否则模型会“看得见文本，但用不好文本”。</description>
+    </item>
+  </channel>
+</rss>

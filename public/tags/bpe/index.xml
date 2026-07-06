@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BPE on 我的算法博客</title>
+    <link>https://example.com/tags/bpe/</link>
+    <description>Recent content in BPE on 我的算法博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 06 Jul 2026 22:05:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/bpe/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tokenizer 入门：大模型为什么不直接读文字</title>
+      <link>https://example.com/aitech/tokenizer-basics/</link>
+      <pubDate>Mon, 06 Jul 2026 22:05:00 +0800</pubDate>
+      <guid>https://example.com/aitech/tokenizer-basics/</guid>
+      <description>大语言模型并不是直接读取文字。&#xA;在模型眼里，文本会先被 tokenizer 切成 token，再转换成数字 ID。模型真正处理的是这些 ID 对应的向量，而不是我们看到的汉字、英文单词或标点。&#xA;token 是什么 token 可以是一个词，也可以是词的一部分，还可以是一个汉字、标点或空格片段。&#xA;例如英文句子：&#xA;unbelievable 可能被切成：&#xA;un + believable 也可能被切成更细的子词。具体怎么切，取决于 tokenizer 的训练方式和词表。&#xA;中文里，一个 token 可能对应一个汉字，也可能对应多个汉字组成的常见词。不同模型的 tokenizer 不一样，所以同一句话在不同模型里消耗的 token 数也不一样。&#xA;为什么不按字切分 最简单的办法是按字符切分，但这样序列会变长，模型计算成本会变高。&#xA;如果按词切分，又会遇到另一个问题：世界上总会出现新词、拼写变化、代码符号、URL、表情、缩写。完全基于词的词表很难覆盖所有情况。&#xA;子词切分是折中方案。它让常见词保持较短表示，同时也能把罕见词拆成可处理的小片段。&#xA;BPE 的直觉 BPE 是常见 tokenizer 方法之一。&#xA;它的核心思想很朴素：从字符开始，反复合并最常一起出现的相邻片段。&#xA;简化过程如下：&#xA;l o w l o w e r n e w e r 合并高频片段： lo, low, er ... 训练结束后，模型得到一个词表。推理时，tokenizer 会按照这个词表把新文本切成 token。&#xA;tokenizer 会影响什么 第一，影响上下文长度。&#xA;模型常说支持 8k、32k、128k context，这里的长度单位是 token，不是字符。中文、英文、代码、表格的 token 消耗方式都不一样。</description>
+    </item>
+  </channel>
+</rss>

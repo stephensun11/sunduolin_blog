@@ -9,6 +9,13 @@
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
         header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
         .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .taxonomy-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1rem; align-items: start; }
+        .tertiary-nav { position: sticky; top: 1rem; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .tertiary-nav h2 { color: #667eea; font-size: 1rem; margin-bottom: 0.75rem; }
+        .tertiary-nav a { display: block; color: #555; text-decoration: none; padding: 0.35rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+        .tertiary-nav a:hover { color: #667eea; }
+        .topic-section { margin-bottom: 1.5rem; }
+        .topic-section h2 { color: #667eea; font-size: 1.2rem; margin-bottom: 0.75rem; }
         .main-content { flex: 1; min-width: 0; }
         h1 { color: #333; margin-bottom: 1.5rem; }
         .post-list { display: flex; flex-direction: column; gap: 1rem; }
@@ -21,7 +28,7 @@
         .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
         .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
         footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
-        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .taxonomy-layout { grid-template-columns: 1fr; } .tertiary-nav { position: static; } .sidebar { width: 100%; } }
     </style>
 </head>
 <body>
@@ -125,7 +132,271 @@
     <div class="main-layout">
         <div class="main-content">
             <h1>子分类：AiTech</h1>
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+            
+            
             <div class="post-list">
+                
+                <div class="post-item">
+                    <h2><a href="../../aitech/context-window-kv-cache/index.html">上下文窗口与 KV Cache：为什么长对话会变贵</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">AiTech</span>
+                        
+                        
+                        <span class="subcategory">LLM基本原理</span>
+                        
+                        
+                        <span class="tag">Context Window</span>
+                        
+                        <span class="tag">KV Cache</span>
+                        
+                        <span class="tag">推理</span>
+                        
+                        <span class="tag">LLM</span>
+                        
+                    </div>
+                    <p>使用大模型时，经常会看到两个词：上下文窗口和 KV Cache。
+它们都和推理成本有关。理解它们，可以帮助你更好地设计提示词、控制成本，也能解释为什么长对话会越来越慢、越来越贵。
+上下文窗口是什么 上下文窗口指模型一次能处理的 token 数量。
+如果一个模型支持 32k context，意思是输入、历史对话、系统提示和模型即将生成的内容加起来，最多大约 32k token。
+这里的单位是 token，不是字数。
+系统提示 + 历史消息 + 当前问题 + 输出内容 &lt;= 上下文窗口 超过窗口后，要么报错，要么需要截断旧内容，要么使用摘要、检索等方式压缩上下文。
+长上下文不等于全部有效 模型支持很长上下文，并不代表它能完美使用所有上下文。
+长文本里可能出现信息稀释、位置偏差和注意力分散。模型有时更关注开头和结尾，中间信息反而容易被忽略。
+所以长上下文不是万能药。很多时候，把相关信息检索出来放进短上下文，比把所有材料都塞进去更有效。
+KV Cache 是什么 Decoder-only 模型生成文本时，每次只生成一个新 token。
+如果每生成一个 token 都重新计算整个上下文，成本会非常高。KV Cache 的作用就是缓存历史 token 的 Key 和 Value。
+这样生成下一个 token 时，模型只需要计算新 token 的 Q/K/V，并复用之前缓存的 K/V。
+历史 token 的 K/V -&gt; 缓存 新 token -&gt; 只计算新增部分 这能显著加速自回归生成。
+KV Cache 为什么占显存 KV Cache 需要保存每一层、每个 attention head、每个历史 token 的 K/V 向量。</p>
+                </div>
+                
+                <div class="post-item">
+                    <h2><a href="../../aitech/llm-training-basics/index.html">LLM 训练流程入门：预训练、指令微调与对齐</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">AiTech</span>
+                        
+                        
+                        <span class="subcategory">LLM基本原理</span>
+                        
+                        
+                        <span class="tag">LLM</span>
+                        
+                        <span class="tag">预训练</span>
+                        
+                        <span class="tag">SFT</span>
+                        
+                        <span class="tag">RLHF</span>
+                        
+                        <span class="tag">对齐</span>
+                        
+                    </div>
+                    <p>一个聊天大模型不是直接从零训练成助手的。
+更常见的路线是分阶段完成：先通过预训练学语言和知识，再通过指令微调学会回答问题，最后通过偏好对齐让回答更符合人类预期。
+第一阶段：预训练 预训练的目标通常是预测下一个 token。
+模型看到大量文本，学习这样的任务：
+给定前文，预测下一个 token 这个目标很简单，但数据规模足够大时，模型会学到语法、事实、推理模式、代码结构和世界知识。
+预训练阶段最昂贵，因为它需要大量数据和算力。很多基础能力都在这个阶段形成。
+第二阶段：指令微调 预训练模型会续写文本，但不一定会像助手一样回答问题。
+指令微调，也就是 SFT，会使用大量“指令-回答”样本继续训练模型。
+例如：
+用户：解释什么是 tokenizer 助手：Tokenizer 是... 经过 SFT 后，模型开始理解“用户提出请求，助手给出回答”这种交互格式。
+SFT 的关键不是让模型获得所有知识，而是让模型学会按照指令组织输出。
+第三阶段：偏好对齐 两个回答都可能语法正确，但一个更有帮助、更安全、更符合用户意图。
+偏好对齐的目标就是让模型更倾向于人类偏好的回答。
+常见方法包括：
+RLHF DPO RLAIF 它们的具体算法不同，但目标相近：用偏好信号塑造模型行为。
+数据质量比想象中更重要 训练大模型不是简单堆数据。
+低质量数据会带来噪声、重复、错误知识和糟糕风格。高质量数据能显著影响模型的表达能力、推理习惯和安全边界。
+尤其在 SFT 和偏好数据阶段，少量高质量样本往往比大量随便拼出来的数据更有价值。
+为什么模型会幻觉 从训练目标看，模型本质上是在预测合理的下一个 token。
+它并不天然拥有数据库式的事实校验机制。如果上下文不足、问题含糊、训练数据冲突，模型可能生成看似合理但并不真实的内容。
+减少幻觉通常需要结合：
+更好的训练数据 检索增强 工具调用 更严格的评估 输出约束 总结 LLM 的训练可以粗略理解为三步：预训练让模型学语言和知识，指令微调让模型学会当助手，偏好对齐让模型回答得更符合人类期待。
+理解这个流程后，你会更容易判断一个模型能力来自哪里，也更容易理解为什么“会聊天”和“懂事实”并不是同一件事。</p>
+                </div>
+                
+                <div class="post-item">
+                    <h2><a href="../../aitech/positional-encoding-basics/index.html">位置编码入门：Transformer 如何理解顺序</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">AiTech</span>
+                        
+                        
+                        <span class="subcategory">LLM基本原理</span>
+                        
+                        
+                        <span class="tag">位置编码</span>
+                        
+                        <span class="tag">RoPE</span>
+                        
+                        <span class="tag">Transformer</span>
+                        
+                        <span class="tag">LLM</span>
+                        
+                    </div>
+                    <p>Transformer 的注意力机制本身不天然知道顺序。
+如果只看一组 token 向量，Self-Attention 更像是在处理一个集合：它能计算 token 之间的关系，但不知道谁在前、谁在后。语言显然需要顺序，所以模型必须额外加入位置信息。
+为什么顺序重要 看两个句子：
+猫追狗。 狗追猫。 词一样，顺序不同，意思完全反过来。
+如果模型不能感知位置，就很难区分这两句话。位置编码的作用就是告诉模型：每个 token 在序列里的相对或绝对位置是什么。
+绝对位置编码 原始 Transformer 使用正弦余弦位置编码。
+它为每个位置生成一个固定向量，再加到 token embedding 上。
+token embedding + position embedding 这样，第 1 个位置、第 2 个位置、第 100 个位置都会有不同的位置信号。
+这种方法简单有效，但也有局限。模型训练时见过的最大长度有限，推理时如果超出训练长度，泛化可能变差。
+可学习位置编码 一些模型使用可学习的位置 embedding。
+也就是说，每个位置对应一个可训练向量，和词向量一样在训练中更新。
+这种方法灵活，但同样受最大长度限制。模型训练时只学到了固定范围内的位置向量，超长外推并不自然。
+相对位置编码 语言里很多关系不只依赖绝对位置，更依赖相对距离。
+例如“前一个词”“后面三个词”“同一句里的主语”都带有相对关系。相对位置编码让模型关注 token 之间的距离，而不是只关心每个 token 的绝对编号。
+这类方法在长文本建模里更自然。
+RoPE 的直觉 RoPE 是现在很多 LLM 使用的位置编码方法。
+它的核心做法是把位置信息编码进向量旋转里。不同位置会让 Q、K 向量发生不同角度的旋转。这样，当 Q 和 K 做点积时，相对位置信息就会进入注意力分数。
+你不需要一开始就记住数学细节。先抓住这个直觉：RoPE 不是简单把位置向量加上去，而是让注意力计算本身带上相对位置信号。
+长上下文和位置编码 长上下文模型经常会讨论 RoPE scaling、插值、外推等技巧。
+它们背后的问题是：模型训练时可能只见过 4k 或 8k 长度，但推理时希望支持 32k、128k 甚至更长上下文。位置编码必须能在更长范围内保持相对稳定，否则模型会“看得见文本，但用不好文本”。</p>
+                </div>
+                
+                <div class="post-item">
+                    <h2><a href="../../aitech/self-attention-basics/index.html">Self-Attention 入门：模型如何决定该看哪里</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">AiTech</span>
+                        
+                        
+                        <span class="subcategory">LLM基本原理</span>
+                        
+                        
+                        <span class="tag">Attention</span>
+                        
+                        <span class="tag">Self-Attention</span>
+                        
+                        <span class="tag">Transformer</span>
+                        
+                        <span class="tag">LLM</span>
+                        
+                    </div>
+                    <p>Self-Attention 是 Transformer 最核心的计算。
+它回答的问题很直接：当模型处理某个 token 时，应该从上下文里的哪些 token 获取信息？注意力分数越高，说明当前位置越需要关注那个位置。
+一个直觉例子 看这个句子：
+小明把书放进书包，因为它很重。 这里的“它”更可能指“书”，不是“书包”。人类可以根据语义判断引用关系，模型也需要类似能力。
+Self-Attention 做的事情，就是让“它”这个位置可以和前面的“小明”“书”“书包”等位置建立联系，并根据上下文分配不同权重。
+Q、K、V 是什么 注意力机制里经常看到三个符号：
+Q = Query K = Key V = Value 可以用检索来类比。
+Query 表示“我现在想找什么信息”。Key 表示“我这里有什么特征可以被匹配”。Value 表示“如果你关注我，真正取走的信息是什么”。
+每个 token 都会生成自己的 Q、K、V。然后用 Q 和所有 K 做相似度计算，得到注意力权重，再用这些权重对 V 加权求和。
+计算流程 简化公式如下：
+Attention(Q, K, V) = softmax(QK^T / sqrt(d)) V 拆开看：
+QK^T 计算当前位置和其他位置的匹配程度。 除以 sqrt(d) 是为了稳定数值。 softmax 把分数变成概率分布。 最后乘以 V，得到融合上下文后的表示。 这就是模型“看哪里”的核心。
+为什么需要 Multi-Head Attention 单个注意力头只能从一种角度看上下文。多头注意力允许模型同时关注不同关系。
+有的头可能关注语法结构，有的头可能关注实体引用，有的头可能关注局部搭配。虽然我们不应该把每个头都解释得太死，但多头机制确实给了模型更丰富的表达空间。
+Head 1: 关注主谓关系 Head 2: 关注指代关系 Head 3: 关注局部短语 多个 head 的结果会拼接起来，再经过线性层融合。</p>
+                </div>
+                
+                <div class="post-item">
+                    <h2><a href="../../aitech/tokenizer-basics/index.html">Tokenizer 入门：大模型为什么不直接读文字</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">AiTech</span>
+                        
+                        
+                        <span class="subcategory">LLM基本原理</span>
+                        
+                        
+                        <span class="tag">Tokenizer</span>
+                        
+                        <span class="tag">LLM</span>
+                        
+                        <span class="tag">BPE</span>
+                        
+                        <span class="tag">词表</span>
+                        
+                    </div>
+                    <p>大语言模型并不是直接读取文字。
+在模型眼里，文本会先被 tokenizer 切成 token，再转换成数字 ID。模型真正处理的是这些 ID 对应的向量，而不是我们看到的汉字、英文单词或标点。
+token 是什么 token 可以是一个词，也可以是词的一部分，还可以是一个汉字、标点或空格片段。
+例如英文句子：
+unbelievable 可能被切成：
+un + believable 也可能被切成更细的子词。具体怎么切，取决于 tokenizer 的训练方式和词表。
+中文里，一个 token 可能对应一个汉字，也可能对应多个汉字组成的常见词。不同模型的 tokenizer 不一样，所以同一句话在不同模型里消耗的 token 数也不一样。
+为什么不按字切分 最简单的办法是按字符切分，但这样序列会变长，模型计算成本会变高。
+如果按词切分，又会遇到另一个问题：世界上总会出现新词、拼写变化、代码符号、URL、表情、缩写。完全基于词的词表很难覆盖所有情况。
+子词切分是折中方案。它让常见词保持较短表示，同时也能把罕见词拆成可处理的小片段。
+BPE 的直觉 BPE 是常见 tokenizer 方法之一。
+它的核心思想很朴素：从字符开始，反复合并最常一起出现的相邻片段。
+简化过程如下：
+l o w l o w e r n e w e r 合并高频片段： lo, low, er ... 训练结束后，模型得到一个词表。推理时，tokenizer 会按照这个词表把新文本切成 token。
+tokenizer 会影响什么 第一，影响上下文长度。
+模型常说支持 8k、32k、128k context，这里的长度单位是 token，不是字符。中文、英文、代码、表格的 token 消耗方式都不一样。</p>
+                </div>
+                
+                <div class="post-item">
+                    <h2><a href="../../aitech/transformer-architecture/index.html">Transformer 架构入门：从 Encoder-Decoder 到 Decoder-only</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">AiTech</span>
+                        
+                        
+                        <span class="subcategory">LLM基本原理</span>
+                        
+                        
+                        <span class="tag">Transformer</span>
+                        
+                        <span class="tag">LLM</span>
+                        
+                        <span class="tag">架构</span>
+                        
+                    </div>
+                    <p>Transformer 是现代大语言模型的骨架。
+如果只记一个结论，可以这样理解：Transformer 用注意力机制替代了传统循环结构，让模型可以并行处理序列，并在每一层里重新判断“当前 token 应该关注上下文里的哪些信息”。
+为什么 Transformer 重要 在 Transformer 出现之前，序列建模常用 RNN、LSTM、GRU 这类结构。它们按顺序处理文本，天然适合时间序列，但训练效率受限，因为后面的 token 依赖前面的计算结果。
+Transformer 的变化在于，它不再逐个时间步递推，而是一次性看见整个序列。模型通过注意力权重计算 token 之间的关系，再用多层网络不断更新表示。
+这带来了两个直接好处：
+训练更容易并行化。 长距离依赖更容易建模。 这也是后来 BERT、GPT、T5 以及各种 LLM 都建立在 Transformer 之上的原因。
+原始 Transformer：Encoder-Decoder 论文《Attention Is All You Need》里的 Transformer 是 Encoder-Decoder 架构，最早主要服务于机器翻译。
+输入句子 -&gt; Encoder -&gt; 中间表示 -&gt; Decoder -&gt; 输出句子 Encoder 负责理解输入序列，Decoder 负责根据输入表示和已经生成的内容继续生成下一个 token。
+Encoder 每层大致包括：
+Self-Attention Feed Forward Network Residual + LayerNorm Decoder 每层多一个 Cross-Attention，用来关注 Encoder 的输出。
+这种结构很适合“输入到输出”的任务，比如翻译、摘要、文本改写。
+Encoder-only：代表是 BERT Encoder-only 模型只保留 Encoder，更擅长理解文本。</p>
+                </div>
                 
                 <div class="post-item">
                     <h2><a href="../../aitech/transformer-tutorial/index.html">Transformer 实战教程</a></h2>
@@ -149,6 +420,7 @@
                 </div>
                 
             </div>
+            
         </div>
         
 

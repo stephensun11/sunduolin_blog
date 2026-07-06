@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RLHF on 我的算法博客</title>
+    <link>https://example.com/tags/rlhf/</link>
+    <description>Recent content in RLHF on 我的算法博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 06 Jul 2026 22:20:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/rlhf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM 训练流程入门：预训练、指令微调与对齐</title>
+      <link>https://example.com/aitech/llm-training-basics/</link>
+      <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-training-basics/</guid>
+      <description>一个聊天大模型不是直接从零训练成助手的。&#xA;更常见的路线是分阶段完成：先通过预训练学语言和知识，再通过指令微调学会回答问题，最后通过偏好对齐让回答更符合人类预期。&#xA;第一阶段：预训练 预训练的目标通常是预测下一个 token。&#xA;模型看到大量文本，学习这样的任务：&#xA;给定前文，预测下一个 token 这个目标很简单，但数据规模足够大时，模型会学到语法、事实、推理模式、代码结构和世界知识。&#xA;预训练阶段最昂贵，因为它需要大量数据和算力。很多基础能力都在这个阶段形成。&#xA;第二阶段：指令微调 预训练模型会续写文本，但不一定会像助手一样回答问题。&#xA;指令微调，也就是 SFT，会使用大量“指令-回答”样本继续训练模型。&#xA;例如：&#xA;用户：解释什么是 tokenizer 助手：Tokenizer 是... 经过 SFT 后，模型开始理解“用户提出请求，助手给出回答”这种交互格式。&#xA;SFT 的关键不是让模型获得所有知识，而是让模型学会按照指令组织输出。&#xA;第三阶段：偏好对齐 两个回答都可能语法正确，但一个更有帮助、更安全、更符合用户意图。&#xA;偏好对齐的目标就是让模型更倾向于人类偏好的回答。&#xA;常见方法包括：&#xA;RLHF DPO RLAIF 它们的具体算法不同，但目标相近：用偏好信号塑造模型行为。&#xA;数据质量比想象中更重要 训练大模型不是简单堆数据。&#xA;低质量数据会带来噪声、重复、错误知识和糟糕风格。高质量数据能显著影响模型的表达能力、推理习惯和安全边界。&#xA;尤其在 SFT 和偏好数据阶段，少量高质量样本往往比大量随便拼出来的数据更有价值。&#xA;为什么模型会幻觉 从训练目标看，模型本质上是在预测合理的下一个 token。&#xA;它并不天然拥有数据库式的事实校验机制。如果上下文不足、问题含糊、训练数据冲突，模型可能生成看似合理但并不真实的内容。&#xA;减少幻觉通常需要结合：&#xA;更好的训练数据 检索增强 工具调用 更严格的评估 输出约束 总结 LLM 的训练可以粗略理解为三步：预训练让模型学语言和知识，指令微调让模型学会当助手，偏好对齐让模型回答得更符合人类期待。&#xA;理解这个流程后，你会更容易判断一个模型能力来自哪里，也更容易理解为什么“会聊天”和“懂事实”并不是同一件事。</description>
+    </item>
+  </channel>
+</rss>

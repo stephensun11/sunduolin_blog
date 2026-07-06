@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上下文窗口与 KV Cache：为什么长对话会变贵 - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                
+                <a href="../../subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/index.html">产品发布</a>
+                
+                <a href="../../subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/index.html">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
+                
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/git/index.html">Git</a>
+                
+                <a href="../../subcategories/python/index.html">Python</a>
+                
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                
+                <a href="../../subcategories/cv/index.html">CV</a>
+                
+                <a href="../../subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/index.html">多模态</a>
+                
+                <a href="../../subcategories/rl/index.html">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>上下文窗口与 KV Cache：为什么长对话会变贵</h1>
+                <div class="meta">
+                    <span>2026-07-06</span>
+                    
+                    <span class="category">AiTech</span>
+                    
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/context-window/index.html">Context Window</a></span>
+                    
+                    <span class="tag"><a href="../../tags/kv-cache/index.html">KV Cache</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%8E%A8%E7%90%86/index.html">推理</a></span>
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>使用大模型时，经常会看到两个词：上下文窗口和 KV Cache。</p>
+<p>它们都和推理成本有关。理解它们，可以帮助你更好地设计提示词、控制成本，也能解释为什么长对话会越来越慢、越来越贵。</p>
+<h2 id="上下文窗口是什么">上下文窗口是什么</h2>
+<p>上下文窗口指模型一次能处理的 token 数量。</p>
+<p>如果一个模型支持 32k context，意思是输入、历史对话、系统提示和模型即将生成的内容加起来，最多大约 32k token。</p>
+<p>这里的单位是 token，不是字数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>系统提示 + 历史消息 + 当前问题 + 输出内容 &lt;= 上下文窗口
+</span></span></code></pre></div><p>超过窗口后，要么报错，要么需要截断旧内容，要么使用摘要、检索等方式压缩上下文。</p>
+<h2 id="长上下文不等于全部有效">长上下文不等于全部有效</h2>
+<p>模型支持很长上下文，并不代表它能完美使用所有上下文。</p>
+<p>长文本里可能出现信息稀释、位置偏差和注意力分散。模型有时更关注开头和结尾，中间信息反而容易被忽略。</p>
+<p>所以长上下文不是万能药。很多时候，把相关信息检索出来放进短上下文，比把所有材料都塞进去更有效。</p>
+<h2 id="kv-cache-是什么">KV Cache 是什么</h2>
+<p>Decoder-only 模型生成文本时，每次只生成一个新 token。</p>
+<p>如果每生成一个 token 都重新计算整个上下文，成本会非常高。KV Cache 的作用就是缓存历史 token 的 Key 和 Value。</p>
+<p>这样生成下一个 token 时，模型只需要计算新 token 的 Q/K/V，并复用之前缓存的 K/V。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>历史 token 的 K/V -&gt; 缓存
+</span></span><span style="display:flex;"><span>新 token -&gt; 只计算新增部分
+</span></span></code></pre></div><p>这能显著加速自回归生成。</p>
+<h2 id="kv-cache-为什么占显存">KV Cache 为什么占显存</h2>
+<p>KV Cache 需要保存每一层、每个 attention head、每个历史 token 的 K/V 向量。</p>
+<p>上下文越长，batch 越大，模型层数越多，KV Cache 占用就越高。</p>
+<p>这就是长对话推理变贵的原因之一：不仅注意力计算变多，缓存也会越来越大。</p>
+<h2 id="实际使用建议">实际使用建议</h2>
+<p>第一，不要无脑保留完整历史对话。</p>
+<p>可以定期摘要旧消息，只保留当前任务真正需要的信息。</p>
+<p>第二，把稳定规则放在 system prompt，把临时材料放在当前用户消息里。</p>
+<p>第三，对于长文档问答，优先考虑检索相关段落，而不是整篇塞给模型。</p>
+<p>第四，写提示词时尽量减少重复背景，尤其是多轮调用中的重复说明。</p>
+<h2 id="总结">总结</h2>
+<p>上下文窗口决定模型一次能看多少 token，KV Cache 决定生成时如何复用历史计算。</p>
+<p>长上下文带来了更强的输入能力，也带来了更高的计算和显存成本。真正高效的 LLM 应用，不是把所有东西都塞进上下文，而是让模型只看到当前最需要的信息。</p>
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>

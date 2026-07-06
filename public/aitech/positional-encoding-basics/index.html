@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>位置编码入门：Transformer 如何理解顺序 - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                
+                <a href="../../subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/index.html">产品发布</a>
+                
+                <a href="../../subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/index.html">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
+                
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/git/index.html">Git</a>
+                
+                <a href="../../subcategories/python/index.html">Python</a>
+                
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                
+                <a href="../../subcategories/cv/index.html">CV</a>
+                
+                <a href="../../subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/index.html">多模态</a>
+                
+                <a href="../../subcategories/rl/index.html">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>位置编码入门：Transformer 如何理解顺序</h1>
+                <div class="meta">
+                    <span>2026-07-06</span>
+                    
+                    <span class="category">AiTech</span>
+                    
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/index.html">位置编码</a></span>
+                    
+                    <span class="tag"><a href="../../tags/rope/index.html">RoPE</a></span>
+                    
+                    <span class="tag"><a href="../../tags/transformer/index.html">Transformer</a></span>
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>Transformer 的注意力机制本身不天然知道顺序。</p>
+<p>如果只看一组 token 向量，Self-Attention 更像是在处理一个集合：它能计算 token 之间的关系，但不知道谁在前、谁在后。语言显然需要顺序，所以模型必须额外加入位置信息。</p>
+<h2 id="为什么顺序重要">为什么顺序重要</h2>
+<p>看两个句子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>猫追狗。
+</span></span><span style="display:flex;"><span>狗追猫。
+</span></span></code></pre></div><p>词一样，顺序不同，意思完全反过来。</p>
+<p>如果模型不能感知位置，就很难区分这两句话。位置编码的作用就是告诉模型：每个 token 在序列里的相对或绝对位置是什么。</p>
+<h2 id="绝对位置编码">绝对位置编码</h2>
+<p>原始 Transformer 使用正弦余弦位置编码。</p>
+<p>它为每个位置生成一个固定向量，再加到 token embedding 上。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>token embedding + position embedding
+</span></span></code></pre></div><p>这样，第 1 个位置、第 2 个位置、第 100 个位置都会有不同的位置信号。</p>
+<p>这种方法简单有效，但也有局限。模型训练时见过的最大长度有限，推理时如果超出训练长度，泛化可能变差。</p>
+<h2 id="可学习位置编码">可学习位置编码</h2>
+<p>一些模型使用可学习的位置 embedding。</p>
+<p>也就是说，每个位置对应一个可训练向量，和词向量一样在训练中更新。</p>
+<p>这种方法灵活，但同样受最大长度限制。模型训练时只学到了固定范围内的位置向量，超长外推并不自然。</p>
+<h2 id="相对位置编码">相对位置编码</h2>
+<p>语言里很多关系不只依赖绝对位置，更依赖相对距离。</p>
+<p>例如“前一个词”“后面三个词”“同一句里的主语”都带有相对关系。相对位置编码让模型关注 token 之间的距离，而不是只关心每个 token 的绝对编号。</p>
+<p>这类方法在长文本建模里更自然。</p>
+<h2 id="rope-的直觉">RoPE 的直觉</h2>
+<p>RoPE 是现在很多 LLM 使用的位置编码方法。</p>
+<p>它的核心做法是把位置信息编码进向量旋转里。不同位置会让 Q、K 向量发生不同角度的旋转。这样，当 Q 和 K 做点积时，相对位置信息就会进入注意力分数。</p>
+<p>你不需要一开始就记住数学细节。先抓住这个直觉：RoPE 不是简单把位置向量加上去，而是让注意力计算本身带上相对位置信号。</p>
+<h2 id="长上下文和位置编码">长上下文和位置编码</h2>
+<p>长上下文模型经常会讨论 RoPE scaling、插值、外推等技巧。</p>
+<p>它们背后的问题是：模型训练时可能只见过 4k 或 8k 长度，但推理时希望支持 32k、128k 甚至更长上下文。位置编码必须能在更长范围内保持相对稳定，否则模型会“看得见文本，但用不好文本”。</p>
+<h2 id="总结">总结</h2>
+<p>Transformer 需要位置编码，因为注意力机制本身不知道顺序。</p>
+<p>绝对位置编码告诉模型每个 token 在哪里，相对位置编码强调 token 之间的距离，RoPE 则把位置信息融合进注意力计算。理解位置编码，有助于理解长上下文模型为什么难，以及为什么同样是“支持 128k”，不同模型效果仍然差很多。</p>
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>

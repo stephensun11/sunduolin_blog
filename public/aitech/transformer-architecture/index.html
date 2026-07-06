@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer 架构入门：从 Encoder-Decoder 到 Decoder-only - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                
+                <a href="../../subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/index.html">产品发布</a>
+                
+                <a href="../../subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/index.html">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
+                
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/git/index.html">Git</a>
+                
+                <a href="../../subcategories/python/index.html">Python</a>
+                
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                
+                <a href="../../subcategories/cv/index.html">CV</a>
+                
+                <a href="../../subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/index.html">多模态</a>
+                
+                <a href="../../subcategories/rl/index.html">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>Transformer 架构入门：从 Encoder-Decoder 到 Decoder-only</h1>
+                <div class="meta">
+                    <span>2026-07-06</span>
+                    
+                    <span class="category">AiTech</span>
+                    
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/transformer/index.html">Transformer</a></span>
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9E%B6%E6%9E%84/index.html">架构</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>Transformer 是现代大语言模型的骨架。</p>
+<p>如果只记一个结论，可以这样理解：Transformer 用注意力机制替代了传统循环结构，让模型可以并行处理序列，并在每一层里重新判断“当前 token 应该关注上下文里的哪些信息”。</p>
+<h2 id="为什么-transformer-重要">为什么 Transformer 重要</h2>
+<p>在 Transformer 出现之前，序列建模常用 RNN、LSTM、GRU 这类结构。它们按顺序处理文本，天然适合时间序列，但训练效率受限，因为后面的 token 依赖前面的计算结果。</p>
+<p>Transformer 的变化在于，它不再逐个时间步递推，而是一次性看见整个序列。模型通过注意力权重计算 token 之间的关系，再用多层网络不断更新表示。</p>
+<p>这带来了两个直接好处：</p>
+<ol>
+<li>训练更容易并行化。</li>
+<li>长距离依赖更容易建模。</li>
+</ol>
+<p>这也是后来 BERT、GPT、T5 以及各种 LLM 都建立在 Transformer 之上的原因。</p>
+<h2 id="原始-transformerencoder-decoder">原始 Transformer：Encoder-Decoder</h2>
+<p>论文《Attention Is All You Need》里的 Transformer 是 Encoder-Decoder 架构，最早主要服务于机器翻译。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>输入句子 -&gt; Encoder -&gt; 中间表示 -&gt; Decoder -&gt; 输出句子
+</span></span></code></pre></div><p>Encoder 负责理解输入序列，Decoder 负责根据输入表示和已经生成的内容继续生成下一个 token。</p>
+<p>Encoder 每层大致包括：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Self-Attention
+</span></span><span style="display:flex;"><span>Feed Forward Network
+</span></span><span style="display:flex;"><span>Residual + LayerNorm
+</span></span></code></pre></div><p>Decoder 每层多一个 Cross-Attention，用来关注 Encoder 的输出。</p>
+<p>这种结构很适合“输入到输出”的任务，比如翻译、摘要、文本改写。</p>
+<h2 id="encoder-only代表是-bert">Encoder-only：代表是 BERT</h2>
+<p>Encoder-only 模型只保留 Encoder，更擅长理解文本。</p>
+<p>典型代表是 BERT。它通过 Masked Language Modeling 训练：随机遮住一些词，让模型根据上下文猜被遮住的词。</p>
+<p>这种模型适合：</p>
+<ul>
+<li>文本分类</li>
+<li>句子匹配</li>
+<li>信息抽取</li>
+<li>语义向量表示</li>
+</ul>
+<p>Encoder-only 的特点是可以双向看上下文。对理解任务来说，这非常自然。</p>
+<h2 id="decoder-only现代-llm-的主流">Decoder-only：现代 LLM 的主流</h2>
+<p>GPT 系列使用的是 Decoder-only 架构。</p>
+<p>Decoder-only 模型的训练目标很简单：根据前面的 token 预测下一个 token。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>The cat sat on the -&gt; mat
+</span></span></code></pre></div><p>这叫自回归语言建模。它让模型天然适合生成任务：每次生成一个 token，再把这个 token 加回上下文，继续生成下一个。</p>
+<p>现代聊天模型大多是 Decoder-only，因为它们要持续生成文本、代码、推理过程和结构化回答。</p>
+<h2 id="一个-token-在模型里经历了什么">一个 token 在模型里经历了什么</h2>
+<p>简化来看，一个 token 会经历这些步骤：</p>
+<ol>
+<li>tokenizer 把文本切成 token id。</li>
+<li>embedding 层把 token id 变成向量。</li>
+<li>加入位置信息。</li>
+<li>多层 Transformer block 反复更新向量表示。</li>
+<li>输出层把最终向量映射到词表概率。</li>
+<li>采样或贪心选择下一个 token。</li>
+</ol>
+<p>每一层 Transformer block 都在做两件事：先通过注意力整合上下文，再通过前馈网络加工特征。</p>
+<h2 id="总结">总结</h2>
+<p>Transformer 并不是一个神秘黑盒。它的核心思想是：让序列里的每个位置都能根据任务需要动态关注其他位置。</p>
+<p>Encoder-Decoder 擅长输入输出转换，Encoder-only 擅长理解，Decoder-only 擅长生成。理解这三种结构，就能看懂大多数 LLM 架构讨论的起点。</p>
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Context Window on 我的算法博客</title>
+    <link>https://example.com/tags/context-window/</link>
+    <description>Recent content in Context Window on 我的算法博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 06 Jul 2026 22:25:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/context-window/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>上下文窗口与 KV Cache：为什么长对话会变贵</title>
+      <link>https://example.com/aitech/context-window-kv-cache/</link>
+      <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
+      <guid>https://example.com/aitech/context-window-kv-cache/</guid>
+      <description>使用大模型时，经常会看到两个词：上下文窗口和 KV Cache。&#xA;它们都和推理成本有关。理解它们，可以帮助你更好地设计提示词、控制成本，也能解释为什么长对话会越来越慢、越来越贵。&#xA;上下文窗口是什么 上下文窗口指模型一次能处理的 token 数量。&#xA;如果一个模型支持 32k context，意思是输入、历史对话、系统提示和模型即将生成的内容加起来，最多大约 32k token。&#xA;这里的单位是 token，不是字数。&#xA;系统提示 + 历史消息 + 当前问题 + 输出内容 &amp;lt;= 上下文窗口 超过窗口后，要么报错，要么需要截断旧内容，要么使用摘要、检索等方式压缩上下文。&#xA;长上下文不等于全部有效 模型支持很长上下文，并不代表它能完美使用所有上下文。&#xA;长文本里可能出现信息稀释、位置偏差和注意力分散。模型有时更关注开头和结尾，中间信息反而容易被忽略。&#xA;所以长上下文不是万能药。很多时候，把相关信息检索出来放进短上下文，比把所有材料都塞进去更有效。&#xA;KV Cache 是什么 Decoder-only 模型生成文本时，每次只生成一个新 token。&#xA;如果每生成一个 token 都重新计算整个上下文，成本会非常高。KV Cache 的作用就是缓存历史 token 的 Key 和 Value。&#xA;这样生成下一个 token 时，模型只需要计算新 token 的 Q/K/V，并复用之前缓存的 K/V。&#xA;历史 token 的 K/V -&amp;gt; 缓存 新 token -&amp;gt; 只计算新增部分 这能显著加速自回归生成。&#xA;KV Cache 为什么占显存 KV Cache 需要保存每一层、每个 attention head、每个历史 token 的 K/V 向量。</description>
+    </item>
+  </channel>
+</rss>

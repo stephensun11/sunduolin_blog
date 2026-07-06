@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>架构 on 我的算法博客</title>
+    <link>https://example.com/tags/%E6%9E%B6%E6%9E%84/</link>
+    <description>Recent content in 架构 on 我的算法博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 06 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E6%9E%B6%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Transformer 架构入门：从 Encoder-Decoder 到 Decoder-only</title>
+      <link>https://example.com/aitech/transformer-architecture/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/transformer-architecture/</guid>
+      <description>Transformer 是现代大语言模型的骨架。&#xA;如果只记一个结论，可以这样理解：Transformer 用注意力机制替代了传统循环结构，让模型可以并行处理序列，并在每一层里重新判断“当前 token 应该关注上下文里的哪些信息”。&#xA;为什么 Transformer 重要 在 Transformer 出现之前，序列建模常用 RNN、LSTM、GRU 这类结构。它们按顺序处理文本，天然适合时间序列，但训练效率受限，因为后面的 token 依赖前面的计算结果。&#xA;Transformer 的变化在于，它不再逐个时间步递推，而是一次性看见整个序列。模型通过注意力权重计算 token 之间的关系，再用多层网络不断更新表示。&#xA;这带来了两个直接好处：&#xA;训练更容易并行化。 长距离依赖更容易建模。 这也是后来 BERT、GPT、T5 以及各种 LLM 都建立在 Transformer 之上的原因。&#xA;原始 Transformer：Encoder-Decoder 论文《Attention Is All You Need》里的 Transformer 是 Encoder-Decoder 架构，最早主要服务于机器翻译。&#xA;输入句子 -&amp;gt; Encoder -&amp;gt; 中间表示 -&amp;gt; Decoder -&amp;gt; 输出句子 Encoder 负责理解输入序列，Decoder 负责根据输入表示和已经生成的内容继续生成下一个 token。&#xA;Encoder 每层大致包括：&#xA;Self-Attention Feed Forward Network Residual + LayerNorm Decoder 每层多一个 Cross-Attention，用来关注 Encoder 的输出。&#xA;这种结构很适合“输入到输出”的任务，比如翻译、摘要、文本改写。&#xA;Encoder-only：代表是 BERT Encoder-only 模型只保留 Encoder，更擅长理解文本。</description>
+    </item>
+  </channel>
+</rss>

@@ -9,6 +9,13 @@
     <lastBuildDate>Mon, 06 Jul 2026 22:25:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>AiTech</title>
+      <link>https://example.com/categories/aitech/</link>
+      <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
+      <guid>https://example.com/categories/aitech/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>CSTech</title>
       <link>https://example.com/categories/cstech/</link>
       <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
@@ -20,13 +27,6 @@
       <link>https://example.com/categories/ainews/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
       <guid>https://example.com/categories/ainews/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>AiTech</title>
-      <link>https://example.com/categories/aitech/</link>
-      <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>https://example.com/categories/aitech/</guid>
       <description></description>
     </item>
     <item>

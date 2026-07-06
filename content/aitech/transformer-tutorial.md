@@ -4,6 +4,7 @@ date: 2026-07-05T10:00:00+08:00
 draft: false
 categories: ["AiTech"]
 subcategories: ["LLM基本原理"]
+topics: ["Transformer"]
 tags: ["PyTorch", "Transformer", "教程"]
 ---
 

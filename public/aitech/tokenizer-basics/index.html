@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokenizer 入门：大模型为什么不直接读文字 - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                
+                <a href="../../subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/index.html">产品发布</a>
+                
+                <a href="../../subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/index.html">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
+                
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/git/index.html">Git</a>
+                
+                <a href="../../subcategories/python/index.html">Python</a>
+                
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                
+                <a href="../../subcategories/cv/index.html">CV</a>
+                
+                <a href="../../subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/index.html">多模态</a>
+                
+                <a href="../../subcategories/rl/index.html">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>Tokenizer 入门：大模型为什么不直接读文字</h1>
+                <div class="meta">
+                    <span>2026-07-06</span>
+                    
+                    <span class="category">AiTech</span>
+                    
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/tokenizer/index.html">Tokenizer</a></span>
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/bpe/index.html">BPE</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E8%AF%8D%E8%A1%A8/index.html">词表</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>大语言模型并不是直接读取文字。</p>
+<p>在模型眼里，文本会先被 tokenizer 切成 token，再转换成数字 ID。模型真正处理的是这些 ID 对应的向量，而不是我们看到的汉字、英文单词或标点。</p>
+<h2 id="token-是什么">token 是什么</h2>
+<p>token 可以是一个词，也可以是词的一部分，还可以是一个汉字、标点或空格片段。</p>
+<p>例如英文句子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>unbelievable
+</span></span></code></pre></div><p>可能被切成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>un + believable
+</span></span></code></pre></div><p>也可能被切成更细的子词。具体怎么切，取决于 tokenizer 的训练方式和词表。</p>
+<p>中文里，一个 token 可能对应一个汉字，也可能对应多个汉字组成的常见词。不同模型的 tokenizer 不一样，所以同一句话在不同模型里消耗的 token 数也不一样。</p>
+<h2 id="为什么不按字切分">为什么不按字切分</h2>
+<p>最简单的办法是按字符切分，但这样序列会变长，模型计算成本会变高。</p>
+<p>如果按词切分，又会遇到另一个问题：世界上总会出现新词、拼写变化、代码符号、URL、表情、缩写。完全基于词的词表很难覆盖所有情况。</p>
+<p>子词切分是折中方案。它让常见词保持较短表示，同时也能把罕见词拆成可处理的小片段。</p>
+<h2 id="bpe-的直觉">BPE 的直觉</h2>
+<p>BPE 是常见 tokenizer 方法之一。</p>
+<p>它的核心思想很朴素：从字符开始，反复合并最常一起出现的相邻片段。</p>
+<p>简化过程如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>l o w
+</span></span><span style="display:flex;"><span>l o w e r
+</span></span><span style="display:flex;"><span>n e w e r
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>合并高频片段：
+</span></span><span style="display:flex;"><span>lo, low, er ...
+</span></span></code></pre></div><p>训练结束后，模型得到一个词表。推理时，tokenizer 会按照这个词表把新文本切成 token。</p>
+<h2 id="tokenizer-会影响什么">tokenizer 会影响什么</h2>
+<p>第一，影响上下文长度。</p>
+<p>模型常说支持 8k、32k、128k context，这里的长度单位是 token，不是字符。中文、英文、代码、表格的 token 消耗方式都不一样。</p>
+<p>第二，影响多语言表现。</p>
+<p>如果 tokenizer 对某种语言切得特别碎，那么同样的信息会占用更多 token，也会增加模型学习难度。</p>
+<p>第三，影响代码和结构化文本。</p>
+<p>代码里有大量符号、缩进和特殊命名。如果 tokenizer 对代码不友好，模型处理代码时就会更吃力。</p>
+<h2 id="特殊-token">特殊 token</h2>
+<p>除了普通文本 token，模型还会使用特殊 token。</p>
+<p>常见例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&lt;bos&gt;  序列开始
+</span></span><span style="display:flex;"><span>&lt;eos&gt;  序列结束
+</span></span><span style="display:flex;"><span>&lt;pad&gt;  填充
+</span></span><span style="display:flex;"><span>&lt;unk&gt;  未知 token
+</span></span></code></pre></div><p>聊天模型还会有表示 system、user、assistant 的特殊模板或控制 token。它们帮助模型区分消息角色和对话结构。</p>
+<h2 id="一个常见误区">一个常见误区</h2>
+<p>很多人把 token 当成“字数”，这是不准确的。</p>
+<p>同样 100 个汉字、100 个英文单词、100 行代码，token 数可能差异很大。估算成本、上下文长度和输入限制时，都应该以 tokenizer 的实际结果为准。</p>
+<h2 id="总结">总结</h2>
+<p>Tokenizer 是文本进入大模型之前的第一道门。</p>
+<p>它决定文本怎么被切分，决定输入会消耗多少 token，也影响模型处理不同语言和代码的效率。理解 tokenizer，能帮助你更准确地理解上下文窗口、调用成本和提示词长度限制。</p>
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>

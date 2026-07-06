@@ -16,11 +16,32 @@
       <description>学 Linux 不需要一开始就理解内核、发行版和系统调用。&#xA;对大多数开发者来说，第一目标很实际：能登录服务器，能找到文件，能看日志，能启动程序，能判断一个问题大概出在哪里。先把这些基本动作练熟，Linux 就不会显得那么陌生。&#xA;这篇文章是一份简单教学，按日常使用顺序整理常用命令。&#xA;先理解目录 Linux 的文件系统从根目录 / 开始。&#xA;常见目录可以先这样理解。&#xA;/home 普通用户的家目录 /root root 用户的家目录 /etc 系统和软件配置 /var 日志、缓存、运行时数据 /usr 系统程序和库 /tmp 临时文件 /opt 额外安装的软件 查看当前目录：&#xA;pwd 列出当前目录文件：&#xA;ls ls -l ls -a 切换目录：&#xA;cd /var/log cd ~ cd .. ~ 表示当前用户的家目录，.. 表示上一级目录。&#xA;文件和目录操作 创建目录：&#xA;mkdir notes mkdir -p projects/blog/content 创建空文件：&#xA;touch hello.txt 复制文件：&#xA;cp hello.txt backup.txt 复制目录：&#xA;cp -r content content-backup 移动或重命名：&#xA;mv old.txt new.txt mv file.txt notes/ 删除文件：</description>
     </item>
     <item>
+      <title>上下文窗口与 KV Cache：为什么长对话会变贵</title>
+      <link>https://example.com/aitech/context-window-kv-cache/</link>
+      <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
+      <guid>https://example.com/aitech/context-window-kv-cache/</guid>
+      <description>使用大模型时，经常会看到两个词：上下文窗口和 KV Cache。&#xA;它们都和推理成本有关。理解它们，可以帮助你更好地设计提示词、控制成本，也能解释为什么长对话会越来越慢、越来越贵。&#xA;上下文窗口是什么 上下文窗口指模型一次能处理的 token 数量。&#xA;如果一个模型支持 32k context，意思是输入、历史对话、系统提示和模型即将生成的内容加起来，最多大约 32k token。&#xA;这里的单位是 token，不是字数。&#xA;系统提示 + 历史消息 + 当前问题 + 输出内容 &amp;lt;= 上下文窗口 超过窗口后，要么报错，要么需要截断旧内容，要么使用摘要、检索等方式压缩上下文。&#xA;长上下文不等于全部有效 模型支持很长上下文，并不代表它能完美使用所有上下文。&#xA;长文本里可能出现信息稀释、位置偏差和注意力分散。模型有时更关注开头和结尾，中间信息反而容易被忽略。&#xA;所以长上下文不是万能药。很多时候，把相关信息检索出来放进短上下文，比把所有材料都塞进去更有效。&#xA;KV Cache 是什么 Decoder-only 模型生成文本时，每次只生成一个新 token。&#xA;如果每生成一个 token 都重新计算整个上下文，成本会非常高。KV Cache 的作用就是缓存历史 token 的 Key 和 Value。&#xA;这样生成下一个 token 时，模型只需要计算新 token 的 Q/K/V，并复用之前缓存的 K/V。&#xA;历史 token 的 K/V -&amp;gt; 缓存 新 token -&amp;gt; 只计算新增部分 这能显著加速自回归生成。&#xA;KV Cache 为什么占显存 KV Cache 需要保存每一层、每个 attention head、每个历史 token 的 K/V 向量。</description>
+    </item>
+    <item>
+      <title>LLM 训练流程入门：预训练、指令微调与对齐</title>
+      <link>https://example.com/aitech/llm-training-basics/</link>
+      <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-training-basics/</guid>
+      <description>一个聊天大模型不是直接从零训练成助手的。&#xA;更常见的路线是分阶段完成：先通过预训练学语言和知识，再通过指令微调学会回答问题，最后通过偏好对齐让回答更符合人类预期。&#xA;第一阶段：预训练 预训练的目标通常是预测下一个 token。&#xA;模型看到大量文本，学习这样的任务：&#xA;给定前文，预测下一个 token 这个目标很简单，但数据规模足够大时，模型会学到语法、事实、推理模式、代码结构和世界知识。&#xA;预训练阶段最昂贵，因为它需要大量数据和算力。很多基础能力都在这个阶段形成。&#xA;第二阶段：指令微调 预训练模型会续写文本，但不一定会像助手一样回答问题。&#xA;指令微调，也就是 SFT，会使用大量“指令-回答”样本继续训练模型。&#xA;例如：&#xA;用户：解释什么是 tokenizer 助手：Tokenizer 是... 经过 SFT 后，模型开始理解“用户提出请求，助手给出回答”这种交互格式。&#xA;SFT 的关键不是让模型获得所有知识，而是让模型学会按照指令组织输出。&#xA;第三阶段：偏好对齐 两个回答都可能语法正确，但一个更有帮助、更安全、更符合用户意图。&#xA;偏好对齐的目标就是让模型更倾向于人类偏好的回答。&#xA;常见方法包括：&#xA;RLHF DPO RLAIF 它们的具体算法不同，但目标相近：用偏好信号塑造模型行为。&#xA;数据质量比想象中更重要 训练大模型不是简单堆数据。&#xA;低质量数据会带来噪声、重复、错误知识和糟糕风格。高质量数据能显著影响模型的表达能力、推理习惯和安全边界。&#xA;尤其在 SFT 和偏好数据阶段，少量高质量样本往往比大量随便拼出来的数据更有价值。&#xA;为什么模型会幻觉 从训练目标看，模型本质上是在预测合理的下一个 token。&#xA;它并不天然拥有数据库式的事实校验机制。如果上下文不足、问题含糊、训练数据冲突，模型可能生成看似合理但并不真实的内容。&#xA;减少幻觉通常需要结合：&#xA;更好的训练数据 检索增强 工具调用 更严格的评估 输出约束 总结 LLM 的训练可以粗略理解为三步：预训练让模型学语言和知识，指令微调让模型学会当助手，偏好对齐让模型回答得更符合人类期待。&#xA;理解这个流程后，你会更容易判断一个模型能力来自哪里，也更容易理解为什么“会聊天”和“懂事实”并不是同一件事。</description>
+    </item>
+    <item>
       <title>Python 实用入门：把重复工作写成脚本</title>
       <link>https://example.com/cstech/python-practical-start/</link>
       <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
       <guid>https://example.com/cstech/python-practical-start/</guid>
       <description>Python 最适合作为第一门实用脚本语言来学。&#xA;它的语法不重，标准库够丰富，写几行代码就能处理文件、整理数据、调用命令、生成报告。对个人博客、AI 实验和日常开发来说，Python 很像一把随手能拿起来的小工具。&#xA;这篇文章不追求讲完 Python，而是帮你建立一个能立刻动手的最小知识框架。&#xA;安装与版本检查 安装完成后，先确认 Python 是否可用。&#xA;python --version 有些系统里命令叫 python3。&#xA;python3 --version 进入交互环境：&#xA;python 执行脚本：&#xA;python hello.py 一个最小脚本如下。&#xA;print(&amp;#34;Hello, Python&amp;#34;) 虚拟环境 写 Python 项目时，建议每个项目使用独立虚拟环境。这样不同项目的依赖不会互相污染。&#xA;创建虚拟环境：&#xA;python -m venv .venv 激活虚拟环境。&#xA;Windows PowerShell：&#xA;.\.venv\Scripts\Activate.ps1 Linux / macOS：&#xA;source .venv/bin/activate 安装依赖：&#xA;pip install requests 导出依赖：&#xA;pip freeze &amp;gt; requirements.txt 下次恢复环境：&#xA;pip install -r requirements.txt 变量和基本类型 Python 里常见的数据类型很直接。&#xA;name = &amp;#34;Alice&amp;#34; age = 18 score = 95.5 is_active = True tags = [&amp;#34;AI&amp;#34;, &amp;#34;Python&amp;#34;, &amp;#34;Blog&amp;#34;] profile = {&amp;#34;name&amp;#34;: name, &amp;#34;age&amp;#34;: age} 列表适合保存一组有顺序的数据。</description>
+    </item>
+    <item>
+      <title>位置编码入门：Transformer 如何理解顺序</title>
+      <link>https://example.com/aitech/positional-encoding-basics/</link>
+      <pubDate>Mon, 06 Jul 2026 22:15:00 +0800</pubDate>
+      <guid>https://example.com/aitech/positional-encoding-basics/</guid>
+      <description>Transformer 的注意力机制本身不天然知道顺序。&#xA;如果只看一组 token 向量，Self-Attention 更像是在处理一个集合：它能计算 token 之间的关系，但不知道谁在前、谁在后。语言显然需要顺序，所以模型必须额外加入位置信息。&#xA;为什么顺序重要 看两个句子：&#xA;猫追狗。 狗追猫。 词一样，顺序不同，意思完全反过来。&#xA;如果模型不能感知位置，就很难区分这两句话。位置编码的作用就是告诉模型：每个 token 在序列里的相对或绝对位置是什么。&#xA;绝对位置编码 原始 Transformer 使用正弦余弦位置编码。&#xA;它为每个位置生成一个固定向量，再加到 token embedding 上。&#xA;token embedding + position embedding 这样，第 1 个位置、第 2 个位置、第 100 个位置都会有不同的位置信号。&#xA;这种方法简单有效，但也有局限。模型训练时见过的最大长度有限，推理时如果超出训练长度，泛化可能变差。&#xA;可学习位置编码 一些模型使用可学习的位置 embedding。&#xA;也就是说，每个位置对应一个可训练向量，和词向量一样在训练中更新。&#xA;这种方法灵活，但同样受最大长度限制。模型训练时只学到了固定范围内的位置向量，超长外推并不自然。&#xA;相对位置编码 语言里很多关系不只依赖绝对位置，更依赖相对距离。&#xA;例如“前一个词”“后面三个词”“同一句里的主语”都带有相对关系。相对位置编码让模型关注 token 之间的距离，而不是只关心每个 token 的绝对编号。&#xA;这类方法在长文本建模里更自然。&#xA;RoPE 的直觉 RoPE 是现在很多 LLM 使用的位置编码方法。&#xA;它的核心做法是把位置信息编码进向量旋转里。不同位置会让 Q、K 向量发生不同角度的旋转。这样，当 Q 和 K 做点积时，相对位置信息就会进入注意力分数。&#xA;你不需要一开始就记住数学细节。先抓住这个直觉：RoPE 不是简单把位置向量加上去，而是让注意力计算本身带上相对位置信号。&#xA;长上下文和位置编码 长上下文模型经常会讨论 RoPE scaling、插值、外推等技巧。&#xA;它们背后的问题是：模型训练时可能只见过 4k 或 8k 长度，但推理时希望支持 32k、128k 甚至更长上下文。位置编码必须能在更长范围内保持相对稳定，否则模型会“看得见文本，但用不好文本”。</description>
     </item>
     <item>
       <title>Git 实用入门：从提交到分支协作</title>
@@ -30,11 +51,32 @@
       <description>Git 最重要的能力不是“保存代码”，而是让你敢于修改代码。&#xA;很多人刚开始学 Git，会被一堆命令吓住：add、commit、branch、merge、rebase、stash。其实入门时不需要把它们全部背下来。先理解 Git 在记录什么，再记住一条稳定的日常工作流，就能覆盖大多数开发场景。&#xA;Git 在解决什么问题 写代码最怕两件事。&#xA;第一是不知道自己改了什么。今天改一点，明天改一点，三天后发现程序坏了，却不知道是哪一步引入的问题。&#xA;第二是不敢尝试。想重构一个函数，想换一种实现方式，但又担心改坏以后回不去。&#xA;Git 的价值就在这里：它把项目的每一次关键变化记录成一个提交。你可以查看差异，可以回到过去，也可以开一个分支大胆试验。&#xA;四个基本区域 理解 Git，先记住四个区域。&#xA;working tree 工作区：你正在编辑的文件 staging area 暂存区：准备进入下一次提交的改动 repository 本地仓库：已经保存为 commit 的历史 remote 远程仓库：GitHub / GitLab 等远端副本 日常命令基本都围绕这四个区域移动文件状态。&#xA;查看当前状态：&#xA;git status 查看具体改动：&#xA;git diff 把改动放入暂存区：&#xA;git add file.md git add . 提交到本地仓库：&#xA;git commit -m &amp;#34;Add tmux guide&amp;#34; 推送到远程仓库：&#xA;git push 第一次使用 Git 第一次使用时，先配置提交身份。&#xA;git config --global user.name &amp;#34;你的名字&amp;#34; git config --global user.email &amp;#34;you@example.com&amp;#34; 克隆已有仓库：&#xA;git clone https://github.</description>
     </item>
     <item>
+      <title>Self-Attention 入门：模型如何决定该看哪里</title>
+      <link>https://example.com/aitech/self-attention-basics/</link>
+      <pubDate>Mon, 06 Jul 2026 22:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/self-attention-basics/</guid>
+      <description>Self-Attention 是 Transformer 最核心的计算。&#xA;它回答的问题很直接：当模型处理某个 token 时，应该从上下文里的哪些 token 获取信息？注意力分数越高，说明当前位置越需要关注那个位置。&#xA;一个直觉例子 看这个句子：&#xA;小明把书放进书包，因为它很重。 这里的“它”更可能指“书”，不是“书包”。人类可以根据语义判断引用关系，模型也需要类似能力。&#xA;Self-Attention 做的事情，就是让“它”这个位置可以和前面的“小明”“书”“书包”等位置建立联系，并根据上下文分配不同权重。&#xA;Q、K、V 是什么 注意力机制里经常看到三个符号：&#xA;Q = Query K = Key V = Value 可以用检索来类比。&#xA;Query 表示“我现在想找什么信息”。Key 表示“我这里有什么特征可以被匹配”。Value 表示“如果你关注我，真正取走的信息是什么”。&#xA;每个 token 都会生成自己的 Q、K、V。然后用 Q 和所有 K 做相似度计算，得到注意力权重，再用这些权重对 V 加权求和。&#xA;计算流程 简化公式如下：&#xA;Attention(Q, K, V) = softmax(QK^T / sqrt(d)) V 拆开看：&#xA;QK^T 计算当前位置和其他位置的匹配程度。 除以 sqrt(d) 是为了稳定数值。 softmax 把分数变成概率分布。 最后乘以 V，得到融合上下文后的表示。 这就是模型“看哪里”的核心。&#xA;为什么需要 Multi-Head Attention 单个注意力头只能从一种角度看上下文。多头注意力允许模型同时关注不同关系。&#xA;有的头可能关注语法结构，有的头可能关注实体引用，有的头可能关注局部搭配。虽然我们不应该把每个头都解释得太死，但多头机制确实给了模型更丰富的表达空间。&#xA;Head 1: 关注主谓关系 Head 2: 关注指代关系 Head 3: 关注局部短语 多个 head 的结果会拼接起来，再经过线性层融合。</description>
+    </item>
+    <item>
+      <title>Tokenizer 入门：大模型为什么不直接读文字</title>
+      <link>https://example.com/aitech/tokenizer-basics/</link>
+      <pubDate>Mon, 06 Jul 2026 22:05:00 +0800</pubDate>
+      <guid>https://example.com/aitech/tokenizer-basics/</guid>
+      <description>大语言模型并不是直接读取文字。&#xA;在模型眼里，文本会先被 tokenizer 切成 token，再转换成数字 ID。模型真正处理的是这些 ID 对应的向量，而不是我们看到的汉字、英文单词或标点。&#xA;token 是什么 token 可以是一个词，也可以是词的一部分，还可以是一个汉字、标点或空格片段。&#xA;例如英文句子：&#xA;unbelievable 可能被切成：&#xA;un + believable 也可能被切成更细的子词。具体怎么切，取决于 tokenizer 的训练方式和词表。&#xA;中文里，一个 token 可能对应一个汉字，也可能对应多个汉字组成的常见词。不同模型的 tokenizer 不一样，所以同一句话在不同模型里消耗的 token 数也不一样。&#xA;为什么不按字切分 最简单的办法是按字符切分，但这样序列会变长，模型计算成本会变高。&#xA;如果按词切分，又会遇到另一个问题：世界上总会出现新词、拼写变化、代码符号、URL、表情、缩写。完全基于词的词表很难覆盖所有情况。&#xA;子词切分是折中方案。它让常见词保持较短表示，同时也能把罕见词拆成可处理的小片段。&#xA;BPE 的直觉 BPE 是常见 tokenizer 方法之一。&#xA;它的核心思想很朴素：从字符开始，反复合并最常一起出现的相邻片段。&#xA;简化过程如下：&#xA;l o w l o w e r n e w e r 合并高频片段： lo, low, er ... 训练结束后，模型得到一个词表。推理时，tokenizer 会按照这个词表把新文本切成 token。&#xA;tokenizer 会影响什么 第一，影响上下文长度。&#xA;模型常说支持 8k、32k、128k context，这里的长度单位是 token，不是字符。中文、英文、代码、表格的 token 消耗方式都不一样。</description>
+    </item>
+    <item>
       <title>Tmux 实用入门：让终端会话不再怕断线</title>
       <link>https://example.com/cstech/tmux-practical-guide/</link>
       <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
       <guid>https://example.com/cstech/tmux-practical-guide/</guid>
       <description>如果你经常通过 SSH 登录服务器，tmux 是一个非常值得尽早掌握的工具。&#xA;它解决的问题很朴素：终端窗口关掉了、网络断了、笔记本合上了，服务器上的任务还能不能继续跑？没有 tmux 时，很多命令会跟着 SSH 会话一起结束；有了 tmux，会话可以留在服务器后台，等你重新登录后再接回去。&#xA;这篇文章参考了阮一峰老师的《Tmux 使用教程》，但会按照我日常使用服务器和开发环境的习惯，整理成一份更偏实战的入门笔记。&#xA;tmux 到底在管什么 理解 tmux，先记住三个概念。&#xA;Session 是会话。你可以把它理解成一组长期存在的终端工作区。即使终端窗口关闭，session 也可以继续留在后台。&#xA;Window 是窗口。一个 session 里可以有多个 window，比如一个用来跑服务，一个用来查看日志，一个用来编辑文件。&#xA;Pane 是窗格。一个 window 可以继续拆成多个 pane，比如左边跑程序，右边看日志，下面开一个临时命令行。&#xA;所以 tmux 的层级大致是：&#xA;session └── window └── pane 日常使用时，不需要一开始就记住所有命令。先把 session 用熟，就已经能解决 80% 的断线焦虑。&#xA;安装 tmux 不同系统的安装方式略有差别。&#xA;# Ubuntu / Debian sudo apt-get install tmux # CentOS / Fedora sudo yum install tmux # macOS brew install tmux 安装完成后，确认版本：&#xA;tmux -V 最小可用流程 第一次使用 tmux，我建议只记这一组命令。</description>
+    </item>
+    <item>
+      <title>Transformer 架构入门：从 Encoder-Decoder 到 Decoder-only</title>
+      <link>https://example.com/aitech/transformer-architecture/</link>
+      <pubDate>Mon, 06 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/transformer-architecture/</guid>
+      <description>Transformer 是现代大语言模型的骨架。&#xA;如果只记一个结论，可以这样理解：Transformer 用注意力机制替代了传统循环结构，让模型可以并行处理序列，并在每一层里重新判断“当前 token 应该关注上下文里的哪些信息”。&#xA;为什么 Transformer 重要 在 Transformer 出现之前，序列建模常用 RNN、LSTM、GRU 这类结构。它们按顺序处理文本，天然适合时间序列，但训练效率受限，因为后面的 token 依赖前面的计算结果。&#xA;Transformer 的变化在于，它不再逐个时间步递推，而是一次性看见整个序列。模型通过注意力权重计算 token 之间的关系，再用多层网络不断更新表示。&#xA;这带来了两个直接好处：&#xA;训练更容易并行化。 长距离依赖更容易建模。 这也是后来 BERT、GPT、T5 以及各种 LLM 都建立在 Transformer 之上的原因。&#xA;原始 Transformer：Encoder-Decoder 论文《Attention Is All You Need》里的 Transformer 是 Encoder-Decoder 架构，最早主要服务于机器翻译。&#xA;输入句子 -&amp;gt; Encoder -&amp;gt; 中间表示 -&amp;gt; Decoder -&amp;gt; 输出句子 Encoder 负责理解输入序列，Decoder 负责根据输入表示和已经生成的内容继续生成下一个 token。&#xA;Encoder 每层大致包括：&#xA;Self-Attention Feed Forward Network Residual + LayerNorm Decoder 每层多一个 Cross-Attention，用来关注 Encoder 的输出。&#xA;这种结构很适合“输入到输出”的任务，比如翻译、摘要、文本改写。&#xA;Encoder-only：代表是 BERT Encoder-only 模型只保留 Encoder，更擅长理解文本。</description>
     </item>
     <item>
       <title>Attention Is All You Need 论文解读</title>
