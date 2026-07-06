@@ -45,24 +45,6 @@
     {{ partial "nav.html" . }}
     <div class="main-layout">
         <div class="main-content">
-            {{/* 栏目导航卡片 */}}
-            <div class="section-cards">
-                {{ range where .Site.Pages "Kind" "section" }}
-                <div class="section-card">
-                    <h2>{{ .Title }}</h2>
-                    {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
-                    <div class="sub-links">
-                        {{ if isset $.Site.Params.section_subcategories .Title }}
-                        {{ range index $.Site.Params.section_subcategories .Title }}
-                        <a href="{{ partial "internal-link.html" (printf "/subcategories/%s/" (urlize .)) }}">{{ . }}</a>
-                        {{ end }}
-                        {{ end }}
-                    </div>
-                    <a class="more-link" href="{{ partial "internal-link.html" .RelPermalink }}">查看全部 →</a>
-                </div>
-                {{ end }}
-            </div>
-
             {{/* 最新文章 */}}
             <h2 class="recent-title">最新文章</h2>
             <div class="posts-grid">
@@ -78,7 +60,6 @@
                     </div>
                     <h3><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h3>
                     <div class="date">{{ .Date.Format "2006-01-02" }}</div>
-                    <div class="summary">{{ .Summary }}</div>
                 </div>
                 {{ end }}
             </div>
