@@ -30,7 +30,7 @@
     </header>
     <nav>
         {{ range .Site.Menus.main }}
-        <a href="{{ .URL | relURL }}">{{ .Name }}</a>
+        <a href="{{ partial "internal-link.html" .URL }}">{{ .Name }}</a>
         {{ end }}
     </nav>
     <div class="container">
@@ -42,7 +42,7 @@
                 <h2>{{ .Title }}</h2>
                 <div class="meta">{{ .Date.Format "2006-01-02" }}</div>
                 <p>{{ .Summary }}</p>
-                <a href="{{ .RelPermalink | relURL }}">阅读更多 →</a>
+                <a href="{{ partial "internal-link.html" .RelPermalink }}">阅读更多 →</a>
             </div>
             {{ end }}
         </div>

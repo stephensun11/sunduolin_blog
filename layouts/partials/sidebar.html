@@ -12,11 +12,11 @@
 <aside class="sidebar">
     {{ range where .Site.Pages "Kind" "section" }}
     <div class="sidebar-section">
-        <h3><a href="{{ .RelPermalink | relURL }}">{{ .Title }}</a></h3>
+        <h3><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h3>
         <div class="sidebar-links">
             {{ if isset $.Site.Params.section_subcategories .Title }}
             {{ range index $.Site.Params.section_subcategories .Title }}
-            <a href="{{ printf "subcategories/%s/" (urlize .) | relURL }}">{{ . }}</a>
+            <a href="{{ partial "internal-link.html" (printf "/subcategories/%s/" (urlize .)) }}">{{ . }}</a>
             {{ end }}
             {{ end }}
         </div>

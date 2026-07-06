@@ -47,10 +47,10 @@
 
             {{/* 子分类筛选按钮 */}}
             <div class="subcategory-filter">
-                <a href="{{ .RelPermalink | relURL }}" class="active">全部</a>
+                <a href="{{ partial "internal-link.html" .RelPermalink }}" class="active">全部</a>
                 {{ if isset .Site.Params.section_subcategories .CurrentSection.Title }}
                     {{ range index .Site.Params.section_subcategories .CurrentSection.Title }}
-                    <a href="{{ printf "subcategories/%s/" (urlize .) | relURL }}">{{ . }}</a>
+                    <a href="{{ partial "internal-link.html" (printf "/subcategories/%s/" (urlize .)) }}">{{ . }}</a>
                     {{ end }}
                 {{ end }}
             </div>
@@ -59,7 +59,7 @@
                 {{ range .Pages }}
                 {{ if not .Params._index }}
                 <div class="post-item">
-                    <h2><a href="{{ .RelPermalink | relURL }}">{{ .Title }}</a></h2>
+                    <h2><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h2>
                     <div class="meta">
                         <span>{{ .Date.Format "2006-01-02" }}</span>
                         {{ range .Params.categories }}

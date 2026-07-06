@@ -15,16 +15,16 @@
         {{ range .Site.Menus.main }}
         {{ if .HasChildren }}
         <div class="nav-item">
-            <a class="nav-link" href="{{ .URL | relURL }}">{{ .Name }} ▾</a>
+            <a class="nav-link" href="{{ partial "internal-link.html" .URL }}">{{ .Name }} ▾</a>
             <div class="dropdown">
                 {{ range .Children }}
-                <a href="{{ .URL | relURL }}">{{ .Name }}</a>
+                <a href="{{ partial "internal-link.html" .URL }}">{{ .Name }}</a>
                 {{ end }}
             </div>
         </div>
         {{ else }}
         <div class="nav-item">
-            <a class="nav-link" href="{{ .URL | relURL }}">{{ .Name }}</a>
+            <a class="nav-link" href="{{ partial "internal-link.html" .URL }}">{{ .Name }}</a>
         </div>
         {{ end }}
         {{ end }}
