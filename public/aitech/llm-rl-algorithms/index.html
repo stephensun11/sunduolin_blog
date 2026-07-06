@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM强化学习算法详解 - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content img { max-width: 100%; height: auto; display: block; margin: 1rem auto; border-radius: 8px; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                
+                <a href="../../subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/index.html">产品发布</a>
+                
+                <a href="../../subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/index.html">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
+                
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/git/index.html">Git</a>
+                
+                <a href="../../subcategories/python/index.html">Python</a>
+                
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                
+                <a href="../../subcategories/cv/index.html">CV</a>
+                
+                <a href="../../subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/index.html">多模态</a>
+                
+                <a href="../../subcategories/rl/index.html">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>LLM强化学习算法详解</h1>
+                <div class="meta">
+                    <span>2026-07-06</span>
+                    
+                    <span class="category">AiTech</span>
+                    
+                    
+                    <a class="subcategory" href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/rlhf/index.html">RLHF</a></span>
+                    
+                    <span class="tag"><a href="../../tags/ppo/index.html">PPO</a></span>
+                    
+                    <span class="tag"><a href="../../tags/grpo/index.html">GRPO</a></span>
+                    
+                    <span class="tag"><a href="../../tags/dapo/index.html">DAPO</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="概述">概述</h2>
+<h2 id="学习路线">学习路线</h2>
+<h2 id="前言">前言</h2>
+<h3 id="一些概念">一些概念</h3>
+<h4 id="策略梯度policy-gradient">策略梯度（Policy Gradient）</h4>
+<p>“策略梯度”（<strong>Policy Gradient</strong>）是强化学习中最核心的一类方法，它直接通过<strong>优化策略的参数</strong>来最大化期望回报。下面进行详解：</p>
+<h5 id="一基本思想">一、基本思想</h5>
+<p>在强化学习中，**策略（Policy）**定义了智能体（Agent）在环境中行动的方式。</p>
+<p>如果我们用一个带参数的函数（如神经网络）表示策略：</p>
+<p>$π_θ(a∣s)$</p>
+<p>表示在状态 s 下采取动作 a 的概率，参数为 θ。</p>
+<p>策略梯度法的核心目标是：</p>
+<blockquote>
+<p>找到一组参数 θ，使得模型获得的<strong>期望累积奖励</strong>最大。</p>
+</blockquote>
+<p>这其实与深度学习中的最小化Loss有异曲同工之妙</p>
+<h5 id="二优化目标与梯度推导">二、优化目标与梯度推导</h5>
+<p>定义目标函数（期望回报）为：</p>
+<p>$J(θ)=E_{π_θ}[R(τ)]$</p>
+<p>其中 R(τ) 是一条轨迹（trajectory）上获得的总奖励。</p>
+<p>使用概率论的<strong>对数导数技巧（log trick）</strong>：</p>
+<p>$∇_θJ(θ)=E_{π_θ}[∇_θlog⁡π_θ(a∣s)⋅R(τ)]$</p>
+<p>这就是 <strong>策略梯度定理（Policy Gradient Theorem）</strong> 的核心结果。
+它告诉我们：只要能从策略中采样（而不需要知道环境的导数），就能计算梯度。</p>
+<blockquote>
+<p>对数导数技巧：∇logf(x) = ∇f(x) / f(x)，即∇f(x) = f(x) * ∇logf(x) ，具体推导过程如下：</p>
+</blockquote>
+<p>设一条长度为 T 的轨迹为</p>
+<p>τ=(s0,a0,s1,a1,…,sT)，累计回报为 R(τ)（可包含折扣）。</p>
+<p>在给定策略参数 θ 下，轨迹的概率密度函数可写为</p>
+<p>$\begin{aligned}
+p_\theta(\tau)
+&amp;= \rho(s_0),\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t),P(s_{t+1}\mid s_t,a_t)
+\end{aligned}$</p>
+<p>其中 ρ 是初始状态分布，环境转移 P 不依赖 θ（典型假设）。</p>
+<p>于是：</p>
+<p>$\begin{aligned}
+J(\theta)
+&amp;= \mathbb{E}<em>{\tau \sim \pi</em>\theta}[R(\tau)]
+= \int p_\theta(\tau),R(\tau),d\tau
+\end{aligned}$</p>
+<p>对目标函数求梯度（找到使目标函数上升最快的方向）：</p>
+<p>$\begin{aligned}
+\nabla_\theta J(\theta)
+&amp;= \nabla_\theta \int p_\theta(\tau),R(\tau),d\tau \
+&amp;= \int \nabla_\theta p_\theta(\tau),R(\tau),d\tau \
+\
+由对数导数技巧：\
+\nabla p_\theta(\tau) = p_\theta(\tau),\nabla_\theta \log p_\theta(\tau)\
+可转换为以下式子：
+\
+&amp;= \int p_\theta(\tau),\nabla_\theta \log p_\theta(\tau),R(\tau),d\tau \
+&amp;= \mathbb{E}<em>{\tau \sim p</em>\theta}!\big[\nabla_\theta \log p_\theta(\tau),R(\tau)\big]
+\end{aligned}$</p>
+<p>展开$log p_\theta(\tau)$ 并去掉与 θ 无关项</p>
+<p>$\begin{aligned}
+\log p_\theta(\tau)
+&amp;= \log \rho(s_0);+;\sum_{t=0}^{T-1}\big(\log \pi_\theta(a_t\mid s_t)+\log P(s_{t+1}\mid s_t,a_t)\big)
+\end{aligned}$</p>
+<p>由于 $\rho$,P 与 θ 无关，则</p>
+<p>$\begin{aligned}
+\quad
+\nabla_\theta \log p_\theta(\tau)
+= \sum_{t=0}^{T-1}\nabla_\theta \log \pi_\theta(a_t\mid s_t)
+\end{aligned}$</p>
+<p>因此：</p>
+<p>$\begin{aligned}
+\nabla_\theta J(\theta)
+&amp;= \mathbb{E}<em>{\tau \sim p</em>\theta}!\left[
+\left(\sum_{t=0}^{T-1}\nabla_\theta \log \pi_\theta(a_t\mid s_t)\right) R(\tau)
+\right] \
+&amp;= \mathbb{E}<em>{\pi</em>\theta}!\big[\nabla_\theta \log \pi_\theta(a\mid s),R(\tau)\big].
+\end{aligned}$</p>
+<p>把期望写成对状态—动作采样的期望，也常见到压缩写法，理解为沿着同一条轨迹对所有时刻求和。</p>
+<h2 id="reinforce">REINFORCE</h2>
+<p><strong>REINFORCE</strong>（Williams, 1992，<a href="https://link.springer.com/article/10.1007/BF00992696">Simple statistical gradient-following algorithms for connectionist reinforcement learning - Machine </a>）是最早、最经典的<strong>Policy Gradient</strong>方法之一。
+它通过采样轨迹并利用梯度上升直接优化策略参数，而不依赖环境的模型或显式的值函数。</p>
+<h3 id="核心思想">核心思想</h3>
+<p>REINFORCE 的核心思想是：</p>
+<blockquote>
+<p>通过采样得到带有高回报的动作，并增加其在策略中的概率，同时降低带来低回报的动作的概率。</p>
+</blockquote>
+<p>数学上，通过对 J(θ) 求导可得策略梯度定理（Policy Gradient Theorem）：</p>
+<p>$∇_θJ(θ)=E_{π_θ}[∇_θlog_{π_θ}(a∣s)G_t]$</p>
+<ul>
+<li>
+<p>其中$G_t=\sum_{k=t}^{T-1} \gamma^{k−t} r_{k+1}
+$是从时间步 t 开始的折扣回报,可以理解为“<strong>从当前状态出发，未来能得到的总奖励</strong>”；</p>
+</li>
+<li>
+<p>$r_t$是在时间步 t 获得的即时奖励，通常由环境给定（基于游戏规则）</p>
+</li>
+<li>
+<p>$\gamma \in [0,1] 是折扣因子$</p>
+</li>
+<li>
+<p>T：回合的结束时间步（终止状态）</p>
+</li>
+</ul>
+<h3 id="算法步骤">算法步骤</h3>
+<p>REINFORCE 算法的参数更新公式是：</p>
+<p>$\theta \leftarrow \theta + \alpha \nabla_\theta \log \pi_\theta(a_t | s_t) G_t$</p>
+<p>或者with baseline版本：</p>
+<p>$\theta \leftarrow \theta + \alpha \nabla_\theta \log \pi_\theta(a_t | s_t) (G_t - b)$</p>
+<p>其中：</p>
+<ul>
+<li>
+<p>$\theta$表示策略参数；</p>
+</li>
+<li>
+<p>$\alpha$表示学习率；</p>
+</li>
+<li>
+<p>$\pi_\theta (a_t | s_t)$表示策略在状态$s_t$下选择动作$a_t$的概率；</p>
+</li>
+<li>
+<p>$G_t$表示<strong>回报信号</strong>（指导方向）；</p>
+</li>
+<li>
+<p>$b$表示减去的baseline，用于降低方差，<strong>可以用时间步</strong>$t$<strong>下的平均回报作为baseline</strong></p>
+</li>
+</ul>
+<h4 id="举个例子cartpole-平衡杆任务">🙌举个例子：CartPole 平衡杆任务</h4>
+<p>环境（来自 OpenAI Gym 的经典例子）：</p>
+<ul>
+<li>
+<p>状态 (s_t)：由 4 个连续变量组成（位置、速度、杆角度、角速度）。</p>
+</li>
+<li>
+<p>动作 (a_t)：离散动作 {左推, 右推}。</p>
+</li>
+<li>
+<p>奖励 (r_t)：每成功保持平衡一步就得到 +1；杆倒下或小车移出界面时，回合结束。</p>
+</li>
+</ul>
+<p>我们假设使用一个参数化策略网络（policy network）输出左右动作的概率。</p>
+<h5 id="step-1初始化">Step 1：初始化</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span>初始化策略参数 θ
+</span></span><span style="display:flex;"><span>设学习率 α <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>
+</span></span><span style="display:flex;"><span>设折扣因子 γ <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.99</span>
+</span></span></code></pre></div><h5 id="step-2采样一条完整轨迹">Step 2：采样一条完整轨迹</h5>
+<p>我们从环境中按照当前策略运行一个 episode：</p>
+<table>
+<thead>
+<tr>
+<th>时间步 t</th>
+<th>状态 s_t</th>
+<th>动作 a_t</th>
+<th>奖励 r_t</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>s₀</td>
+<td>向右</td>
+<td>+1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>s₁</td>
+<td>向右</td>
+<td>+1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>s₂</td>
+<td>向左</td>
+<td>+1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>s₃</td>
+<td>向左</td>
+<td>+1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>s₄</td>
+<td>向右</td>
+<td>+1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>s₅</td>
+<td>—</td>
+<td>（杆倒下，回合结束）</td>
+</tr>
+</tbody>
+</table>
+<p>此时 episode 长度 T = 5，总奖励 5。</p>
+<h5 id="step-3计算每个时间步的累计回报-g_t">Step 3：计算每个时间步的累计回报 (G_t)</h5>
+<p>公式：</p>
+<p>$
+G_t = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \cdots
+$</p>
+<p><strong>计算结果：</strong></p>
+<table>
+<thead>
+<tr>
+<th>t</th>
+<th>奖励序列</th>
+<th>折扣累计回报 (G_t)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1 + 0.99×1 + 0.99²×1 + 0.99³×1 + 0.99⁴×1</td>
+<td>4.90</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1 + 0.99×1 + 0.99²×1 + 0.99³×1</td>
+<td>3.94</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1 + 0.99×1 + 0.99²×1</td>
+<td>2.97</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1 + 0.99×1</td>
+<td>1.99</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+<h5 id="step-4计算每步的策略梯度">Step 4：计算每步的策略梯度</h5>
+<p>对于每个时间步 (t)，计算梯度：</p>
+<p>$\left[
+g_t = \nabla_\theta \log \pi_\theta(a_t | s_t) , , G_t
+\right]$</p>
+<p><strong>这表示：</strong></p>
+<blockquote>
+<p>如果某动作获得的累计回报高（即 (G_t) 大），则增加该动作在该状态下的概率。</p>
+<p>如果 (G_t) 小（甚至负），则减少该动作的概率。</p>
+</blockquote>
+<p><strong>实际操作中，这个梯度由神经网络的反向传播自动计算。</strong></p>
+<h5 id="step-5策略参数更新">Step 5：策略参数更新</h5>
+<p>把所有时间步的梯度加起来并更新参数：</p>
+<p>$\left[
+\theta \leftarrow \theta + \alpha \sum_t g_t
+\right]$</p>
+<p>这一步完成一次完整的 <strong>REINFORCE 迭代（Episode Update）</strong>。</p>
+<ul>
+<li>
+<p>在实际训练中，会运行多条轨迹（batch of episodes），</p>
+</li>
+<li>
+<p>对每条轨迹求平均梯度，</p>
+</li>
+<li>
+<p>然后一起更新策略参数。</p>
+</li>
+</ul>
+<h5 id="step-6重复迭代直到收敛">Step 6：重复迭代，直到收敛</h5>
+<p>整个训练过程循环执行：</p>
+<ol>
+<li>
+<p>采样轨迹；</p>
+</li>
+<li>
+<p>计算 (G_t)；</p>
+</li>
+<li>
+<p>计算梯度；</p>
+</li>
+<li>
+<p>更新策略；</p>
+</li>
+<li>
+<p>测试效果。</p>
+</li>
+</ol>
+<p>随着迭代次数增加：</p>
+<ul>
+<li>
+<p>小车平衡的时间越来越长；</p>
+</li>
+<li>
+<p>最终能维持数百步甚至永久平衡；</p>
+</li>
+<li>
+<p>策略网络学会了在不同角度下自动调整推力方向。</p>
+</li>
+</ul>
+<h5 id="step-7算法流程总结">Step 7：算法流程总结</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Plain" data-lang="Plain"><span style="display:flex;"><span>初始化策略参数 θ
+</span></span><span style="display:flex;"><span>while 未收敛:
+</span></span><span style="display:flex;"><span>    从环境采样一条完整轨迹 τ = (s₀, a₀, r₀, s₁, a₁, r₁, …)
+</span></span><span style="display:flex;"><span>    对每个时间步 t:
+</span></span><span style="display:flex;"><span>        计算累计回报 G_t = Σ_{k=t}^{T-1} γ^{k-t} r_k
+</span></span><span style="display:flex;"><span>        计算梯度 g_t = ∇θ log πθ(a_t | s_t) * G_t
+</span></span><span style="display:flex;"><span>    θ ← θ + α * Σ_t g_t
+</span></span></code></pre></div><h3 id="-八直观理解总结">🧾 八、直观理解总结</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>含义</th>
+<th>举例</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(r_t)</td>
+<td>当前动作获得的即时奖励</td>
+<td>成功保持平衡得 +1</td>
+<td></td>
+</tr>
+<tr>
+<td>(G_t)</td>
+<td>从当前时刻起未来累计回报</td>
+<td>预测动作的“长期好处”</td>
+<td></td>
+</tr>
+<tr>
+<td>(\log \pi_\theta(a_t</td>
+<td>s_t))</td>
+<td>动作的概率对数</td>
+<td>策略网络的输出</td>
+</tr>
+<tr>
+<td>更新规则</td>
+<td>增强高回报动作概率</td>
+<td>学会更好的平衡策略</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="存在的问题">存在的问题</h3>
+<ul>
+<li>
+<p><strong>高方差</strong>：策略梯度是通过采样得到的随机估计值，梯度估计波动大，训练不稳定，需要大量样本才能收敛。</p>
+<ul>
+<li>通过引入 **基线 **或 <strong>价值函数</strong> 来减少方差 → <strong>Actor-Critic方法</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>样本效率低</strong>：需要大量采样。</p>
+</li>
+<li>
+<p><strong>难以控制策略更新幅度</strong>：容易出现“灾难性遗忘”。</p>
+</li>
+</ul>
+<h2 id="actor-critic">Actor-Critic</h2>
+<p>这里简单介绍Actor-Critic方法</p>
+<h3 id="原理">原理</h3>
+<p>Actor-Critic 框架的两个核心组件：</p>
+<p><strong>Actor</strong></p>
+<ul>
+<li>
+<p>策略函数 $\pi_\theta (a | s)$，参数为 θ</p>
+</li>
+<li>
+<p>输入状态 $s_t$，输出动作或动作的概率分布。</p>
+</li>
+<li>
+<p>目标：调整策略，使得产生更高回报的动作概率更大。</p>
+</li>
+</ul>
+<p><strong>Critic（评论家）</strong></p>
+<ul>
+<li>
+<p>价值函数 $V_w (s)$（或 $Q_w(s,a)$），参数为 w。</p>
+</li>
+<li>
+<p>目标：估计当前策略下状态（或动作）的“好坏”，即期望回报。</p>
+</li>
+</ul>
+<p>Actor 利用 Critic 的反馈来改进自己的策略。</p>
+<h3 id="目标函数">目标函数</h3>
+<h4 id="一actor的目标函数">一、Actor的目标函数：</h4>
+<p>$\nabla_\theta J(\theta) = \mathbb{E}<em>{\pi</em>\theta} \left[ \nabla_\theta \log \pi_\theta(a_t | s_t) A_t \right]$</p>
+<p>其中：</p>
+<ul>
+<li>
+<p>$A_t = R_t + \gamma V_w(s_{t+1}) - V_w(s_t)$ 是 <strong>优势函数（Advantage）</strong>；</p>
+</li>
+<li>
+<p>它告诉我们“这个动作比期望好多少”。</p>
+</li>
+</ul>
+<h4 id="二critic的目标函数">二、Critic的目标函数：</h4>
+<p>Critic 的目标是让自己更准确地预测回报：</p>
+<p>$L(w) = \big(R_t + \gamma V_w(s_{t+1}) - V_w(s_t)\big)^2$</p>
+<p>这是一个典型的 <strong>时序差分误差（TD Error）</strong>：</p>
+<p>$\delta_t = R_t + \gamma V_w(s_{t+1}) - V_w(s_t)$</p>
+<p>Critic 最小化这个误差来更新参数 w。</p>
+<h3 id="迭代流程">迭代流程</h3>
+<p>$\left{
+\begin{aligned}
+\theta &amp;\leftarrow \theta + \alpha_\theta \nabla_\theta \log \pi_\theta(a_t | s_t) \delta_t \
+w      &amp;\leftarrow w + \alpha_w \delta_t \nabla_w V_w(s_t)
+\end{aligned}
+\right.$</p>
+<ul>
+<li>
+<p>Actor 用 Critic 的 TD 误差更新；</p>
+</li>
+<li>
+<p>Critic 自己根据 TD 误差学习。</p>
+</li>
+</ul>
+<h3 id="总结">总结</h3>
+<p>相比与REINFORCE，Actor-Critic方法引入Critic model来估计给定状态下的价值，从而计算优势函数估计当前动作相比于其他动作的优势，进而更新Actor</p>
+<h2 id="trpo">TRPO</h2>
+<p>**TRPO （Trust Region Policy Optimization ，<strong><strong>https://arxiv.org/pdf/1502.05477</strong></strong>）**算法于 2015 年由 Schulman 等人提出，旨在解决REINFORCE存在的以下问题：</p>
+<ul>
+<li><strong>策略更新幅度较大</strong>，可能造成策略的灾难性遗忘</li>
+</ul>
+<p>**TRPO **通过引入“信赖域约束”（Trust Region Constraint）来 <strong>保证策略更新的稳定性与单调改进性</strong>。</p>
+<h3 id="核心思想-1">核心思想</h3>
+<p>TRPO 的核心思想是：</p>
+<blockquote>
+<p><strong>在优化策略时，限制新旧策略之间的差异，使得每次更新都在一个“信赖区域”内。</strong></p>
+</blockquote>
+<p>即：</p>
+<p>在最大化期望优势函数（Advantage Function）的同时，约束新旧策略的 KL 散度（Kullback-Leibler Divergence）不超过某个阈值。</p>
+<h2 id="ppo">PPO</h2>
+<p>PPO（Proximal Policy Optimization，近端策略优化）是强化学习中一种非常流行的策略梯度算法，由 OpenAI 在 2017 年提出 (https://arxiv.org/abs/1707.06347) 。它在保持高样本效率和稳定训练的同时，大大简化了实现难度，是目前应用最广泛的强化学习算法之一（如 ChatGPT 的训练中也用到了 PPO）。</p>
+<h3 id="一ppo-的基本思想">一、PPO 的基本思想</h3>
+<p>在强化学习中，我们希望优化一个策略$\pi (a|s)$ （即在状态 s 下采取动作 a 的概率），使得智能体获得的期望回报最大。
+传统的策略梯度方法（Policy Gradient）通过直接对期望回报求导来更新策略，但会出现<strong>训练不稳定、步长选择困难</strong>等问题。</p>
+<p>PPO 的核心思想是：</p>
+<blockquote>
+<p>在更新策略时，<strong>约束新旧策略之间的变化幅度</strong>，防止更新步伐过大导致性能崩溃。</p>
+</blockquote>
+<p>这就是“近端”优化（Proximal Optimization）的含义。</p>
+<h3 id="二ppo-的目标函数">二、PPO 的目标函数</h3>
+<p>PPO 基于 Trust Region Policy Optimization (TRPO) 的思想，但进行了简化。</p>
+<ol>
+<li>传统的策略梯度目标</li>
+</ol>
+<p>强化学习中常见的目标是：</p>
+<p>$L^{PG}(θ)=E_t[\frac{π_θ(a_t∣s_t)}{π_{θ_{old}}(a_t∣s_t)}A_t]$</p>
+<p>其中：</p>
+<ul>
+<li>
+<p>$π_θ(a_t∣s_t)$：当前策略</p>
+</li>
+<li>
+<p>$π_{θ_{old}}(a_t∣s_t)$：旧策略</p>
+</li>
+<li>
+<p>$A_t
+$：优势函数（Advantage Function），表示动作比平均水平好多少</p>
+</li>
+<li>
+<p>$\frac{\pi_\theta}{\pi_{\theta_{\text{old}}}}$：即<strong>概率比（ratio）</strong>，表示当前策略与旧策略的差异。</p>
+</li>
+</ul>
+<ol start="2">
+<li>PPO 的裁剪（Clipping）目标</li>
+</ol>
+<p>PPO 使用了一个<strong>裁剪目标函数</strong>，限制策略变化过大：</p>
+<p>$\mathcal{L}_{\text{CLIP}}(\theta) = \mathbb{E}_t \left[ \min\left( r_t(\theta) A_t, \text{clip}\left( r_t(\theta), 1 - \epsilon, 1 + \epsilon \right) A_t \right) \right]$</p>
+<p>其中：</p>
+<ul>
+<li>
+<p>$r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(a_t \mid s_t)}$</p>
+</li>
+<li>
+<p>$\epsilon$是一个小常数（通常为 0.1 或 0.2）</p>
+</li>
+</ul>
+<p>解释：</p>
+<ul>
+<li>
+<p>当策略更新较小时，PPO 的目标与传统策略梯度相同；</p>
+</li>
+<li>
+<p>当策略变化过大（即 rt超出区间 [1-ε, 1+ε]），目标会被裁剪，<strong>阻止过大的更新</strong>。</p>
+</li>
+</ul>
+<p>这样就能稳定训练，防止策略“越界”。</p>
+<h3 id="三ppo-的训练流程">三、PPO 的训练流程</h3>
+<ol start="3">
+<li>
+<p><strong>采样数据</strong>：使用当前策略与环境交互，获得状态、动作、奖励等；</p>
+</li>
+<li>
+<p><strong>计算优势函数</strong>：常用 Generalized Advantage Estimation (GAE)；</p>
+</li>
+<li>
+<p><strong>更新策略</strong>：使用上面的裁剪目标函数优化策略参数；</p>
+</li>
+<li>
+<p><strong>更新价值函数（V(s)）</strong>：拟合状态的期望回报；</p>
+</li>
+<li>
+<p><strong>重复以上步骤</strong>直到收敛。</p>
+</li>
+</ol>
+<h3 id="四ppo-的优点">四、PPO 的优点</h3>
+<ul>
+<li>
+<p><strong>稳定性高</strong>：通过限制更新幅度，避免策略崩溃；</p>
+</li>
+<li>
+<p><strong>实现简单</strong>：比 TRPO 不需要计算复杂的二阶导或约束优化；</p>
+</li>
+<li>
+<p><strong>样本效率高</strong>：可以重复利用同一批数据进行多次更新；</p>
+</li>
+<li>
+<p><strong>通用性强</strong>：适用于离散和连续动作空间。</p>
+</li>
+</ul>
+<h3 id="五ppo-的应用">五、PPO 的应用</h3>
+<ul>
+<li>OpenAI 用 PPO 训练了 ChatGPT、OpenAI Five（Dota2 AI）等大型系统；</li>
+</ul>
+<h3 id="六ppo总结">六、PPO总结</h3>
+<h2 id="代码实现">代码实现</h2>
+<h3 id="1-模型结构与动作分布">1) 模型结构与动作分布</h3>
+<p>核心是一个共享干路（shared backbone）的 Actor-Critic：共享 MLP 提特征，然后分两头：</p>
+<ul>
+<li>
+<p><strong>Actor head</strong> 产出策略分布参数（离散→<code>Categorical</code> 的 logits；连续→高斯 <code>Normal</code> 的均值和可学习对数方差）</p>
+</li>
+<li>
+<p><strong>Critic head</strong> 产出 <code>V(s)</code> 估计</p>
+</li>
+</ul>
+<p>实现要点：</p>
+<ul>
+<li>
+<p><strong>正交初始化 + Tanh 激活</strong>常见且稳定</p>
+</li>
+<li>
+<p><strong>连续动作</strong>：对数方差一般用独立的可学习参数向量（不随状态而变），或加一层网络预测</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch<span style="color:#f92672">,</span> torch.nn <span style="color:#66d9ef">as</span> nn<span style="color:#f92672">,</span> torch.nn.functional <span style="color:#66d9ef">as</span> F
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.distributions <span style="color:#f92672">import</span> Categorical, Normal
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ortho_init</span>(layer, gain<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> isinstance(layer, nn<span style="color:#f92672">.</span>Linear):
+</span></span><span style="display:flex;"><span>        nn<span style="color:#f92672">.</span>init<span style="color:#f92672">.</span>orthogonal_(layer<span style="color:#f92672">.</span>weight, gain<span style="color:#f92672">=</span>gain)
+</span></span><span style="display:flex;"><span>        nn<span style="color:#f92672">.</span>init<span style="color:#f92672">.</span>constant_(layer<span style="color:#f92672">.</span>bias, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActorCritic</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, obs_dim, action_space, hidden_sizes<span style="color:#f92672">=</span>(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>)):
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># shared</span>
+</span></span><span style="display:flex;"><span>        layers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        last <span style="color:#f92672">=</span> obs_dim
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> h <span style="color:#f92672">in</span> hidden_sizes:
+</span></span><span style="display:flex;"><span>            layers <span style="color:#f92672">+=</span> [nn<span style="color:#f92672">.</span>Linear(last, h), nn<span style="color:#f92672">.</span>Tanh()]
+</span></span><span style="display:flex;"><span>            last <span style="color:#f92672">=</span> h
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>backbone <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(<span style="color:#f92672">*</span>layers)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>v_head <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(last, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>is_discrete <span style="color:#f92672">=</span> hasattr(action_space, <span style="color:#e6db74">&#34;n&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>is_discrete:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>pi_head <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(last, action_space<span style="color:#f92672">.</span>n)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            act_dim <span style="color:#f92672">=</span> action_space<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>mu_head <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(last, act_dim)
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># log_std as a parameter (state-independent)</span>
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>log_std <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>zeros(act_dim))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># init</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> m: ortho_init(m, gain<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>))
+</span></span><span style="display:flex;"><span>        ortho_init(self<span style="color:#f92672">.</span>v_head, gain<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>is_discrete:
+</span></span><span style="display:flex;"><span>            ortho_init(self<span style="color:#f92672">.</span>pi_head, gain<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>)  <span style="color:#75715e"># 小一点，延缓过早饱和</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            ortho_init(self<span style="color:#f92672">.</span>mu_head, gain<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, obs):
+</span></span><span style="display:flex;"><span>        feat <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>backbone(obs)
+</span></span><span style="display:flex;"><span>        v <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>v_head(feat)<span style="color:#f92672">.</span>squeeze(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>is_discrete:
+</span></span><span style="display:flex;"><span>            logits <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pi_head(feat)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> logits, v
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            mu <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>mu_head(feat)
+</span></span><span style="display:flex;"><span>            std <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>log_std<span style="color:#f92672">.</span>exp()<span style="color:#f92672">.</span>expand_as(mu)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> (mu, std), v
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">distribution</span>(self, obs):
+</span></span><span style="display:flex;"><span>        out, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>forward(obs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>is_discrete:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> Categorical(logits<span style="color:#f92672">=</span>out)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            mu, std <span style="color:#f92672">=</span> out
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> Normal(mu, std)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">act</span>(self, obs):
+</span></span><span style="display:flex;"><span>        dist <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>distribution(obs)
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>sample()
+</span></span><span style="display:flex;"><span>        logp <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>log_prob(action)<span style="color:#f92672">.</span>sum(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">if</span> isinstance(dist, Normal) <span style="color:#66d9ef">else</span> dist<span style="color:#f92672">.</span>log_prob(action)
+</span></span><span style="display:flex;"><span>        _, v <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>forward(obs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> action, logp, v
+</span></span></code></pre></div><h3 id="2-采样回合与-gaeλ-优势估计">2) 采样回合与 GAE(λ) 优势估计</h3>
+<p>典型流程：收集 T 步轨迹（或 N 环境并行收集 N×T），存储 <code>obs, act, logp, reward, done, value</code>，然后用 GAE 计算优势 <code>A_t</code> 与回报 <code>R_t</code>。</p>
+<p><strong>GAE 公式</strong>：</p>
+<p>$\delta_t = r_t + \gamma (1 - d_t) V(s_{t+1}) - V(s_t), \quad A_t = \text{GAE}<em>\lambda (\delta_t) = \sum</em>{l=0}^\infty (\gamma \lambda)^l \delta_{t+l}$</p>
+<p>最后 <code>ret_t = A_t + V(s_t)</code>。</p>
+<p>实现注意：</p>
+<ul>
+<li>
+<p>终止步 <code>done=1</code> 要<strong>截断</strong>引导</p>
+</li>
+<li>
+<p>训练更稳定：<strong>优势标准化</strong>（均值0方差1）</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RolloutBuffer</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, size, obs_dim, act_shape, device):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>obs <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros((size, obs_dim), dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>acts <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros((size,) <span style="color:#f92672">+</span> act_shape, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32 <span style="color:#66d9ef">if</span> len(act_shape)<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0</span> <span style="color:#66d9ef">else</span> torch<span style="color:#f92672">.</span>long, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>logps <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(size, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>rews <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(size, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dones <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(size, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>vals <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(size, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>ptr <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; self<span style="color:#f92672">.</span>full <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(self, o, a, logp, r, d, v):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>obs[self<span style="color:#f92672">.</span>ptr] <span style="color:#f92672">=</span> o
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>acts[self<span style="color:#f92672">.</span>ptr] <span style="color:#f92672">=</span> a
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>logps[self<span style="color:#f92672">.</span>ptr] <span style="color:#f92672">=</span> logp
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>rews[self<span style="color:#f92672">.</span>ptr] <span style="color:#f92672">=</span> r
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dones[self<span style="color:#f92672">.</span>ptr] <span style="color:#f92672">=</span> d
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>vals[self<span style="color:#f92672">.</span>ptr] <span style="color:#f92672">=</span> v
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>ptr <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>ptr <span style="color:#f92672">==</span> len(self<span style="color:#f92672">.</span>rews):
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>full <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_gae</span>(self, last_value, gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">0.99</span>, lam<span style="color:#f92672">=</span><span style="color:#ae81ff">0.95</span>):
+</span></span><span style="display:flex;"><span>        size <span style="color:#f92672">=</span> len(self<span style="color:#f92672">.</span>rews)
+</span></span><span style="display:flex;"><span>        adv <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(size, device<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>rews<span style="color:#f92672">.</span>device)
+</span></span><span style="display:flex;"><span>        last_gae <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> t <span style="color:#f92672">in</span> reversed(range(size)):
+</span></span><span style="display:flex;"><span>            nonterminal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> self<span style="color:#f92672">.</span>dones[t]
+</span></span><span style="display:flex;"><span>            next_v <span style="color:#f92672">=</span> last_value <span style="color:#66d9ef">if</span> t <span style="color:#f92672">==</span> size<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">else</span> self<span style="color:#f92672">.</span>vals[t<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>            delta <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>rews[t] <span style="color:#f92672">+</span> gamma <span style="color:#f92672">*</span> nonterminal <span style="color:#f92672">*</span> next_v <span style="color:#f92672">-</span> self<span style="color:#f92672">.</span>vals[t]
+</span></span><span style="display:flex;"><span>            last_gae <span style="color:#f92672">=</span> delta <span style="color:#f92672">+</span> gamma <span style="color:#f92672">*</span> lam <span style="color:#f92672">*</span> nonterminal <span style="color:#f92672">*</span> last_gae
+</span></span><span style="display:flex;"><span>            adv[t] <span style="color:#f92672">=</span> last_gae
+</span></span><span style="display:flex;"><span>        ret <span style="color:#f92672">=</span> adv <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>vals
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 标准化优势</span>
+</span></span><span style="display:flex;"><span>        adv <span style="color:#f92672">=</span> (adv <span style="color:#f92672">-</span> adv<span style="color:#f92672">.</span>mean()) <span style="color:#f92672">/</span> (adv<span style="color:#f92672">.</span>std(unbiased<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1e-8</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> adv, ret
+</span></span></code></pre></div><h3 id="3-ppo-clip-多轮小批量更新">3) PPO-Clip 多轮小批量更新</h3>
+<p><strong>裁剪目标</strong>（核心）：</p>
+<p>$\mathcal{L}_{\text{clip}}(\theta) = \mathbb{E} \left[ \min \left( r_t(\theta) A_t, \text{clip}(r_t(\theta), 1 - \epsilon, 1 + \epsilon) A_t \right) \right]$</p>
+<ul>
+<li>
+<p><code>r = exp(new_logp - old_logp)</code></p>
+</li>
+<li>
+<p>同时加上 <strong>熵奖励</strong>（鼓励探索）与 <strong>价值函数损失</strong>（可选 value clip）</p>
+</li>
+</ul>
+<p><strong>训练技巧</strong>：</p>
+<ul>
+<li>
+<p>多轮（<code>K epochs</code>）随机打乱、小批量（<code>minibatch</code>）SGD</p>
+</li>
+<li>
+<p><strong>目标 KL 早停</strong>（approx_kl 超阈值就结束当轮更新）</p>
+</li>
+<li>
+<p><strong>梯度范数裁剪</strong>（如 0.5）</p>
+</li>
+<li>
+<p><strong>值函数裁剪</strong>防止 critic 过冲：<code>v_loss = max((v - ret)^2, (clip(v, v_old-εv, v_old+εv) - ret)^2)</code></p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ppo_update</span>(ac, optimizer, buffer, adv, ret, old_logp, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>,
+</span></span><span style="display:flex;"><span>               clip_ratio<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>, vf_coef<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, ent_coef<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0</span>, max_grad_norm<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>,
+</span></span><span style="display:flex;"><span>               target_kl<span style="color:#f92672">=</span><span style="color:#ae81ff">0.015</span>):
+</span></span><span style="display:flex;"><span>    device <span style="color:#f92672">=</span> buffer<span style="color:#f92672">.</span>obs<span style="color:#f92672">.</span>device
+</span></span><span style="display:flex;"><span>    N <span style="color:#f92672">=</span> len(buffer<span style="color:#f92672">.</span>rews)
+</span></span><span style="display:flex;"><span>    idxs <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>arange(N, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(epochs):
+</span></span><span style="display:flex;"><span>        perm <span style="color:#f92672">=</span> idxs[torch<span style="color:#f92672">.</span>randperm(N)]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> start <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, N, batch_size):
+</span></span><span style="display:flex;"><span>            mb <span style="color:#f92672">=</span> perm[start:start<span style="color:#f92672">+</span>batch_size]
+</span></span><span style="display:flex;"><span>            obs_b <span style="color:#f92672">=</span> buffer<span style="color:#f92672">.</span>obs[mb]
+</span></span><span style="display:flex;"><span>            act_b <span style="color:#f92672">=</span> buffer<span style="color:#f92672">.</span>acts[mb]
+</span></span><span style="display:flex;"><span>            adv_b <span style="color:#f92672">=</span> adv[mb]
+</span></span><span style="display:flex;"><span>            ret_b <span style="color:#f92672">=</span> ret[mb]
+</span></span><span style="display:flex;"><span>            old_logp_b <span style="color:#f92672">=</span> old_logp[mb]
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 新分布、对数概率与价值</span>
+</span></span><span style="display:flex;"><span>            dist <span style="color:#f92672">=</span> ac<span style="color:#f92672">.</span>distribution(obs_b)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> isinstance(dist, Normal):
+</span></span><span style="display:flex;"><span>                logp <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>log_prob(act_b)<span style="color:#f92672">.</span>sum(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>                ent <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>entropy()<span style="color:#f92672">.</span>sum(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>mean()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                logp <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>log_prob(act_b)
+</span></span><span style="display:flex;"><span>                ent <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>entropy()<span style="color:#f92672">.</span>mean()
+</span></span><span style="display:flex;"><span>            _, v <span style="color:#f92672">=</span> ac<span style="color:#f92672">.</span>forward(obs_b)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            ratio <span style="color:#f92672">=</span> (logp <span style="color:#f92672">-</span> old_logp_b)<span style="color:#f92672">.</span>exp()
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># policy loss</span>
+</span></span><span style="display:flex;"><span>            unclipped <span style="color:#f92672">=</span> ratio <span style="color:#f92672">*</span> adv_b
+</span></span><span style="display:flex;"><span>            clipped <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>clamp(ratio, <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> clip_ratio, <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> clip_ratio) <span style="color:#f92672">*</span> adv_b
+</span></span><span style="display:flex;"><span>            pi_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>torch<span style="color:#f92672">.</span>min(unclipped, clipped)<span style="color:#f92672">.</span>mean()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># value loss (可加 value clip)</span>
+</span></span><span style="display:flex;"><span>            v_loss <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>mse_loss(v, ret_b)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># entropy bonus</span>
+</span></span><span style="display:flex;"><span>            loss <span style="color:#f92672">=</span> pi_loss <span style="color:#f92672">+</span> vf_coef <span style="color:#f92672">*</span> v_loss <span style="color:#f92672">-</span> ent_coef <span style="color:#f92672">*</span> ent
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            optimizer<span style="color:#f92672">.</span>zero_grad(set_to_none<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>            loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>clip_grad_norm_(ac<span style="color:#f92672">.</span>parameters(), max_grad_norm)
+</span></span><span style="display:flex;"><span>            optimizer<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 计算近似KL做早停</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>            dist <span style="color:#f92672">=</span> ac<span style="color:#f92672">.</span>distribution(buffer<span style="color:#f92672">.</span>obs)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> isinstance(dist, Normal):
+</span></span><span style="display:flex;"><span>                new_logp_full <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>log_prob(buffer<span style="color:#f92672">.</span>acts)<span style="color:#f92672">.</span>sum(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                new_logp_full <span style="color:#f92672">=</span> dist<span style="color:#f92672">.</span>log_prob(buffer<span style="color:#f92672">.</span>acts)
+</span></span><span style="display:flex;"><span>            approx_kl <span style="color:#f92672">=</span> (old_logp <span style="color:#f92672">-</span> new_logp_full)<span style="color:#f92672">.</span>mean()<span style="color:#f92672">.</span>clamp(min<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>item()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> approx_kl <span style="color:#f92672">&gt;</span> target_kl:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span></code></pre></div><h3 id="4-训练主循环最小可运行范例">4) 训练主循环（最小可运行范例）</h3>
+<ul>
+<li>
+<p>依赖：<code>gymnasium</code> 或 <code>gym</code>（根据你的环境），<code>PyTorch</code></p>
+</li>
+<li>
+<p>支持 <strong>离散/连续</strong> 动作空间（如 <code>CartPole-v1</code> / <code>MuJoCo</code> 环境）</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gymnasium <span style="color:#66d9ef">as</span> gym  <span style="color:#75715e"># 如果你用的是 gym，请改成: import gym</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">make_env</span>(env_id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;CartPole-v1&#34;</span>):
+</span></span><span style="display:flex;"><span>    env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(env_id)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> env
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">to_tensor</span>(x, device):
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>as_tensor(x, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32, device<span style="color:#f92672">=</span>device)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_ppo</span>(env_id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;CartPole-v1&#34;</span>,
+</span></span><span style="display:flex;"><span>              total_steps<span style="color:#f92672">=</span><span style="color:#ae81ff">200_000</span>,
+</span></span><span style="display:flex;"><span>              rollout_len<span style="color:#f92672">=</span><span style="color:#ae81ff">2048</span>,
+</span></span><span style="display:flex;"><span>              gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">0.99</span>, lam<span style="color:#f92672">=</span><span style="color:#ae81ff">0.95</span>,
+</span></span><span style="display:flex;"><span>              lr<span style="color:#f92672">=</span><span style="color:#ae81ff">3e-4</span>, clip_ratio<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,
+</span></span><span style="display:flex;"><span>              epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>,
+</span></span><span style="display:flex;"><span>              vf_coef<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, ent_coef<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0</span>,
+</span></span><span style="display:flex;"><span>              seed<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, device<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cuda&#34;</span> <span style="color:#66d9ef">if</span> torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>is_available() <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;cpu&#34;</span>):
+</span></span><span style="display:flex;"><span>    torch<span style="color:#f92672">.</span>manual_seed(seed); np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(seed)
+</span></span><span style="display:flex;"><span>    env <span style="color:#f92672">=</span> make_env(env_id)
+</span></span><span style="display:flex;"><span>    is_discrete <span style="color:#f92672">=</span> hasattr(env<span style="color:#f92672">.</span>action_space, <span style="color:#e6db74">&#34;n&#34;</span>)
+</span></span><span style="display:flex;"><span>    obs_dim <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>observation_space<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>    act_shape <span style="color:#f92672">=</span> () <span style="color:#66d9ef">if</span> is_discrete <span style="color:#66d9ef">else</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ac <span style="color:#f92672">=</span> ActorCritic(obs_dim, env<span style="color:#f92672">.</span>action_space)<span style="color:#f92672">.</span>to(device)
+</span></span><span style="display:flex;"><span>    optim <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>optim<span style="color:#f92672">.</span>Adam(ac<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span>lr, eps<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-5</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    buf <span style="color:#f92672">=</span> RolloutBuffer(rollout_len, obs_dim, act_shape, device)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    o, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset(seed<span style="color:#f92672">=</span>seed)
+</span></span><span style="display:flex;"><span>    o_t <span style="color:#f92672">=</span> to_tensor(o, device)
+</span></span><span style="display:flex;"><span>    ep_ret, ep_len <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    step <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> step <span style="color:#f92672">&lt;</span> total_steps:
+</span></span><span style="display:flex;"><span>        buf<span style="color:#f92672">.</span>ptr <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; buf<span style="color:#f92672">.</span>full <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># ====== 收集一批轨迹 ======</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> buf<span style="color:#f92672">.</span>full:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>                a_t, logp_t, v_t <span style="color:#f92672">=</span> ac<span style="color:#f92672">.</span>act(o_t<span style="color:#f92672">.</span>unsqueeze(<span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>            a_np <span style="color:#f92672">=</span> a_t<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> is_discrete:
+</span></span><span style="display:flex;"><span>                next_o, r, terminated, truncated, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(int(a_np))
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                next_o, r, terminated, truncated, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(a_np)
+</span></span><span style="display:flex;"><span>            d <span style="color:#f92672">=</span> terminated <span style="color:#f92672">or</span> truncated
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            buf<span style="color:#f92672">.</span>add(o_t, a_t<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">0</span>), logp_t<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">0</span>), float(r), float(d), v_t<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            ep_ret <span style="color:#f92672">+=</span> r; ep_len <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>            step <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            o_t <span style="color:#f92672">=</span> to_tensor(next_o, device)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> d:
+</span></span><span style="display:flex;"><span>                next_o, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>                o_t <span style="color:#f92672">=</span> to_tensor(next_o, device)
+</span></span><span style="display:flex;"><span>                ep_ret, ep_len <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># ====== 计算GAE与回报 ======</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>            _, last_v <span style="color:#f92672">=</span> ac<span style="color:#f92672">.</span>forward(o_t<span style="color:#f92672">.</span>unsqueeze(<span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>        adv, ret <span style="color:#f92672">=</span> buf<span style="color:#f92672">.</span>compute_gae(last_v<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">0</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        old_logp <span style="color:#f92672">=</span> buf<span style="color:#f92672">.</span>logps<span style="color:#f92672">.</span>clone()<span style="color:#f92672">.</span>detach()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># ====== PPO 多轮更新 ======</span>
+</span></span><span style="display:flex;"><span>        ppo_update(ac, optim, buf, adv, ret, old_logp,
+</span></span><span style="display:flex;"><span>                   epochs<span style="color:#f92672">=</span>epochs, batch_size<span style="color:#f92672">=</span>batch_size,
+</span></span><span style="display:flex;"><span>                   clip_ratio<span style="color:#f92672">=</span>clip_ratio, vf_coef<span style="color:#f92672">=</span>vf_coef,
+</span></span><span style="display:flex;"><span>                   ent_coef<span style="color:#f92672">=</span>ent_coef, max_grad_norm<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>,
+</span></span><span style="display:flex;"><span>                   target_kl<span style="color:#f92672">=</span><span style="color:#ae81ff">0.015</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    env<span style="color:#f92672">.</span>close()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ac
+</span></span></code></pre></div><h3 id="5-关键超参与工程细节">5) 关键超参与工程细节</h3>
+<ul>
+<li>
+<p><strong>clip_ratio (ε)</strong>：<code>0.1 ~ 0.2</code> 常见；更大更冒进，更小更保守</p>
+</li>
+<li>
+<p><strong>学习率</strong>：<code>3e-4</code> 起步，配合 Adam <code>eps=1e-5</code></p>
+</li>
+<li>
+<p><strong>GAE λ</strong>：<code>0.95</code> 常见，偏大更平滑但偏差可能增</p>
+</li>
+<li>
+<p><strong>γ</strong>：大多数控制任务 <code>0.99</code></p>
+</li>
+<li>
+<p><strong>minibatch / epochs</strong>：<code>batch_size=64~256, epochs=3~10</code>；总更新量 ≈ <code>epochs * (rollout_len / batch_size)</code></p>
+</li>
+<li>
+<p><strong>熵系数</strong>：<code>0.0 ~ 0.01</code>（对探索不足的任务适当加大）</p>
+</li>
+<li>
+<p><strong>值函数损失系数</strong>：<code>0.5</code> 常见</p>
+</li>
+<li>
+<p><strong>梯度裁剪</strong>：<code>0.5</code>（<code>max_norm</code>）</p>
+</li>
+<li>
+<p><strong>目标 KL 早停</strong>：<code>0.01 ~ 0.02</code>，训练会更稳</p>
+</li>
+</ul>
+<h3 id="6-常见坑位与排查">6) 常见坑位与排查</h3>
+<ol>
+<li>
+<p><strong>log_prob 维度</strong>
+连续动作要对每个维度的 <code>log_prob</code> <strong>求和</strong>；离散则是标量。否则 ratio 会错位。</p>
+</li>
+<li>
+<p><strong>优势标准化</strong>
+不标准化容易导致更新不稳；务必 <code>(adv - mean) / (std + 1e-8)</code>。</p>
+</li>
+<li>
+<p><strong>done 截断</strong>
+GAE 里 <code>(1 - done)</code> 别忘了。对 Gymnasium 的 <code>terminated</code>/<code>truncated</code> 可统一成 <code>done = terminated or truncated</code>。</p>
+</li>
+<li>
+<p><strong>值函数过拟合</strong>
+可加 <strong>value clip</strong> 或 <strong>早停</strong>（看 <code>v_loss</code> 曲线），或降低 <code>vf_coef</code>。</p>
+</li>
+<li>
+<p><strong>观测/奖励归一化</strong>
+对高易变任务（特别是连续控制），<strong>obs 标准化、奖励缩放</strong>很关键。</p>
+</li>
+<li>
+<p><strong>数值稳定</strong>
+<code>log_std</code> 建议初始化为 0（std=1），再靠训练收缩；别用太小的初值导致探索不足。</p>
+</li>
+<li>
+<p><strong>多环境并行</strong>
+吞吐率大幅提升；但要保持 <strong>时间维优先</strong> 的 GAE 实现，以及正确 reshape。</p>
+</li>
+</ol>
+<h3 id="7-进一步增强可选">7) 进一步增强（可选）</h3>
+<ul>
+<li>
+<p><strong>价值函数裁剪</strong>：把 <code>v</code> 限制在 <code>[v_old-εv, v_old+εv]</code> 后再算 MSE，能稳定 critic。</p>
+</li>
+<li>
+<p><strong>学习率/clip 的线性退火</strong>：随训练进度逐步减小，常与帧数比例挂钩。</p>
+</li>
+<li>
+<p><strong>观测归一化</strong>：运行时统计均值/方差，在线归一化。</p>
+</li>
+<li>
+<p><strong>动作约束</strong>：连续动作若 env 需要 <code>[-1,1]</code>，用 <code>tanh</code> + 概率密度修正（或简单 clamp）。</p>
+</li>
+</ul>
+<h2 id="grpo">GRPO</h2>
+<p><img src="../../images/aitech/llm-rl-algorithms/image.png" alt="GRPO流程图"></p>
+<h3 id="一grpo的核心思想">一、GRPO的核心思想</h3>
+<p>GRPO（Group Relative Policy Optimization，<strong>组内相对策略优化</strong>）是 DeepSeek 团队在数学/推理类 RLHF 场景中提出并广泛使用的 PPO 变体。它的关键点是：<strong>不再训练单独的价值函数（critic）</strong>，而是针对每个提示一次性采样一组候选输出（一个“组”），用<strong>组内的平均得分作为基线</strong>来计算优势，这样就能省掉昂贵的价值网络，同时在复杂推理任务上表现稳健。这一思路最早系统化地出现在 DeepSeekMath 论文中，并在后续的 DeepSeek-R1 系列强化了“长链路推理”的能力。</p>
+<h3 id="二grpo的目标函数">二、GRPO的目标函数</h3>
+<p>设对同一条 prompt，一次采样得到 G 个完整回答 ${ o_i }_{i=1}^{G}$，每个回答有一个整体奖励（如“答案是否正确”等），记为 $r_i$。GRPO用<strong>组内标准化的奖励</strong>来当优势，典型做法是</p>
+<p>$A^i= \frac{r_i−mean(r)}{std(r)},$</p>
+<p>并把这一个样本级优势分配到它的所有 token（也有实现用 token 级聚合）。策略更新仍采用 PPO 的<strong>比率裁剪</strong>思想与<strong>KL 正则</strong>，其常见形式可写为（简化到直观版）：</p>
+<p>$\theta_{\text{max}} \quad \mathbb{E}\left[ \frac{1}{|o_i|} \sum_t \min\left( r_t(\theta) \hat{A}^{i,t}, \text{clip}\left( r_t(\theta), 1-\epsilon, 1+\epsilon \right) \hat{A}^{i,t} \right) - \beta \text{DKL}\left( \pi_\theta \parallel \pi_{\text{ref}} \right) \right]$</p>
+<p>其中$r_t(\theta) = \frac{\pi_\theta(o_{i,t} \mid \cdot)}{\pi_{\text{old}}(o_{i,t} \mid \cdot)}$，表示重要性权重比率，KL 正则既可加在奖励里，也可<strong>直接作为 loss 项</strong>加入</p>
+<p><strong>要点：</strong></p>
+<ul>
+<li>
+<p><strong>优势来源</strong>：来自“同一 prompt 的组内相对好坏”，而<strong>不是价值网络估计</strong>。</p>
+</li>
+<li>
+<p><strong>正则</strong>：用 KL 约束新策略别偏离参考策略（通常是 SFT 模型），抑制退化和模式崩塌。</p>
+</li>
+</ul>
+<h3 id="三grpo的训练流程">三、GRPO的训练流程</h3>
+<p><strong>算法流程：</strong></p>
+<p>$\text{Input: } \pi_{\theta_{\text{init}}}, , r_{\phi}, , D, , \varepsilon, \beta, \mu \
+\pi_{\theta} \leftarrow \pi_{\theta_{\text{init}}} \
+\text{for } \text{iteration} = 1, \dots, I: \
+\quad \pi_{\text{ref}} \leftarrow \pi_{\theta} \
+\quad \text{for } \text{step} = 1, \dots, M: \
+\quad \quad D_b \sim D \quad (\text{sample batch}) \
+\quad \quad \pi_{\theta_{\text{old}}} \leftarrow \pi_{\theta} \
+\quad \quad {o_i}<em>{i=1}^G \sim \pi</em>{\theta_{\text{old}}}(\cdot \mid q) \quad (\forall q \in D_b) \
+\quad \quad {r_i}<em>{i=1}^G \leftarrow r</em>{\phi}(o_i) \quad (\text{compute rewards}) \
+\quad \quad \hat{A}<em>{i,t} \leftarrow \text{group relative advantage estimation} \quad (\forall t\text{-th token of } o_i) \
+\quad \quad \text{for } \text{GRPO iteration} = 1, \dots, \mu: \
+\quad \quad \quad \pi</em>{\theta} \leftarrow \arg\max , \text{GRPO objective (Equation 21)} \
+\quad r_{\phi} \leftarrow \text{update via replay mechanism} \
+\text{Output: } \pi_{\theta}$</p>
+<h4 id="例子">例子</h4>
+<p>下面，我举一个使用GRPO算法优化LLM的例子：</p>
+<p>假设我们有训练数据p(Q)，从中抽样一个query，具体为：</p>
+<blockquote>
+<p>“请解释一下量子纠缠的原理。”</p>
+</blockquote>
+<h5 id="第一步生成多个候选回答sampling"><strong>第一步：生成多个候选回答（sampling）</strong></h5>
+<p>将上述query输入给LLM，生成n个回答（一般通过设置LLM推理时的temperature来控制生成的随机性），也就是所谓的Rollout阶段：</p>
+<table>
+<thead>
+<tr>
+<th>回答编号</th>
+<th>模型输出（Response）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R₁</strong></td>
+<td>量子纠缠是指两个或多个粒子之间建立起一种量子态关联，即使它们相距很远，一个粒子的测量结果会瞬间影响另一个。</td>
+</tr>
+<tr>
+<td><strong>R₂</strong></td>
+<td>量子纠缠是一种量子现象，但它不能用于超光速通信，因为纠缠本身不传递信息。</td>
+</tr>
+<tr>
+<td><strong>R₃</strong></td>
+<td>量子纠缠是爱因斯坦称之为“鬼魅般的远距作用”的现象，它违反了经典直觉，但符合量子力学原理。</td>
+</tr>
+<tr>
+<td><strong>R₄</strong></td>
+<td>量子纠缠就是两个粒子互相联系的现象，它们之间能互相感应。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="第二步计算奖励reward-modeling">第二步：计算奖励（Reward Modeling）</h5>
+<p>现在需要根据每个回答的质量，给出“人类偏好”或奖励模型（RM）计算的得分：</p>
+<table>
+<thead>
+<tr>
+<th>回答编号</th>
+<th>奖励分数（Reward）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R₁</strong></td>
+<td>0.85</td>
+</tr>
+<tr>
+<td><strong>R₂</strong></td>
+<td>0.90</td>
+</tr>
+<tr>
+<td><strong>R₃</strong></td>
+<td>0.75</td>
+</tr>
+<tr>
+<td><strong>R₄</strong></td>
+<td>0.40</td>
+</tr>
+</tbody>
+</table>
+<p>这里的奖励可以来自：</p>
+<ul>
+<li>
+<p>一个基于规则的 **Reward Function **计算人类偏好</p>
+</li>
+<li>
+<p>一个经过训练的 <strong>Reward Model</strong> 自动评估回答质量。</p>
+</li>
+</ul>
+<h3 id="第三步分组与相对奖励group-relative-advantage">第三步：分组与相对奖励（Group Relative Advantage）</h3>
+<p>GRPO 的核心思想是：</p>
+<p>把这些回答分成小组（例如每组 4 个），计算它们在组内的相对表现，而不是绝对奖励。</p>
+<p>例如：</p>
+<ul>
+<li>
+<p>组内平均奖励 = (0.85 + 0.90 + 0.75 + 0.40) / 4 = <strong>0.725</strong></p>
+</li>
+<li>
+<p>每个样本的“相对优势”（advantage）为：</p>
+<ul>
+<li>
+<p>R₁: 0.85 − 0.725 = <strong>+0.125</strong></p>
+</li>
+<li>
+<p>R₂: 0.90 − 0.725 = <strong>+0.175</strong></p>
+</li>
+<li>
+<p>R₃: 0.75 − 0.725 = <strong>+0.025</strong></p>
+</li>
+<li>
+<p>R₄: 0.40 − 0.725 = <strong>−0.325</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="第四步策略更新policy-optimization">第四步：策略更新（Policy Optimization）</h3>
+<p>GRPO 使用类似于 PPO 的目标函数，但用“组内相对优势”代替绝对奖励优势：</p>
+<p>$L_{\text{GRPO}} = \mathbb{E}\left[\min\left(r_t A_t, \text{clip}(r_t, 1-\epsilon, 1+\epsilon) A_t\right)\right]$</p>
+<p>其中：</p>
+<ul>
+<li>
+<p>$r_t = \frac{\pi_\theta(a_t|s_t)}{\pi_{\text{old}}(a_t|s_t)}$表示新旧策略的概率比；</p>
+</li>
+<li>
+<p>$A_t$ 是刚才计算的组内相对优势。</p>
+</li>
+</ul>
+<p>模型根据这个目标函数反向传播，更新参数，使得生成高相对奖励回答的概率上升。</p>
+<h3 id="第五步迭代训练">第五步：迭代训练</h3>
+<p>重复以上步骤：</p>
+<ol>
+<li>
+<p>从当前模型采样若干回答；</p>
+</li>
+<li>
+<p>通过 Reward Model 打分；</p>
+</li>
+<li>
+<p>计算组内相对优势；</p>
+</li>
+<li>
+<p>用 GRPO 目标函数优化策略；</p>
+</li>
+<li>
+<p>更新模型参数。</p>
+</li>
+</ol>
+<p>经过多轮迭代后，模型学会更倾向于输出被人类偏好或 Reward Model 高分评价的回答。</p>
+<h3 id="四grpo的优缺点">四、GRPO的优缺点</h3>
+<h4 id="优点"><strong>优点</strong></h4>
+<ul>
+<li>
+<p><strong>省去 Critic</strong>：不需要和策略同规模的价值网络，<strong>显著节省显存与工程复杂度</strong>。</p>
+</li>
+<li>
+<p><strong>贴合排序/比较型奖励</strong>：许多 RLHF/RLAIF 奖励本就“同题内比较”，组内归一化天然契合。</p>
+</li>
+<li>
+<p><strong>在推理任务上实证有效</strong>：DeepSeekMath、DeepSeek-R1 系列显示对复杂推理/数学题有效。</p>
+</li>
+</ul>
+<h4 id="局限坑点"><strong>局限/坑点</strong></h4>
+<ul>
+<li>
+<p><strong>长度偏置风险</strong>：组内归一化 + 序列级优势可能鼓励更长输出（尤其错误答案也越写越长）。VERL 给出 <strong>DrGRPO</strong> 变体（改聚合与归一化）来缓解。</p>
+</li>
+<li>
+<p><strong>奖励设计敏感</strong>：整体奖励粗粒度，若只看“最终正确/错误”会造成梯度稀疏；往往需要<strong>多项奖励</strong>（正确性/格式/冗余/稳健性）与权重。</p>
+</li>
+<li>
+<p><strong>组大小与采样温度权衡</strong>：组太小方差大、太大算力贵；温度过高噪声大、过低探索不足（实践里常搭配自适应温度/Top-p）。实务指南多建议从小组数起步做 ablation。</p>
+</li>
+</ul>
+<h3 id="五grpo的应用">五、GRPO的应用</h3>
+<p><a href="https://arxiv.org/abs/2402.03300"><strong>DeepSeekMath</strong></a><strong>（2024）</strong>：引入 GRPO 后，7B 模型在 MATH 等推理指标上显著提升；论文明确提出“用组内基线替代 critic，降低内存并提升推理能力”。</p>
+<p><a href="https://arxiv.org/abs/2501.12948"><strong>DeepSeek-R1</strong></a><strong>（2025）</strong>：大规模 RL 推理模型系列，采用 GRPO 体系（及其改造）鼓励更长链路的内在推理行为。</p>
+<h3 id="六grpo总结">六、GRPO总结</h3>
+<h2 id="gspo">GSPO</h2>
+<h3 id="一gspo的核心思想">一、GSPO的核心思想</h3>
+<p>在 RL 强化大模型时，奖励通常是对<strong>整条回答序列</strong>（response）打分。如果仍用 GRPO/PPO 那样的 <strong>token 级重要性比（importance ratio）</strong> 去做裁剪与更新，容易产生与奖励单位不一致的“错配”，带来高方差噪声并在长序列/MoE 下被放大，导致训练不稳定甚至崩溃。
+<strong>GSPO 的关键改动</strong>：把重要性比、裁剪与优化都提升到<strong>序列级</strong>来做——让“优化的基本单位”和“奖励的基本单位”保持一致，从根上降低噪声、提升稳定性，尤其对长序列与 MoE 结构效果显著。</p>
+<h3 id="二gspo的目标函数">二、GSPO的目标函数</h3>
+<p>设对同一查询 xxx 采样一组回答 ${y_i}_{i=1}^G$（组大小 G）。GSPO 的优化目标为（省略 KL 正则的写法）：</p>
+<p>$J_{\text{GSPO}}(\theta) = \mathbb{E}<em>{x,{y_i}\sim \pi</em>{\theta_{\text{old}}}} \left[ \frac{1}{G} \sum_{i=1}^G \min\left( s_i(\theta),\hat{A}_i,\ \text{clip}\left(s_i(\theta),1-\epsilon,1+\epsilon\right),\hat{A}_i \right) \right]$</p>
+<p>其中 <strong>组内相对优势（group advantage）</strong> 与 GRPO 一致，用组内标准化的奖励：</p>
+<p>$\hat{A}_i = \frac{r(x, y_i) - \text{mean}_j , r(x, y_j)}{\text{std}_j , r(x, y_j)}$</p>
+<p>而 <strong>序列级重要性比</strong> 定义为基于整条序列似然的比值，并做长度归一：</p>
+<p>$s_i(\theta) = \left( \frac{\pi_\theta(y_i \mid x)}{\pi_{\theta_{\text{old}}}(y_i \mid x)} \right)^{\frac{1}{|y_i|}} = \exp\left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\theta(y_{i,t} \mid x, y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t} \mid x, y_{i,&lt;t})} \right)$</p>
+<p>这样将<strong>裁剪也放在序列级</strong>完成，避免逐 token 波动累计。论文同时给出了梯度形式，便于实现与分析。</p>
+<blockquote>
+<p>小结：GSPO=（序列级比率）×（组内标准化优势）+（序列级裁剪）。它与 GRPO 的主要差异就是 <strong>把 wi,t 改成 si(θ)</strong>，并把 min-clip 也移到<strong>序列级</strong>。</p>
+</blockquote>
+<h3 id="三gspo的训练流程">三、GSPO的训练流程</h3>
+<p><strong>数据与采样</strong>
+对每个查询 x，用旧策略 $\pi_{\theta_{\text{old}}}$ 采样 G 条回答 $y_i$（可并行推理引擎生成）。</p>
+<p><strong>打分与组内标准化</strong>
+用人类/AI 评审或奖励模型得到每条回答的奖励 $r(x,y_i)$，做组内标准化得 $A^i$。</p>
+<p><strong>计算序列级重要性比</strong>
+计算每条回答在新旧策略下的<strong>序列似然比</strong>并做<strong>长度归一</strong>得到 $s_i(\theta)$。</p>
+<p><strong>序列级裁剪与目标</strong>
+代入上式做 $\min\left( \cdot, \text{clip}\left( \cdot \right) \right)$ 形成损失，反向传播更新 θ\thetaθ。可按需加 KL 到参考策略。</p>
+<p><strong>旧策略同步</strong>
+以固定步数/EMA 同步 $\theta_{\text{old}} \leftarrow \theta$，继续下一批。</p>
+<p><strong>基础设施优化（实践亮点）</strong>
+因为只用到<strong>序列级似然</strong>，很多场景下可以直接复用<strong>推理引擎返回的对数似然</strong>而无需训练引擎逐 token 复算，有利于“推理-训练解耦”、多轮对话与部分回滚等复杂流水线。</p>
+<h3 id="四gspo的优缺点">四、GSPO的优缺点</h3>
+<p><strong>优点</strong></p>
+<ul>
+<li>
+<p><strong>稳定性显著提升</strong>：从理论与经验上缓解长序列/大模型（尤其是 <strong>MoE</strong>）训练的崩溃问题。</p>
+</li>
+<li>
+<p><strong>工程更简化</strong>：不依赖价值头，也减少了为稳定性引入的复杂补丁；序列级似然可直接来自推理侧，降低复算开销。</p>
+</li>
+<li>
+<p><strong>效率与性能</strong>：在同等预算下较 GRPO 展现更优训练效率与下游指标（论文报告）。</p>
+</li>
+</ul>
+<p><strong>局限/注意点</strong></p>
+<ul>
+<li>
+<p><strong>组采样成本</strong>：需对同一提示采样 GGG 条响应以做组内标准化，对吞吐与缓存有压力。</p>
+</li>
+<li>
+<p><strong>裁剪区间需要重新标定</strong>：序列级比率与 token 级数量级不同，ϵ\epsilonϵ 通常需要重新调参；长度归一虽缓解但仍需与任务长度分布配套。</p>
+</li>
+<li>
+<p><strong>粒度权衡</strong>：序列级优化的 credit assignment 较粗；若任务强依赖格式/安全位点的逐 token 约束，仍可能需要额外正则或奖励设计。</p>
+</li>
+<li>
+<p><strong>依赖可靠的打分</strong>：与 RLHF/RLAIF 一样，奖励模型或判别器的稳健性直接影响最终能力。</p>
+</li>
+</ul>
+<h3 id="五gspo的应用">五、GSPO的应用</h3>
+<p><strong>Qwen3 系列显著收益</strong>：作者报告 GSPO 直接支撑了最新 Qwen3（Instruct/Coder/Thinking）大幅进步，并特别<strong>稳定了 MoE 的 RL 训练</strong>。</p>
+<h3 id="六gspo总结">六、GSPO总结</h3>
+<p>GSPO 是对 GRPO 的序列级优化升级版——通过序列级裁剪与标准化，显著提升了 RLHF 在长序列和大模型场景下的稳定性与效率。</p>
+<h2 id="dapo">DAPO</h2>
+
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>

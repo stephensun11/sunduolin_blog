@@ -14,7 +14,7 @@ relativeURLs = true
   # 栏目与子分类映射（供模板使用）
   [params.section_subcategories]
     AiNews = ["行业动态", "产品发布", "政策法规"]
-    AiTech = ["LLM基本原理", "LLM最新技术", "部署实践"]
+    AiTech = ["LLM基本原理", "LLM最新技术", "强化学习", "部署实践"]
     CSTech = ["Git", "Python", "Linux", "tmux"]
     PaperReading = ["NLP", "CV", "多模态", "RL"]
 
@@ -66,8 +66,14 @@ relativeURLs = true
   parent = "aitech"
 
 [[menu.main]]
-  name = "部署实践"
+  name = "强化学习"
   weight = 3
+  url = "/subcategories/强化学习/"
+  parent = "aitech"
+
+[[menu.main]]
+  name = "部署实践"
+  weight = 4
   url = "/subcategories/部署实践/"
   parent = "aitech"
 

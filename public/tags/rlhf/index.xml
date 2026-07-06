@@ -6,8 +6,15 @@
     <description>Recent content in RLHF on 我的算法博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 06 Jul 2026 22:20:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2026 22:30:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/rlhf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM强化学习算法详解</title>
+      <link>https://example.com/aitech/llm-rl-algorithms/</link>
+      <pubDate>Mon, 06 Jul 2026 22:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-rl-algorithms/</guid>
+      <description>概述 学习路线 前言 一些概念 策略梯度（Policy Gradient） “策略梯度”（Policy Gradient）是强化学习中最核心的一类方法，它直接通过优化策略的参数来最大化期望回报。下面进行详解：&#xA;一、基本思想 在强化学习中，**策略（Policy）**定义了智能体（Agent）在环境中行动的方式。&#xA;如果我们用一个带参数的函数（如神经网络）表示策略：&#xA;$π_θ(a∣s)$&#xA;表示在状态 s 下采取动作 a 的概率，参数为 θ。&#xA;策略梯度法的核心目标是：&#xA;找到一组参数 θ，使得模型获得的期望累积奖励最大。&#xA;这其实与深度学习中的最小化Loss有异曲同工之妙&#xA;二、优化目标与梯度推导 定义目标函数（期望回报）为：&#xA;$J(θ)=E_{π_θ}[R(τ)]$&#xA;其中 R(τ) 是一条轨迹（trajectory）上获得的总奖励。&#xA;使用概率论的对数导数技巧（log trick）：&#xA;$∇_θJ(θ)=E_{π_θ}[∇_θlog⁡π_θ(a∣s)⋅R(τ)]$&#xA;这就是 策略梯度定理（Policy Gradient Theorem） 的核心结果。 它告诉我们：只要能从策略中采样（而不需要知道环境的导数），就能计算梯度。&#xA;对数导数技巧：∇logf(x) = ∇f(x) / f(x)，即∇f(x) = f(x) * ∇logf(x) ，具体推导过程如下：&#xA;设一条长度为 T 的轨迹为&#xA;τ=(s0,a0,s1,a1,…,sT)，累计回报为 R(τ)（可包含折扣）。&#xA;在给定策略参数 θ 下，轨迹的概率密度函数可写为&#xA;$\begin{aligned} p_\theta(\tau) &amp;amp;= \rho(s_0),\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t),P(s_{t+1}\mid s_t,a_t) \end{aligned}$&#xA;其中 ρ 是初始状态分布，环境转移 P 不依赖 θ（典型假设）。&#xA;于是：&#xA;$\begin{aligned} J(\theta) &amp;amp;= \mathbb{E}{\tau \sim \pi\theta}[R(\tau)] = \int p_\theta(\tau),R(\tau),d\tau \end{aligned}$</description>
+    </item>
     <item>
       <title>LLM 训练流程入门：预训练、指令微调与对齐</title>
       <link>https://example.com/aitech/llm-training-basics/</link>

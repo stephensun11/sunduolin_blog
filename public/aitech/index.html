@@ -82,6 +82,8 @@
                 
                 <a href="../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
                 
+                <a href="../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                
                 <a href="../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
                 
             </div>
@@ -145,6 +147,56 @@
             </div>
 
             <div class="post-list">
+                
+                
+                <div class="post-item">
+                    <h2><a href="../aitech/llm-rl-algorithms/index.html">LLM强化学习算法详解</a></h2>
+                    <div class="meta">
+                        <span>2026-07-06</span>
+                        
+                        <span class="category">AiTech</span>
+                        
+                        
+                        <span class="subcategory">强化学习</span>
+                        
+                        
+                        <span class="tag">LLM</span>
+                        
+                        <span class="tag">强化学习</span>
+                        
+                        <span class="tag">RLHF</span>
+                        
+                        <span class="tag">PPO</span>
+                        
+                        <span class="tag">GRPO</span>
+                        
+                        <span class="tag">DAPO</span>
+                        
+                    </div>
+                    <div class="summary">概述 学习路线 前言 一些概念 策略梯度（Policy Gradient） “策略梯度”（Policy Gradient）是强化学习中最核心的一类方法，它直接通过优化策略的参数来最大化期望回报。下面进行详解：
+一、基本思想 在强化学习中，**策略（Policy）**定义了智能体（Agent）在环境中行动的方式。
+如果我们用一个带参数的函数（如神经网络）表示策略：
+$π_θ(a∣s)$
+表示在状态 s 下采取动作 a 的概率，参数为 θ。
+策略梯度法的核心目标是：
+找到一组参数 θ，使得模型获得的期望累积奖励最大。
+这其实与深度学习中的最小化Loss有异曲同工之妙
+二、优化目标与梯度推导 定义目标函数（期望回报）为：
+$J(θ)=E_{π_θ}[R(τ)]$
+其中 R(τ) 是一条轨迹（trajectory）上获得的总奖励。
+使用概率论的对数导数技巧（log trick）：
+$∇_θJ(θ)=E_{π_θ}[∇_θlog⁡π_θ(a∣s)⋅R(τ)]$
+这就是 策略梯度定理（Policy Gradient Theorem） 的核心结果。 它告诉我们：只要能从策略中采样（而不需要知道环境的导数），就能计算梯度。
+对数导数技巧：∇logf(x) = ∇f(x) / f(x)，即∇f(x) = f(x) * ∇logf(x) ，具体推导过程如下：
+设一条长度为 T 的轨迹为
+τ=(s0,a0,s1,a1,…,sT)，累计回报为 R(τ)（可包含折扣）。
+在给定策略参数 θ 下，轨迹的概率密度函数可写为
+$\begin{aligned} p_\theta(\tau) &amp;= \rho(s_0),\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t),P(s_{t+1}\mid s_t,a_t) \end{aligned}$
+其中 ρ 是初始状态分布，环境转移 P 不依赖 θ（典型假设）。
+于是：
+$\begin{aligned} J(\theta) &amp;= \mathbb{E}{\tau \sim \pi\theta}[R(\tau)] = \int p_\theta(\tau),R(\tau),d\tau \end{aligned}$</div>
+                </div>
+                
                 
                 
                 <div class="post-item">
