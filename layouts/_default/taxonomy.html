@@ -35,7 +35,7 @@
             <div class="post-list">
                 {{ range .Pages }}
                 <div class="post-item">
-                    <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+                    <h2><a href="{{ .RelPermalink | relURL }}">{{ .Title }}</a></h2>
                     <div class="meta">
                         <span>{{ .Date.Format "2006-01-02" }}</span>
                         {{ range .Params.categories }}

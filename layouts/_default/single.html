@@ -52,10 +52,10 @@
                     <span class="category">{{ . }}</span>
                     {{ end }}
                     {{ range .Params.subcategories }}
-                    <a class="subcategory" href="{{ printf "/subcategories/%s/" (urlize .) }}">{{ . }}</a>
+                    <a class="subcategory" href="{{ printf "subcategories/%s/" (urlize .) | relURL }}">{{ . }}</a>
                     {{ end }}
                     {{ range .Params.tags }}
-                    <span class="tag"><a href="{{ printf "/tags/%s/" (urlize .) }}">{{ . }}</a></span>
+                    <span class="tag"><a href="{{ printf "tags/%s/" (urlize .) | relURL }}">{{ . }}</a></span>
                     {{ end }}
                 </div>
                 <div class="post-content">

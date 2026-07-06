@@ -32,7 +32,7 @@
             <div class="terms-grid">
                 {{ range .Data.Terms }}
                 <div class="term-card">
-                    <a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+                    <a href="{{ .Page.RelPermalink | relURL }}">{{ .Page.Title }}</a>
                     <div class="count">{{ .Count }} 篇文章</div>
                 </div>
                 {{ end }}

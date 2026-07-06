@@ -54,11 +54,11 @@
                     <div class="sub-links">
                         {{ if isset $.Site.Params.section_subcategories .Title }}
                         {{ range index $.Site.Params.section_subcategories .Title }}
-                        <a href="{{ printf "/subcategories/%s/" (urlize .) }}">{{ . }}</a>
+                        <a href="{{ printf "subcategories/%s/" (urlize .) | relURL }}">{{ . }}</a>
                         {{ end }}
                         {{ end }}
                     </div>
-                    <a class="more-link" href="{{ .Permalink }}">查看全部 →</a>
+                    <a class="more-link" href="{{ .RelPermalink | relURL }}">查看全部 →</a>
                 </div>
                 {{ end }}
             </div>
@@ -76,7 +76,7 @@
                         <span class="subcategory">{{ . }}</span>
                         {{ end }}
                     </div>
-                    <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+                    <h3><a href="{{ .RelPermalink | relURL }}">{{ .Title }}</a></h3>
                     <div class="date">{{ .Date.Format "2006-01-02" }}</div>
                     <div class="summary">{{ .Summary }}</div>
                 </div>

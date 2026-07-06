@@ -1,6 +1,7 @@
 baseURL = 'https://example.com'
 languageCode = 'zh-cn'
 title = '我的算法博客'
+relativeURLs = true
 
 [taxonomies]
   category = "categories"
