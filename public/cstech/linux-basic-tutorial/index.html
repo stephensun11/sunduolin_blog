@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux 简单教学：从目录、文件到常用命令 - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                
+                <a href="../../subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/index.html">产品发布</a>
+                
+                <a href="../../subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/index.html">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
+                
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/git/index.html">Git</a>
+                
+                <a href="../../subcategories/python/index.html">Python</a>
+                
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                
+                <a href="../../subcategories/cv/index.html">CV</a>
+                
+                <a href="../../subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/index.html">多模态</a>
+                
+                <a href="../../subcategories/rl/index.html">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>Linux 简单教学：从目录、文件到常用命令</h1>
+                <div class="meta">
+                    <span>2026-07-06</span>
+                    
+                    <span class="category">CSTech</span>
+                    
+                    
+                    <a class="subcategory" href="../../subcategories/linux/index.html">Linux</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/linux/index.html">Linux</a></span>
+                    
+                    <span class="tag"><a href="../../tags/shell/index.html">Shell</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/index.html">命令行</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">服务器</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>学 Linux 不需要一开始就理解内核、发行版和系统调用。</p>
+<p>对大多数开发者来说，第一目标很实际：能登录服务器，能找到文件，能看日志，能启动程序，能判断一个问题大概出在哪里。先把这些基本动作练熟，Linux 就不会显得那么陌生。</p>
+<p>这篇文章是一份简单教学，按日常使用顺序整理常用命令。</p>
+<h2 id="先理解目录">先理解目录</h2>
+<p>Linux 的文件系统从根目录 <code>/</code> 开始。</p>
+<p>常见目录可以先这样理解。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>/home      普通用户的家目录
+</span></span><span style="display:flex;"><span>/root      root 用户的家目录
+</span></span><span style="display:flex;"><span>/etc       系统和软件配置
+</span></span><span style="display:flex;"><span>/var       日志、缓存、运行时数据
+</span></span><span style="display:flex;"><span>/usr       系统程序和库
+</span></span><span style="display:flex;"><span>/tmp       临时文件
+</span></span><span style="display:flex;"><span>/opt       额外安装的软件
+</span></span></code></pre></div><p>查看当前目录：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pwd
+</span></span></code></pre></div><p>列出当前目录文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls
+</span></span><span style="display:flex;"><span>ls -l
+</span></span><span style="display:flex;"><span>ls -a
+</span></span></code></pre></div><p>切换目录：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd /var/log
+</span></span><span style="display:flex;"><span>cd ~
+</span></span><span style="display:flex;"><span>cd ..
+</span></span></code></pre></div><p><code>~</code> 表示当前用户的家目录，<code>..</code> 表示上一级目录。</p>
+<h2 id="文件和目录操作">文件和目录操作</h2>
+<p>创建目录：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir notes
+</span></span><span style="display:flex;"><span>mkdir -p projects/blog/content
+</span></span></code></pre></div><p>创建空文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>touch hello.txt
+</span></span></code></pre></div><p>复制文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cp hello.txt backup.txt
+</span></span></code></pre></div><p>复制目录：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cp -r content content-backup
+</span></span></code></pre></div><p>移动或重命名：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mv old.txt new.txt
+</span></span><span style="display:flex;"><span>mv file.txt notes/
+</span></span></code></pre></div><p>删除文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rm old.txt
+</span></span></code></pre></div><p>删除目录要更谨慎：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rm -r old-folder
+</span></span></code></pre></div><p><code>rm -rf</code> 很危险。它不会把文件放进回收站，执行前一定确认路径。</p>
+<h2 id="查看文件内容">查看文件内容</h2>
+<p>查看整个文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat README.md
+</span></span></code></pre></div><p>分页查看：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>less README.md
+</span></span></code></pre></div><p>查看文件前几行和后几行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>head README.md
+</span></span><span style="display:flex;"><span>tail README.md
+</span></span><span style="display:flex;"><span>tail -f app.log
+</span></span></code></pre></div><p><code>tail -f</code> 很适合看实时日志。服务正在运行时，新的日志会不断追加显示。</p>
+<p>搜索文件内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>grep <span style="color:#e6db74">&#34;error&#34;</span> app.log
+</span></span><span style="display:flex;"><span>grep -R <span style="color:#e6db74">&#34;TODO&#34;</span> .
+</span></span></code></pre></div><p>如果系统安装了 <code>rg</code>，也可以用它搜索，速度通常更快。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>rg <span style="color:#e6db74">&#34;error&#34;</span>
+</span></span></code></pre></div><h2 id="权限基础">权限基础</h2>
+<p>Linux 文件有读、写、执行三类权限。</p>
+<p>查看权限：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -l
+</span></span></code></pre></div><p>你会看到类似这样的内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>-rw-r--r--  1 user user  1200 Jul  6 README.md
+</span></span></code></pre></div><p>给脚本增加执行权限：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chmod +x deploy.sh
+</span></span></code></pre></div><p>切换到管理员权限执行命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl status nginx
+</span></span></code></pre></div><p>不要随手在不理解的命令前加 <code>sudo</code>。权限越大，误操作的代价越高。</p>
+<h2 id="进程和端口">进程和端口</h2>
+<p>查看当前进程：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux
+</span></span></code></pre></div><p>搜索某个进程：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux | grep nginx
+</span></span></code></pre></div><p>查看端口占用：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ss -tulpn
+</span></span></code></pre></div><p>结束进程：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kill PID
+</span></span></code></pre></div><p>如果普通结束失败，再考虑：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kill -9 PID
+</span></span></code></pre></div><p><code>kill -9</code> 是强制结束，适合最后再用。</p>
+<h2 id="服务管理">服务管理</h2>
+<p>很多服务器程序会交给 systemd 管理，比如 nginx、mysql、docker。</p>
+<p>查看服务状态：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl status nginx
+</span></span></code></pre></div><p>启动服务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl start nginx
+</span></span></code></pre></div><p>重启服务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl restart nginx
+</span></span></code></pre></div><p>设置开机自启：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable nginx
+</span></span></code></pre></div><p>查看服务日志：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>journalctl -u nginx -f
+</span></span></code></pre></div><h2 id="网络和下载">网络和下载</h2>
+<p>测试网络连通：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ping example.com
+</span></span></code></pre></div><p>查看当前机器 IP：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ip addr
+</span></span></code></pre></div><p>下载文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -O https://example.com/file.txt
+</span></span><span style="display:flex;"><span>wget https://example.com/file.txt
+</span></span></code></pre></div><p>测试 HTTP 响应：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -I https://example.com
+</span></span></code></pre></div><h2 id="一个日常排查流程">一个日常排查流程</h2>
+<p>假设你部署了一个网站，但页面打不开，可以按这个顺序看。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 1. 服务是否在运行</span>
+</span></span><span style="display:flex;"><span>systemctl status nginx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 端口是否在监听</span>
+</span></span><span style="display:flex;"><span>ss -tulpn | grep <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 本机访问是否正常</span>
+</span></span><span style="display:flex;"><span>curl -I http://127.0.0.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 日志里有没有错误</span>
+</span></span><span style="display:flex;"><span>journalctl -u nginx -n <span style="color:#ae81ff">50</span>
+</span></span></code></pre></div><p>这个流程不一定解决所有问题，但能帮你快速判断问题在服务、端口、配置还是网络。</p>
+<h2 id="总结">总结</h2>
+<p>Linux 入门不需要一次学完所有命令。</p>
+<p>先掌握目录切换、文件操作、日志查看、权限、进程、服务管理这几组动作。只要能在服务器上稳定完成这些操作，你就已经具备了继续学习部署、自动化和系统维护的基础。</p>
+<p>命令行真正的价值不是看起来专业，而是让你能清楚地控制一台机器。</p>
+
+                </div>
+            </div>
+        </div>
+        <style>
+    .sidebar { width: 240px; flex-shrink: 0; }
+    .sidebar-section { background: white; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .sidebar-section h3 { color: #667eea; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f0f0ff; }
+    .sidebar-section h3 a { color: #667eea; text-decoration: none; }
+    .sidebar-section h3 a:hover { text-decoration: underline; }
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.35rem; }
+    .sidebar-links a { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 16px; font-size: 0.85rem; text-decoration: none; color: #555; background: #f5f5f5; transition: all 0.2s; }
+    .sidebar-links a:hover { background: #667eea; color: white; }
+    .sidebar-links a.active { background: #667eea; color: white; }
+</style>
+<aside class="sidebar">
+    
+    <div class="sidebar-section">
+        <h3><a href="../../cstech/index.html">CSTech - 计算机技术</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="../../ainews/index.html">AiNews - AI资讯</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="../../aitech/index.html">AiTech - AI技术</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="../../paperreading/index.html">PaperReading - 论文解读</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="../../search/index.html">搜索</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+</aside>
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>

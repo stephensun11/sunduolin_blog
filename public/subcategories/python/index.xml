@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on 我的算法博客</title>
+    <link>https://example.com/subcategories/python/</link>
+    <description>Recent content in Python on 我的算法博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 06 Jul 2026 22:20:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/subcategories/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python 实用入门：把重复工作写成脚本</title>
+      <link>https://example.com/cstech/python-practical-start/</link>
+      <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
+      <guid>https://example.com/cstech/python-practical-start/</guid>
+      <description>Python 最适合作为第一门实用脚本语言来学。&#xA;它的语法不重，标准库够丰富，写几行代码就能处理文件、整理数据、调用命令、生成报告。对个人博客、AI 实验和日常开发来说，Python 很像一把随手能拿起来的小工具。&#xA;这篇文章不追求讲完 Python，而是帮你建立一个能立刻动手的最小知识框架。&#xA;安装与版本检查 安装完成后，先确认 Python 是否可用。&#xA;python --version 有些系统里命令叫 python3。&#xA;python3 --version 进入交互环境：&#xA;python 执行脚本：&#xA;python hello.py 一个最小脚本如下。&#xA;print(&amp;#34;Hello, Python&amp;#34;) 虚拟环境 写 Python 项目时，建议每个项目使用独立虚拟环境。这样不同项目的依赖不会互相污染。&#xA;创建虚拟环境：&#xA;python -m venv .venv 激活虚拟环境。&#xA;Windows PowerShell：&#xA;.\.venv\Scripts\Activate.ps1 Linux / macOS：&#xA;source .venv/bin/activate 安装依赖：&#xA;pip install requests 导出依赖：&#xA;pip freeze &amp;gt; requirements.txt 下次恢复环境：&#xA;pip install -r requirements.txt 变量和基本类型 Python 里常见的数据类型很直接。&#xA;name = &amp;#34;Alice&amp;#34; age = 18 score = 95.5 is_active = True tags = [&amp;#34;AI&amp;#34;, &amp;#34;Python&amp;#34;, &amp;#34;Blog&amp;#34;] profile = {&amp;#34;name&amp;#34;: name, &amp;#34;age&amp;#34;: age} 列表适合保存一组有顺序的数据。</description>
+    </item>
+  </channel>
+</rss>

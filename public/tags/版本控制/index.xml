@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>版本控制 on 我的算法博客</title>
+    <link>https://example.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/</link>
+    <description>Recent content in 版本控制 on 我的算法博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 06 Jul 2026 22:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Git 实用入门：从提交到分支协作</title>
+      <link>https://example.com/cstech/git-practical-guide/</link>
+      <pubDate>Mon, 06 Jul 2026 22:10:00 +0800</pubDate>
+      <guid>https://example.com/cstech/git-practical-guide/</guid>
+      <description>Git 最重要的能力不是“保存代码”，而是让你敢于修改代码。&#xA;很多人刚开始学 Git，会被一堆命令吓住：add、commit、branch、merge、rebase、stash。其实入门时不需要把它们全部背下来。先理解 Git 在记录什么，再记住一条稳定的日常工作流，就能覆盖大多数开发场景。&#xA;Git 在解决什么问题 写代码最怕两件事。&#xA;第一是不知道自己改了什么。今天改一点，明天改一点，三天后发现程序坏了，却不知道是哪一步引入的问题。&#xA;第二是不敢尝试。想重构一个函数，想换一种实现方式，但又担心改坏以后回不去。&#xA;Git 的价值就在这里：它把项目的每一次关键变化记录成一个提交。你可以查看差异，可以回到过去，也可以开一个分支大胆试验。&#xA;四个基本区域 理解 Git，先记住四个区域。&#xA;working tree 工作区：你正在编辑的文件 staging area 暂存区：准备进入下一次提交的改动 repository 本地仓库：已经保存为 commit 的历史 remote 远程仓库：GitHub / GitLab 等远端副本 日常命令基本都围绕这四个区域移动文件状态。&#xA;查看当前状态：&#xA;git status 查看具体改动：&#xA;git diff 把改动放入暂存区：&#xA;git add file.md git add . 提交到本地仓库：&#xA;git commit -m &amp;#34;Add tmux guide&amp;#34; 推送到远程仓库：&#xA;git push 第一次使用 Git 第一次使用时，先配置提交身份。&#xA;git config --global user.name &amp;#34;你的名字&amp;#34; git config --global user.email &amp;#34;you@example.com&amp;#34; 克隆已有仓库：&#xA;git clone https://github.</description>
+    </item>
+  </channel>
+</rss>

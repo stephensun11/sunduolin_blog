@@ -6,8 +6,29 @@
     <description>Recent content in CSTech - 计算机技术 on 我的算法博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 06 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2026 22:25:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/cstech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux 简单教学：从目录、文件到常用命令</title>
+      <link>https://example.com/cstech/linux-basic-tutorial/</link>
+      <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
+      <guid>https://example.com/cstech/linux-basic-tutorial/</guid>
+      <description>学 Linux 不需要一开始就理解内核、发行版和系统调用。&#xA;对大多数开发者来说，第一目标很实际：能登录服务器，能找到文件，能看日志，能启动程序，能判断一个问题大概出在哪里。先把这些基本动作练熟，Linux 就不会显得那么陌生。&#xA;这篇文章是一份简单教学，按日常使用顺序整理常用命令。&#xA;先理解目录 Linux 的文件系统从根目录 / 开始。&#xA;常见目录可以先这样理解。&#xA;/home 普通用户的家目录 /root root 用户的家目录 /etc 系统和软件配置 /var 日志、缓存、运行时数据 /usr 系统程序和库 /tmp 临时文件 /opt 额外安装的软件 查看当前目录：&#xA;pwd 列出当前目录文件：&#xA;ls ls -l ls -a 切换目录：&#xA;cd /var/log cd ~ cd .. ~ 表示当前用户的家目录，.. 表示上一级目录。&#xA;文件和目录操作 创建目录：&#xA;mkdir notes mkdir -p projects/blog/content 创建空文件：&#xA;touch hello.txt 复制文件：&#xA;cp hello.txt backup.txt 复制目录：&#xA;cp -r content content-backup 移动或重命名：&#xA;mv old.txt new.txt mv file.txt notes/ 删除文件：</description>
+    </item>
+    <item>
+      <title>Python 实用入门：把重复工作写成脚本</title>
+      <link>https://example.com/cstech/python-practical-start/</link>
+      <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
+      <guid>https://example.com/cstech/python-practical-start/</guid>
+      <description>Python 最适合作为第一门实用脚本语言来学。&#xA;它的语法不重，标准库够丰富，写几行代码就能处理文件、整理数据、调用命令、生成报告。对个人博客、AI 实验和日常开发来说，Python 很像一把随手能拿起来的小工具。&#xA;这篇文章不追求讲完 Python，而是帮你建立一个能立刻动手的最小知识框架。&#xA;安装与版本检查 安装完成后，先确认 Python 是否可用。&#xA;python --version 有些系统里命令叫 python3。&#xA;python3 --version 进入交互环境：&#xA;python 执行脚本：&#xA;python hello.py 一个最小脚本如下。&#xA;print(&amp;#34;Hello, Python&amp;#34;) 虚拟环境 写 Python 项目时，建议每个项目使用独立虚拟环境。这样不同项目的依赖不会互相污染。&#xA;创建虚拟环境：&#xA;python -m venv .venv 激活虚拟环境。&#xA;Windows PowerShell：&#xA;.\.venv\Scripts\Activate.ps1 Linux / macOS：&#xA;source .venv/bin/activate 安装依赖：&#xA;pip install requests 导出依赖：&#xA;pip freeze &amp;gt; requirements.txt 下次恢复环境：&#xA;pip install -r requirements.txt 变量和基本类型 Python 里常见的数据类型很直接。&#xA;name = &amp;#34;Alice&amp;#34; age = 18 score = 95.5 is_active = True tags = [&amp;#34;AI&amp;#34;, &amp;#34;Python&amp;#34;, &amp;#34;Blog&amp;#34;] profile = {&amp;#34;name&amp;#34;: name, &amp;#34;age&amp;#34;: age} 列表适合保存一组有顺序的数据。</description>
+    </item>
+    <item>
+      <title>Git 实用入门：从提交到分支协作</title>
+      <link>https://example.com/cstech/git-practical-guide/</link>
+      <pubDate>Mon, 06 Jul 2026 22:10:00 +0800</pubDate>
+      <guid>https://example.com/cstech/git-practical-guide/</guid>
+      <description>Git 最重要的能力不是“保存代码”，而是让你敢于修改代码。&#xA;很多人刚开始学 Git，会被一堆命令吓住：add、commit、branch、merge、rebase、stash。其实入门时不需要把它们全部背下来。先理解 Git 在记录什么，再记住一条稳定的日常工作流，就能覆盖大多数开发场景。&#xA;Git 在解决什么问题 写代码最怕两件事。&#xA;第一是不知道自己改了什么。今天改一点，明天改一点，三天后发现程序坏了，却不知道是哪一步引入的问题。&#xA;第二是不敢尝试。想重构一个函数，想换一种实现方式，但又担心改坏以后回不去。&#xA;Git 的价值就在这里：它把项目的每一次关键变化记录成一个提交。你可以查看差异，可以回到过去，也可以开一个分支大胆试验。&#xA;四个基本区域 理解 Git，先记住四个区域。&#xA;working tree 工作区：你正在编辑的文件 staging area 暂存区：准备进入下一次提交的改动 repository 本地仓库：已经保存为 commit 的历史 remote 远程仓库：GitHub / GitLab 等远端副本 日常命令基本都围绕这四个区域移动文件状态。&#xA;查看当前状态：&#xA;git status 查看具体改动：&#xA;git diff 把改动放入暂存区：&#xA;git add file.md git add . 提交到本地仓库：&#xA;git commit -m &amp;#34;Add tmux guide&amp;#34; 推送到远程仓库：&#xA;git push 第一次使用 Git 第一次使用时，先配置提交身份。&#xA;git config --global user.name &amp;#34;你的名字&amp;#34; git config --global user.email &amp;#34;you@example.com&amp;#34; 克隆已有仓库：&#xA;git clone https://github.</description>
+    </item>
     <item>
       <title>Tmux 实用入门：让终端会话不再怕断线</title>
       <link>https://example.com/cstech/tmux-practical-guide/</link>

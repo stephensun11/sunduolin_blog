@@ -6,8 +6,29 @@
     <description>Recent content in Subcategories on 我的算法博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 06 Jul 2026 22:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2026 22:25:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/subcategories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux</title>
+      <link>https://example.com/subcategories/linux/</link>
+      <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Python</title>
+      <link>https://example.com/subcategories/python/</link>
+      <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/python/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Git</title>
+      <link>https://example.com/subcategories/git/</link>
+      <pubDate>Mon, 06 Jul 2026 22:10:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/git/</guid>
+      <description></description>
+    </item>
     <item>
       <title>tmux</title>
       <link>https://example.com/subcategories/tmux/</link>
