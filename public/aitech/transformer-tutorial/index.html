@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer 实战教程 - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
+        .post .subcategory:hover { opacity: 0.85; }
+        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+        .post .tag a { color: inherit; text-decoration: none; }
+        .post .tag a:hover { color: #667eea; }
+        .post-content { color: #333; }
+        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
+        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
+        .post-content p { margin-bottom: 1rem; }
+        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
+        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
+        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
+        .post-content pre code { background: none; color: inherit; padding: 0; }
+        .post-content a { color: #667eea; text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
+        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        .post-content th { background: #f5f5f5; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/ainews/">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/">行业动态</a>
+                
+                <a href="/subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/">产品发布</a>
+                
+                <a href="/subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/aitech/">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">LLM基本原理</a>
+                
+                <a href="/subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/">LLM最新技术</a>
+                
+                <a href="/subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/cstech/">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/git/">Git</a>
+                
+                <a href="/subcategories/python/">Python</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/paperreading/">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/nlp/">NLP</a>
+                
+                <a href="/subcategories/cv/">CV</a>
+                
+                <a href="/subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/">多模态</a>
+                
+                <a href="/subcategories/rl/">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <div class="post">
+                <h1>Transformer 实战教程</h1>
+                <div class="meta">
+                    <span>2026-07-05</span>
+                    
+                    <span class="category">AiTech</span>
+                    
+                    
+                    <a class="subcategory" href="/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">LLM基本原理</a>
+                    
+                    
+                    <span class="tag"><a href="/tags/pytorch/">PyTorch</a></span>
+                    
+                    <span class="tag"><a href="/tags/transformer/">Transformer</a></span>
+                    
+                    <span class="tag"><a href="/tags/%E6%95%99%E7%A8%8B/">教程</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="环境准备">环境准备</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install torch torchvision
+</span></span><span style="display:flex;"><span>pip install transformers
+</span></span></code></pre></div><h2 id="快速开始">快速开始</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> pipeline
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用预训练模型</span>
+</span></span><span style="display:flex;"><span>classifier <span style="color:#f92672">=</span> pipeline(<span style="color:#e6db74">&#34;sentiment-analysis&#34;</span>)
+</span></span><span style="display:flex;"><span>result <span style="color:#f92672">=</span> classifier(<span style="color:#e6db74">&#34;Hello, I&#39;m learning AI!&#34;</span>)
+</span></span><span style="display:flex;"><span>print(result)
+</span></span></code></pre></div><h2 id="训练自己的模型">训练自己的模型</h2>
+<ol>
+<li>准备数据集</li>
+<li>配置训练参数</li>
+<li>开始训练</li>
+<li>评估模型性能</li>
+</ol>
+<h2 id="下一步">下一步</h2>
+<p>关注本栏目获取更多实战技巧！</p>
+
+                </div>
+            </div>
+        </div>
+        <style>
+    .sidebar { width: 240px; flex-shrink: 0; }
+    .sidebar-section { background: white; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .sidebar-section h3 { color: #667eea; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f0f0ff; }
+    .sidebar-section h3 a { color: #667eea; text-decoration: none; }
+    .sidebar-section h3 a:hover { text-decoration: underline; }
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.35rem; }
+    .sidebar-links a { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 16px; font-size: 0.85rem; text-decoration: none; color: #555; background: #f5f5f5; transition: all 0.2s; }
+    .sidebar-links a:hover { background: #667eea; color: white; }
+    .sidebar-links a.active { background: #667eea; color: white; }
+</style>
+<aside class="sidebar">
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/ainews/">AiNews - AI资讯</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/aitech/">AiTech - AI技术</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/paperreading/">PaperReading - 论文解读</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/cstech/">CSTech - 计算机技术</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/search/">搜索</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+</aside>
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>

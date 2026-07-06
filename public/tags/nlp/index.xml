@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NLP on 我的算法博客</title>
+    <link>http://localhost:1313/tags/nlp/</link>
+    <description>Recent content in NLP on 我的算法博客</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/nlp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Attention Is All You Need 论文解读</title>
+      <link>http://localhost:1313/paperreading/attention-is-all-you-need/</link>
+      <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>http://localhost:1313/paperreading/attention-is-all-you-need/</guid>
+      <description>论文简介 《Attention Is All You Need》是由Google团队在2017年提出的开创性论文，提出了Transformer架构。&#xA;核心贡献 自注意力机制: 无需RNN即可处理序列数据 多头注意力: 同时关注不同位置的信息 位置编码: 注入序列位置信息 代码示例 import torch import torch.nn as nn class MultiHeadAttention(nn.Module): def __init__(self, d_model, num_heads): super().__init__() self.d_model = d_model self.num_heads = num_heads def forward(self, q, k, v): # 实现细节... pass 总结 Transformer已成为现代NLP和AI的基石。</description>
+    </item>
+  </channel>
+</rss>

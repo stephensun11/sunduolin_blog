@@ -1,0 +1,124 @@
+baseURL = 'https://example.com'
+languageCode = 'zh-cn'
+title = '我的算法博客'
+
+[taxonomies]
+  category = "categories"
+  subcategory = "subcategories"
+  tag = "tags"
+
+[params]
+  description = "分享AI技术、论文解读和技术心得"
+
+  # 栏目与子分类映射（供模板使用）
+  [params.section_subcategories]
+    AiNews = ["行业动态", "产品发布", "政策法规"]
+    AiTech = ["LLM基本原理", "LLM最新技术", "部署实践"]
+    CSTech = ["Git", "Python"]
+    PaperReading = ["NLP", "CV", "多模态", "RL"]
+
+[[menu.main]]
+  name = "首页"
+  weight = 1
+  url = "/"
+
+[[menu.main]]
+  name = "AiNews"
+  weight = 2
+  url = "/categories/ainews/"
+  identifier = "ainews"
+
+[[menu.main]]
+  name = "行业动态"
+  weight = 1
+  url = "/subcategories/行业动态/"
+  parent = "ainews"
+
+[[menu.main]]
+  name = "产品发布"
+  weight = 2
+  url = "/subcategories/产品发布/"
+  parent = "ainews"
+
+[[menu.main]]
+  name = "政策法规"
+  weight = 3
+  url = "/subcategories/政策法规/"
+  parent = "ainews"
+
+[[menu.main]]
+  name = "AiTech"
+  weight = 3
+  url = "/categories/aitech/"
+  identifier = "aitech"
+
+[[menu.main]]
+  name = "LLM基本原理"
+  weight = 1
+  url = "/subcategories/llm基本原理/"
+  parent = "aitech"
+
+[[menu.main]]
+  name = "LLM最新技术"
+  weight = 2
+  url = "/subcategories/llm最新技术/"
+  parent = "aitech"
+
+[[menu.main]]
+  name = "部署实践"
+  weight = 3
+  url = "/subcategories/部署实践/"
+  parent = "aitech"
+
+[[menu.main]]
+  name = "CSTech"
+  weight = 4
+  url = "/categories/cstech/"
+  identifier = "cstech"
+
+[[menu.main]]
+  name = "Git"
+  weight = 1
+  url = "/subcategories/git/"
+  parent = "cstech"
+
+[[menu.main]]
+  name = "Python"
+  weight = 2
+  url = "/subcategories/python/"
+  parent = "cstech"
+
+[[menu.main]]
+  name = "PaperReading"
+  weight = 5
+  url = "/categories/paperreading/"
+  identifier = "paperreading"
+
+[[menu.main]]
+  name = "NLP"
+  weight = 1
+  url = "/subcategories/nlp/"
+  parent = "paperreading"
+
+[[menu.main]]
+  name = "CV"
+  weight = 2
+  url = "/subcategories/cv/"
+  parent = "paperreading"
+
+[[menu.main]]
+  name = "多模态"
+  weight = 3
+  url = "/subcategories/多模态/"
+  parent = "paperreading"
+
+[[menu.main]]
+  name = "RL"
+  weight = 4
+  url = "/subcategories/rl/"
+  parent = "paperreading"
+
+[[menu.main]]
+  name = "标签"
+  weight = 6
+  url = "/tags/"

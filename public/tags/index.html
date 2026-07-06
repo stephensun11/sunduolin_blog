@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tags - 我的算法博客</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
+        .main-layout { display: flex; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; }
+        .main-content { flex: 1; min-width: 0; }
+        h1 { color: #333; margin-bottom: 1.5rem; }
+        .terms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .term-card { background: white; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; transition: transform 0.2s; }
+        .term-card:hover { transform: translateY(-2px); }
+        .term-card a { color: #667eea; text-decoration: none; font-size: 1.1rem; font-weight: 500; }
+        .term-card a:hover { text-decoration: underline; }
+        .term-card .count { color: #999; font-size: 0.85rem; margin-top: 0.25rem; }
+        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+        @media (max-width: 768px) { .main-layout { flex-direction: column; } .sidebar { width: 100%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>我的算法博客</h1>
+    </header>
+    <style>
+    nav { background: #333; padding: 0; position: relative; }
+    nav .nav-inner { display: flex; align-items: stretch; }
+    nav .nav-item { position: relative; }
+    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    nav .nav-link.active { color: #667eea; }
+    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    nav .nav-item:hover .dropdown { display: block; }
+    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+</style>
+<nav>
+    <div class="nav-inner">
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/ainews/">AiNews ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/">行业动态</a>
+                
+                <a href="/subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/">产品发布</a>
+                
+                <a href="/subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/">政策法规</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/aitech/">AiTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/">LLM基本原理</a>
+                
+                <a href="/subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/">LLM最新技术</a>
+                
+                <a href="/subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/">部署实践</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/cstech/">CSTech ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/git/">Git</a>
+                
+                <a href="/subcategories/python/">Python</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/categories/paperreading/">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                <a href="/subcategories/nlp/">NLP</a>
+                
+                <a href="/subcategories/cv/">CV</a>
+                
+                <a href="/subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/">多模态</a>
+                
+                <a href="/subcategories/rl/">RL</a>
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            <a class="nav-link" href="/tags/">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    <div class="main-layout">
+        <div class="main-content">
+            <h1>Tags</h1>
+            <div class="terms-grid">
+                
+                <div class="term-card">
+                    <a href="http://localhost:1313/tags/attention/">Attention</a>
+                    <div class="count">1 篇文章</div>
+                </div>
+                
+                <div class="term-card">
+                    <a href="http://localhost:1313/tags/nlp/">NLP</a>
+                    <div class="count">1 篇文章</div>
+                </div>
+                
+                <div class="term-card">
+                    <a href="http://localhost:1313/tags/pytorch/">PyTorch</a>
+                    <div class="count">1 篇文章</div>
+                </div>
+                
+                <div class="term-card">
+                    <a href="http://localhost:1313/tags/transformer/">Transformer</a>
+                    <div class="count">2 篇文章</div>
+                </div>
+                
+                <div class="term-card">
+                    <a href="http://localhost:1313/tags/%E6%95%99%E7%A8%8B/">教程</a>
+                    <div class="count">1 篇文章</div>
+                </div>
+                
+            </div>
+        </div>
+        <style>
+    .sidebar { width: 240px; flex-shrink: 0; }
+    .sidebar-section { background: white; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .sidebar-section h3 { color: #667eea; font-size: 1rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f0f0ff; }
+    .sidebar-section h3 a { color: #667eea; text-decoration: none; }
+    .sidebar-section h3 a:hover { text-decoration: underline; }
+    .sidebar-links { display: flex; flex-direction: column; gap: 0.35rem; }
+    .sidebar-links a { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 16px; font-size: 0.85rem; text-decoration: none; color: #555; background: #f5f5f5; transition: all 0.2s; }
+    .sidebar-links a:hover { background: #667eea; color: white; }
+    .sidebar-links a.active { background: #667eea; color: white; }
+</style>
+<aside class="sidebar">
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/ainews/">AiNews - AI资讯</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/aitech/">AiTech - AI技术</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/paperreading/">PaperReading - 论文解读</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/cstech/">CSTech - 计算机技术</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+    <div class="sidebar-section">
+        <h3><a href="http://localhost:1313/search/">搜索</a></h3>
+        <div class="sidebar-links">
+            
+        </div>
+    </div>
+    
+</aside>
+
+    </div>
+    <footer>
+        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+    </footer>
+</body>
+</html>
