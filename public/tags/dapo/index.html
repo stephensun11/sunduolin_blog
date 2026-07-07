@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAPO - 我的算法博客</title>
+    <title>DAPO - Duolin Sun的技术室</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
@@ -33,21 +33,21 @@
 </head>
 <body>
     <header>
-        <h1>我的算法博客</h1>
+        <h1>Duolin Sun的技术室</h1>
     </header>
     <style>
-    nav { background: #333; padding: 0; position: relative; }
-    nav .nav-inner { display: flex; align-items: stretch; }
-    nav .nav-item { position: relative; }
-    nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
-    nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
-    nav .nav-link.active { color: #667eea; }
-    nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-    nav .nav-item:hover .dropdown { display: block; }
-    nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
-    nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    .site-nav { background: #333; padding: 0; position: relative; }
+    .site-nav .nav-inner { display: flex; align-items: stretch; }
+    .site-nav .nav-item { position: relative; }
+    .site-nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
+    .site-nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
+    .site-nav .nav-link.active { color: #667eea; }
+    .site-nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .site-nav .nav-item:hover .dropdown { display: block; }
+    .site-nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
+    .site-nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
 </style>
-<nav>
+<nav class="site-nav">
     <div class="nav-inner">
         
         
@@ -167,27 +167,21 @@
                         
                     </div>
                     <p>概述 学习路线 前言 一些概念 策略梯度（Policy Gradient） “策略梯度”（Policy Gradient）是强化学习中最核心的一类方法，它直接通过优化策略的参数来最大化期望回报。下面进行详解：
-一、基本思想 在强化学习中，**策略（Policy）**定义了智能体（Agent）在环境中行动的方式。
+一、基本思想 在强化学习中， 策略（Policy） 定义了智能体（Agent）在环境中行动的方式。
 如果我们用一个带参数的函数（如神经网络）表示策略：
-$π_θ(a∣s)$
-表示在状态 s 下采取动作 a 的概率，参数为 θ。
+\[ π_θ(a∣s) \]表示在状态 s 下采取动作 a 的概率，参数为 θ。
 策略梯度法的核心目标是：
 找到一组参数 θ，使得模型获得的期望累积奖励最大。
 这其实与深度学习中的最小化Loss有异曲同工之妙
 二、优化目标与梯度推导 定义目标函数（期望回报）为：
-$J(θ)=E_{π_θ}[R(τ)]$
-其中 R(τ) 是一条轨迹（trajectory）上获得的总奖励。
+\[ J(θ)=E_{π_θ}[R(τ)] \]其中 R\(τ\) 是一条轨迹（trajectory）上获得的总奖励。
 使用概率论的对数导数技巧（log trick）：
-$∇_θJ(θ)=E_{π_θ}[∇_θlog⁡π_θ(a∣s)⋅R(τ)]$
-这就是 策略梯度定理（Policy Gradient Theorem） 的核心结果。 它告诉我们：只要能从策略中采样（而不需要知道环境的导数），就能计算梯度。
+\[ ∇_θJ(θ)=E_{π_θ}[∇_θlog⁡π_θ(a∣s)⋅R(τ)] \]这就是 策略梯度定理（Policy Gradient Theorem） 的核心结果。 它告诉我们：只要能从策略中采样（而不需要知道环境的导数），就能计算梯度。
 对数导数技巧：∇logf(x) = ∇f(x) / f(x)，即∇f(x) = f(x) * ∇logf(x) ，具体推导过程如下：
 设一条长度为 T 的轨迹为
-τ=(s0,a0,s1,a1,…,sT)，累计回报为 R(τ)（可包含折扣）。
+τ=(s0,a0,s1,a1,…,sT)，累计回报为 R\(τ\)（可包含折扣）。
 在给定策略参数 θ 下，轨迹的概率密度函数可写为
-$\begin{aligned} p_\theta(\tau) &amp;= \rho(s_0),\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t),P(s_{t+1}\mid s_t,a_t) \end{aligned}$
-其中 ρ 是初始状态分布，环境转移 P 不依赖 θ（典型假设）。
-于是：
-$\begin{aligned} J(\theta) &amp;= \mathbb{E}{\tau \sim \pi\theta}[R(\tau)] = \int p_\theta(\tau),R(\tau),d\tau \end{aligned}$</p>
+\[ \begin{aligned}p_\theta(\tau)&amp;= \rho(s_0)\,\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t)\,P(s_{t+1}\mid s_t,a_t)\end{aligned} \]其中 ρ 是初始状态分布，环境转移 P 不依赖 θ（典型假设）。</p>
                 </div>
                 
             </div>
@@ -197,7 +191,7 @@ $\begin{aligned} J(\theta) &amp;= \mathbb{E}{\tau \sim \pi\theta}[R(\tau)] = \in
 
     </div>
     <footer>
-        <p>&copy; 2026 我的算法博客. Powered by Hugo.</p>
+        <p>&copy; 2026 Duolin Sun的技术室. Powered by Hugo.</p>
     </footer>
 </body>
 </html>

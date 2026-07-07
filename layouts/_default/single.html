@@ -41,6 +41,8 @@
         .post-content a:hover { text-decoration: underline; }
         .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
         .post-content img { max-width: 100%; height: auto; display: block; margin: 1rem auto; border-radius: 8px; }
+        .post-content .math-display { overflow-x: auto; margin: 1rem 0; padding: 0.25rem 0; }
+        .post-content .math-inline { white-space: nowrap; }
         .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
         .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
         .post-content th { background: #f5f5f5; }
@@ -52,6 +54,19 @@
         }
         @media (max-width: 768px) { .sidebar { width: 100%; } .post { padding: 1.25rem; } }
     </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
     <header>

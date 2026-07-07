@@ -1,7 +1,12 @@
 baseURL = 'https://example.com'
 languageCode = 'zh-cn'
-title = '我的算法博客'
+title = 'Duolin Sun的技术室'
 relativeURLs = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
 
 [taxonomies]
   category = "categories"
