@@ -1,12 +1,12 @@
 ---
-title: "欢迎来到我的博客"
+title: "欢迎来到 Duolin Sun' Blog"
 date: 2026-07-05T10:00:00+08:00
 draft: false
 categories: ["AiNews"]
 subcategories: ["行业动态"]
 ---
 
-欢迎来到我的算法博客！这里我会分享最新的AI资讯、论文解读和技术心得。
+欢迎来到 Duolin Sun' Blog！这里我会分享最新的AI资讯、论文解读和技术心得。
 
 ## 本博客栏目
 
