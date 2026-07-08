@@ -1,4 +1,4 @@
-# Duolin Sun的技术室
+# Duolin Sun' Blog
 
 这是一个基于 [Hugo](https://gohugo.io/) 搭建的个人静态博客，用于整理和分享 AI 技术、论文解读、行业动态以及计算机基础技术笔记。
 

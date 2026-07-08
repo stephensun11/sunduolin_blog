@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上下文窗口与 KV Cache：为什么长对话会变贵 - Duolin Sun的技术室</title>
+    <title>上下文窗口与 KV Cache：为什么长对话会变贵 - Duolin Sun&#39; Blog</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
         header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
         .main-layout { display: grid; grid-template-columns: minmax(0, 1fr); max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; align-items: start; }
-        .main-layout.has-toc { grid-template-columns: 240px minmax(0, 1fr); max-width: 1320px; }
+        .main-layout.has-toc { grid-template-columns: 240px minmax(0, 1fr); width: 80vw; max-width: 80vw; }
         .main-content { min-width: 0; }
         .article-toc { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; }
         .article-toc-inner { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -48,7 +48,7 @@
         .post-content th { background: #f5f5f5; }
         footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
         @media (max-width: 960px) {
-            .main-layout.has-toc { grid-template-columns: 1fr; max-width: 1100px; }
+            .main-layout.has-toc { grid-template-columns: 1fr; width: auto; max-width: 1100px; }
             .article-toc { position: static; max-height: none; }
             .article-toc nav { max-height: 16rem; overflow: auto; }
         }
@@ -70,7 +70,7 @@
 </head>
 <body>
     <header>
-        <h1>Duolin Sun的技术室</h1>
+        <h1>Duolin Sun&#39; Blog</h1>
     </header>
     <style>
     .site-nav { background: #333; padding: 0; position: relative; }
@@ -250,7 +250,7 @@
 
     </div>
     <footer>
-        <p>&copy; 2026 Duolin Sun的技术室. Powered by Hugo.</p>
+        <p>&copy; 2026 Duolin Sun&#39; Blog. Powered by Hugo.</p>
     </footer>
 </body>
 </html>

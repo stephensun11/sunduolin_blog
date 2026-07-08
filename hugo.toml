@@ -1,6 +1,6 @@
 baseURL = 'https://example.com'
 languageCode = 'zh-cn'
-title = 'Duolin Sun的技术室'
+title = "Duolin Sun' Blog"
 relativeURLs = true
 
 [markup]
