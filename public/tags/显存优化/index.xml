@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>显存优化 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E6%98%BE%E5%AD%98%E4%BC%98%E5%8C%96/</link>
+    <description>Recent content in 显存优化 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 09:20:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E6%98%BE%E5%AD%98%E4%BC%98%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>显存不够怎么办：FSDP、ZeRO 与 DeepSpeed</title>
+      <link>https://example.com/aitech/distributed-training-fsdp-zero-deepspeed/</link>
+      <pubDate>Thu, 09 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/distributed-training-fsdp-zero-deepspeed/</guid>
+      <description>解释全分片数据并行的核心思想，梳理 FSDP、ZeRO 和 DeepSpeed 的关系，以及它们适合解决的问题。</description>
+    </item>
+  </channel>
+</rss>

@@ -6,8 +6,15 @@
     <description>Recent content in PyTorch on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2026 09:10:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/pytorch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>数据并行入门：从 DP 到 DDP</title>
+      <link>https://example.com/aitech/distributed-training-dp-ddp/</link>
+      <pubDate>Thu, 09 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/distributed-training-dp-ddp/</guid>
+      <description>理解数据并行的基本工作方式，以及为什么 PyTorch 多 GPU 训练通常优先选择 DistributedDataParallel。</description>
+    </item>
     <item>
       <title>Transformer 实战教程</title>
       <link>https://example.com/aitech/transformer-tutorial/</link>

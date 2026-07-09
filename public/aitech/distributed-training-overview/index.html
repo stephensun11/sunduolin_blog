@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>分布式训练总览：DP、DDP、FSDP、ZeRO 怎么选 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/git/index.html">Git</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/python/index.html">Python</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么需要分布式训练">为什么需要分布式训练</a></li>
+    <li><a href="#dpddpfsdp-对比">DP、DDP、FSDP 对比</a></li>
+    <li><a href="#zerodeepspeedfsdp-的关系">ZeRO、DeepSpeed、FSDP 的关系</a></li>
+    <li><a href="#选型建议">选型建议</a></li>
+    <li><a href="#一句话总结">一句话总结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+    <span aria-hidden="true">/</span>
+    <span>分布式训练总览：DP、DDP、FSDP、ZeRO 怎么选</span>
+</nav>
+
+                <h1>分布式训练总览：DP、DDP、FSDP、ZeRO 怎么选</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83/index.html">分布式训练</a></span>
+                    
+                    <span class="tag"><a href="../../tags/ddp/index.html">DDP</a></span>
+                    
+                    <span class="tag"><a href="../../tags/fsdp/index.html">FSDP</a></span>
+                    
+                    <span class="tag"><a href="../../tags/zero/index.html">ZeRO</a></span>
+                    
+                    <span class="tag"><a href="../../tags/deepspeed/index.html">DeepSpeed</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么需要分布式训练">为什么需要分布式训练</h2>
+<p>训练 LLM 时，单卡经常会被三类东西撑爆：模型参数、梯度、优化器状态。尤其是 Adam 这类优化器，除了参数本身，还要保存一阶、二阶动量；模型越大，这些状态越快成为显存瓶颈。</p>
+<p>分布式训练的目标不是简单地“多插几张卡”，而是把训练中的数据、模型参数、梯度和优化器状态合理拆开，让每张 GPU 做自己擅长的一部分工作。</p>
+<p>可以先记住一个很实用的判断：</p>
+<ul>
+<li><strong>模型单卡能放下，想提高吞吐</strong>：优先用 DDP。</li>
+<li><strong>模型单卡放不下，显存是主要瓶颈</strong>：考虑 FSDP 或 DeepSpeed ZeRO。</li>
+<li><strong>模型已经大到需要拆层、拆矩阵</strong>：需要 Megatron-LM 这类 TP、PP、DP 组合方案。</li>
+</ul>
+<h2 id="dpddpfsdp-对比">DP、DDP、FSDP 对比</h2>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>DP</th>
+<th>DDP</th>
+<th>FSDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型副本</td>
+<td>每卡一份完整副本</td>
+<td>每卡一份完整副本</td>
+<td>参数被分片存放</td>
+</tr>
+<tr>
+<td>通信方式</td>
+<td>主进程聚合</td>
+<td>NCCL AllReduce</td>
+<td>参数、梯度、优化器状态分片同步</td>
+</tr>
+<tr>
+<td>显存占用</td>
+<td>高</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>通信开销</td>
+<td>中</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>小模型、快速实验</td>
+<td>中大型模型、多卡训练默认选择</td>
+<td>Billion 级以上大模型</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>简单</td>
+<td>中等</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<p>DP 和 DDP 都属于数据并行：每张卡拿到不同的数据，模型本身仍然完整复制。区别在于 DP 通常是单进程多线程，主卡负担重；DDP 是多进程，每个进程控制一张卡，通信效率更高。</p>
+<p>FSDP 则进一步拆掉了“每张卡都保存完整模型状态”这个前提。它会把参数、梯度、优化器状态切分到不同 GPU 上，训练时按需聚合，计算完成后再释放或重新分片。</p>
+<h2 id="zerodeepspeedfsdp-的关系">ZeRO、DeepSpeed、FSDP 的关系</h2>
+<p><img src="../../images/aitech/distributed-training/image.png" alt="FSDP、DeepSpeed 与 ZeRO 对比"></p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>ZeRO</th>
+<th>DeepSpeed</th>
+<th>FSDP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本质</td>
+<td>算法思想</td>
+<td>分布式训练框架</td>
+<td>PyTorch 原生分片训练实现</td>
+</tr>
+<tr>
+<td>实现者</td>
+<td>Microsoft Research</td>
+<td>Microsoft</td>
+<td>PyTorch Core Team</td>
+</tr>
+<tr>
+<td>支持能力</td>
+<td>ZeRO-1/2/3</td>
+<td>ZeRO-1/2/3、Offload、Pipeline、TP 等</td>
+<td>类似 ZeRO-3 的全分片训练</td>
+</tr>
+<tr>
+<td>集成方式</td>
+<td>需要框架实现</td>
+<td><code>deepspeed.initialize()</code></td>
+<td><code>FSDP(model)</code></td>
+</tr>
+<tr>
+<td>易用性</td>
+<td>偏理论</td>
+<td>封装完善，能力多</td>
+<td>PyTorch 原生，生态顺手</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>理解分片思路</td>
+<td>超大模型训练与复杂并行组合</td>
+<td>通用 PyTorch 大模型训练</td>
+</tr>
+</tbody>
+</table>
+<p>三者最容易混淆，可以这样理解：</p>
+<ul>
+<li><strong>ZeRO</strong> 是一套降低冗余显存的算法思想。</li>
+<li><strong>DeepSpeed</strong> 是微软围绕 ZeRO 做出的工程框架，同时集成了 offload、pipeline、tensor parallel 等能力。</li>
+<li><strong>FSDP</strong> 是 PyTorch 官方提供的全分片数据并行实现，核心思路和 ZeRO-3 很接近。</li>
+</ul>
+<h2 id="选型建议">选型建议</h2>
+<p>如果你只是把 BERT、较小的 Transformer 或几亿参数模型放到多卡上训练，DDP 通常是最稳的起点。它的通信模式清晰，生态成熟，出问题也更容易定位。</p>
+<p>如果你训练的是 LoRA 之外的完整大模型，显存已经成为主要矛盾，就应该优先看 FSDP 或 DeepSpeed ZeRO。FSDP 的优势是 PyTorch 原生；DeepSpeed 的优势是能力完整，尤其适合更复杂的工程训练栈。</p>
+<p>如果模型规模继续扩大，仅仅分片参数还不够，就要进入 Megatron-LM 的世界：把同一层的矩阵运算切开，把不同层切到不同 GPU，再叠加数据并行和 ZeRO。</p>
+<h2 id="一句话总结">一句话总结</h2>
+<p>DDP 解决“多卡怎么更快训练”，FSDP 和 ZeRO 解决“模型太大怎么放得下”，Megatron-LM 解决“超大模型怎么把计算也拆开”。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/llm-rl-algorithms/index.html">
+                        <span>上一篇</span>
+                        <strong>LLM强化学习算法详解</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/distributed-training-dp-ddp/index.html">
+                        <span>下一篇</span>
+                        <strong>数据并行入门：从 DP 到 DDP</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

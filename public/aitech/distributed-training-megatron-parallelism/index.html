@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Megatron-LM：张量并行、流水线并行与 3D 并行 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/git/index.html">Git</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/python/index.html">Python</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#megatron-lm-要解决什么">Megatron-LM 要解决什么</a></li>
+    <li><a href="#整体结构">整体结构</a></li>
+    <li><a href="#张量并行拆矩阵">张量并行：拆矩阵</a></li>
+    <li><a href="#流水线并行拆层">流水线并行：拆层</a></li>
+    <li><a href="#1f1b-与-pipeline-bubble">1F1B 与 pipeline bubble</a></li>
+    <li><a href="#数据并行复制并行组">数据并行：复制并行组</a></li>
+    <li><a href="#3d-并行怎么理解">3D 并行怎么理解</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+    <span aria-hidden="true">/</span>
+    <span>Megatron-LM：张量并行、流水线并行与 3D 并行</span>
+</nav>
+
+                <h1>Megatron-LM：张量并行、流水线并行与 3D 并行</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/megatron-lm/index.html">Megatron-LM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C/index.html">张量并行</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%B9%B6%E8%A1%8C/index.html">流水线并行</a></span>
+                    
+                    <span class="tag"><a href="../../tags/3d%E5%B9%B6%E8%A1%8C/index.html">3D并行</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="megatron-lm-要解决什么">Megatron-LM 要解决什么</h2>
+<p>当模型达到数百亿甚至上千亿参数时，单纯的数据并行已经不够了。</p>
+<p>DDP 可以让多张卡处理更多数据，FSDP 和 ZeRO 可以把模型状态拆开存储，但超大模型训练还会遇到另一个问题：单个矩阵运算、单个 Transformer 层本身就可能太大，或者计算量太集中。</p>
+<p>Megatron-LM 的目标是让超大模型能在多 GPU、多节点环境中高效训练。它通常组合三类并行：</p>
+<ul>
+<li><strong>张量并行</strong>：把同一层里的矩阵运算切开。</li>
+<li><strong>流水线并行</strong>：把模型的不同层切到不同 GPU。</li>
+<li><strong>数据并行</strong>：复制若干组模型并行结构，处理不同数据。</li>
+</ul>
+<p>如果再结合 ZeRO 或 FSDP 的状态分片，就形成更完整的多维并行训练。</p>
+<h2 id="整体结构">整体结构</h2>
+<p>可以用一个简化图理解 Megatron-LM 的层次：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>+--------------------------------------------------------------+
+</span></span><span style="display:flex;"><span>|                    Megatron-LM 训练系统                       |
+</span></span><span style="display:flex;"><span>+--------------------------------------------------------------+
+</span></span><span style="display:flex;"><span>| Data Parallel：多个样本                                       |
+</span></span><span style="display:flex;"><span>|   - 不同并行组处理不同 batch                                  |
+</span></span><span style="display:flex;"><span>|   - 组间同步梯度                                              |
+</span></span><span style="display:flex;"><span>+--------------------------------------------------------------+
+</span></span><span style="display:flex;"><span>| Pipeline Parallel：层级切分                                   |
+</span></span><span style="display:flex;"><span>|   - 不同 GPU 负责不同 Transformer 层                          |
+</span></span><span style="display:flex;"><span>|   - micro-batch 在各 stage 间流动                              |
+</span></span><span style="display:flex;"><span>+--------------------------------------------------------------+
+</span></span><span style="display:flex;"><span>| Tensor Parallel：算子内切分                                   |
+</span></span><span style="display:flex;"><span>|   - 同一层的矩阵运算在多张 GPU 上并行计算                     |
+</span></span><span style="display:flex;"><span>|   - 通过 AllReduce 或 Concat 聚合结果                          |
+</span></span><span style="display:flex;"><span>+--------------------------------------------------------------+
+</span></span></code></pre></div><p>这三类并行解决的是不同层面的瓶颈：TP 拆算子，PP 拆层，DP 拆数据。</p>
+<h2 id="张量并行拆矩阵">张量并行：拆矩阵</h2>
+<p>Transformer 中最重的计算通常来自线性层和注意力里的矩阵乘法。张量并行会把一个大矩阵拆成多个子矩阵，让多张 GPU 一起计算。</p>
+<p>以线性层为例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Y = XW + b
+</span></span></code></pre></div><p>如果把权重矩阵 <code>W</code> 按输出维度切成 4 份：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>W = [W1, W2, W3, W4]
+</span></span></code></pre></div><p>那么每张 GPU 只保存一部分权重，并计算自己的输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Y1 = XW1
+</span></span><span style="display:flex;"><span>Y2 = XW2
+</span></span><span style="display:flex;"><span>Y3 = XW3
+</span></span><span style="display:flex;"><span>Y4 = XW4
+</span></span></code></pre></div><p>最后再把结果拼接：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Y = Concat(Y1, Y2, Y3, Y4)
+</span></span></code></pre></div><p>张量并行可以降低单卡权重和计算压力，也能让大矩阵乘法更充分地利用多 GPU。但它需要频繁通信，因此更适合节点内高速互联环境，例如 NVLink 连接的 8 卡机器。</p>
+<h2 id="流水线并行拆层">流水线并行：拆层</h2>
+<p>流水线并行把模型按层切分到不同 GPU 上。</p>
+<p>例如一个 48 层 Transformer 可以被切成 4 个 stage：</p>
+<ul>
+<li>GPU 0：第 1 到 12 层。</li>
+<li>GPU 1：第 13 到 24 层。</li>
+<li>GPU 2：第 25 到 36 层。</li>
+<li>GPU 3：第 37 到 48 层。</li>
+</ul>
+<p>如果只把一个 batch 顺序传过这 4 张卡，后面的 GPU 会一直等待，利用率很低。所以流水线并行会把 batch 再切成多个 micro-batch，让不同 GPU 同时处理不同 micro-batch。</p>
+<table>
+<thead>
+<tr>
+<th>时间步</th>
+<th>GPU0</th>
+<th>GPU1</th>
+<th>GPU2</th>
+<th>GPU3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>t1</td>
+<td>FWD micro-batch 1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>t2</td>
+<td>FWD micro-batch 2</td>
+<td>FWD micro-batch 1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>t3</td>
+<td>FWD micro-batch 3</td>
+<td>FWD micro-batch 2</td>
+<td>FWD micro-batch 1</td>
+<td></td>
+</tr>
+<tr>
+<td>t4</td>
+<td>FWD micro-batch 4</td>
+<td>FWD micro-batch 3</td>
+<td>FWD micro-batch 2</td>
+<td>FWD micro-batch 1</td>
+</tr>
+</tbody>
+</table>
+<p>这样多个 micro-batch 会像流水线一样在不同 stage 之间流动，从而提高 GPU 利用率。</p>
+<h2 id="1f1b-与-pipeline-bubble">1F1B 与 pipeline bubble</h2>
+<p>流水线并行有一个经典问题：开始阶段和结束阶段总会有 GPU 空等，这叫 pipeline bubble。</p>
+<p>Megatron-LM 常用 <strong>1F1B</strong> 调度，也就是 one-forward-one-backward。流水线填满后，每个 stage 尽量交替执行一次前向和一次反向，让计算更均衡。</p>
+<p>另一个常见优化是 virtual pipeline stage。它会把一个物理 GPU 上负责的层再切成更细的虚拟 stage，减少等待时间，提高调度灵活性。</p>
+<h2 id="数据并行复制并行组">数据并行：复制并行组</h2>
+<p>即使使用了张量并行和流水线并行，训练时通常仍然会使用数据并行。</p>
+<p>可以把一组 TP + PP 组合看成一个“巨大模型副本”。如果资源足够，就复制多组这样的结构，每组处理不同数据。最后，各组之间同步梯度。</p>
+<p>这时的数据并行常常会和 ZeRO 或 DeepSpeed 结合，用来进一步降低优化器状态、梯度和参数的冗余显存。</p>
+<h2 id="3d-并行怎么理解">3D 并行怎么理解</h2>
+<p>所谓 3D 并行，可以粗略理解为三个维度一起切：</p>
+<table>
+<thead>
+<tr>
+<th>并行维度</th>
+<th>切分对象</th>
+<th>解决的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tensor Parallel</td>
+<td>单层矩阵和算子</td>
+<td>单个算子太大、计算太重</td>
+</tr>
+<tr>
+<td>Pipeline Parallel</td>
+<td>Transformer 层</td>
+<td>层数太多、模型纵向太深</td>
+</tr>
+<tr>
+<td>Data Parallel</td>
+<td>训练样本</td>
+<td>提高吞吐、扩大 batch</td>
+</tr>
+</tbody>
+</table>
+<p>再叠加 ZeRO/FSDP 后，还可以把优化器状态、梯度和参数分片，进一步降低显存压力。</p>
+<h2 id="小结">小结</h2>
+<p>Megatron-LM 的重点不是某一个单独技巧，而是把模型训练拆成多个维度来组织。</p>
+<p>TP 让同一层变小，PP 让模型深度可拆，DP 让吞吐扩大。理解这三件事，再看大模型训练脚本里的 tensor model parallel size、pipeline model parallel size、data parallel size，就会清楚很多。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/distributed-training-fsdp-zero-deepspeed/index.html">
+                        <span>上一篇</span>
+                        <strong>显存不够怎么办：FSDP、ZeRO 与 DeepSpeed</strong>
+                    </a>
+                    
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

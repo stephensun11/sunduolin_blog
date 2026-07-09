@@ -2,25 +2,82 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://example.com/tags/3d%E5%B9%B6%E8%A1%8C/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
     <loc>https://example.com/categories/aitech/</loc>
-    <lastmod>2026-07-06T22:30:00+08:00</lastmod>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/aitech/</loc>
-    <lastmod>2026-07-06T22:30:00+08:00</lastmod>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/categories/</loc>
-    <lastmod>2026-07-06T22:30:00+08:00</lastmod>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/llm/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/megatron-lm/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/distributed-training-megatron-parallelism/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%BC%A0%E9%87%8F%E5%B9%B6%E8%A1%8C/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%B9%B6%E8%A1%8C/</loc>
+    <lastmod>2026-07-09T09:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/deepspeed/</loc>
+    <lastmod>2026-07-09T09:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/fsdp/</loc>
+    <lastmod>2026-07-09T09:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/zero/</loc>
+    <lastmod>2026-07-09T09:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/distributed-training-fsdp-zero-deepspeed/</loc>
+    <lastmod>2026-07-09T09:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%98%BE%E5%AD%98%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2026-07-09T09:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/ddp/</loc>
+    <lastmod>2026-07-09T09:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/dp/</loc>
+    <lastmod>2026-07-09T09:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/pytorch/</loc>
+    <lastmod>2026-07-09T09:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83/</loc>
+    <lastmod>2026-07-09T09:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/distributed-training-dp-ddp/</loc>
+    <lastmod>2026-07-09T09:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/distributed-training-overview/</loc>
+    <lastmod>2026-07-09T09:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/dapo/</loc>
     <lastmod>2026-07-06T22:30:00+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/</loc>
-    <lastmod>2026-07-06T22:30:00+08:00</lastmod>
-  </url><url>
     <loc>https://example.com/tags/grpo/</loc>
-    <lastmod>2026-07-06T22:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/llm/</loc>
     <lastmod>2026-07-06T22:30:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/aitech/llm-rl-algorithms/</loc>
@@ -30,12 +87,6 @@
     <lastmod>2026-07-06T22:30:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/rlhf/</loc>
-    <lastmod>2026-07-06T22:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/subcategories/</loc>
-    <lastmod>2026-07-06T22:30:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/</loc>
     <lastmod>2026-07-06T22:30:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
@@ -201,9 +252,6 @@
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/paperreading/</loc>
-    <lastmod>2026-07-05T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/pytorch/</loc>
     <lastmod>2026-07-05T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/aitech/transformer-tutorial/</loc>
