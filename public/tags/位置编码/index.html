@@ -8,7 +8,8 @@
 
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -18,13 +19,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -143,6 +147,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -312,6 +317,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -477,6 +483,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -630,6 +637,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../tags/index.html">标签</a>
         </div>
         
@@ -640,10 +648,21 @@
     </div>
 </header>
 
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">tag</p>
+                
+                
+                
+                
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="../../index.html">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="../../tags/index.html">标签</a>
+                    <span aria-hidden="true">/</span>
+                    <span>位置编码</span>
+                </nav>
+                <p class="eyebrow">标签</p>
                 <h1>位置编码</h1>
             </section>
 
@@ -686,6 +705,7 @@ RoPE 的直觉 RoPE 是现在很多 LLM 使用的位置编码方法。
 你不需要一开始就记住数学细节。先抓住这个直觉：RoPE 不是简单把位置向量加上去，而是让注意力计算本身带上相对位置信号。
 长上下文和位置编码 长上下文模型经常会讨论 RoPE scaling、插值、外推等技巧。
 它们背后的问题是：模型训练时可能只见过 4k 或 8k 长度，但推理时希望支持 32k、128k 甚至更长上下文。位置编码必须能在更长范围内保持相对稳定，否则模型会“看得见文本，但用不好文本”。</p>
+                    <a class="read-more" href="../../aitech/positional-encoding-basics/index.html">阅读全文</a>
                 </article>
                 
             </div>

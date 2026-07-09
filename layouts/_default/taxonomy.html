@@ -5,10 +5,21 @@
 </head>
 <body>
     {{ partial "site-header.html" . }}
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">{{ .Data.Singular | default "Topic" }}</p>
+                {{ $taxonomyLabel := .Data.Plural }}
+                {{ if eq .Data.Plural "categories" }}{{ $taxonomyLabel = "分类" }}{{ end }}
+                {{ if eq .Data.Plural "subcategories" }}{{ $taxonomyLabel = "子分类" }}{{ end }}
+                {{ if eq .Data.Plural "tags" }}{{ $taxonomyLabel = "标签" }}{{ end }}
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="{{ partial "internal-link.html" "/" }}">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="{{ partial "internal-link.html" (printf "/%s/" .Data.Plural) }}">{{ $taxonomyLabel }}</a>
+                    <span aria-hidden="true">/</span>
+                    <span>{{ .Title }}</span>
+                </nav>
+                <p class="eyebrow">{{ $taxonomyLabel }}</p>
                 <h1>{{ if eq .Data.Singular "subcategory" }}子分类：{{ end }}{{ .Title }}</h1>
             </section>
 
@@ -44,6 +55,7 @@
                                     {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
                                 </div>
                                 <p>{{ .Summary }}</p>
+                                <a class="read-more" href="{{ partial "internal-link.html" .RelPermalink }}">阅读全文</a>
                             </article>
                             {{ end }}
                             {{ end }}
@@ -64,6 +76,7 @@
                         {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
                     </div>
                     <p>{{ .Summary }}</p>
+                    <a class="read-more" href="{{ partial "internal-link.html" .RelPermalink }}">阅读全文</a>
                 </article>
                 {{ else }}
                 <div class="empty-hint">该子分类暂无文章</div>

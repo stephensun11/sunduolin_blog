@@ -6,6 +6,7 @@ categories: ["AiTech"]
 subcategories: ["LLM基本原理"]
 topics: ["Transformer"]
 tags: ["PyTorch", "Transformer", "教程"]
+summary: "从环境准备、Transformers pipeline 快速调用，到训练自定义模型的基本流程，给刚开始实践 Transformer 的读者一个最小可运行入口。"
 ---
 
 ## 环境准备

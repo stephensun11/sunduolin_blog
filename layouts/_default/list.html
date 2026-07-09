@@ -5,10 +5,15 @@
 </head>
 <body>
     {{ partial "site-header.html" . }}
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">Column</p>
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="{{ partial "internal-link.html" "/" }}">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <span>{{ .Title }}</span>
+                </nav>
+                <p class="eyebrow">栏目</p>
                 <h1>{{ .Title }}</h1>
                 {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
             </section>
@@ -38,6 +43,7 @@
                         {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
                     </div>
                     <div class="summary">{{ .Summary }}</div>
+                    <a class="read-more" href="{{ partial "internal-link.html" .RelPermalink }}">阅读全文</a>
                 </article>
                 {{ end }}
                 {{ else }}

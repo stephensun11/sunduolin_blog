@@ -8,7 +8,8 @@
 
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -18,13 +19,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -143,6 +147,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -312,6 +317,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -477,6 +483,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -630,6 +637,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../tags/index.html">标签</a>
         </div>
         
@@ -640,10 +648,21 @@
     </div>
 </header>
 
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">tag</p>
+                
+                
+                
+                
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="../../index.html">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="../../tags/index.html">标签</a>
+                    <span aria-hidden="true">/</span>
+                    <span>预训练</span>
+                </nav>
+                <p class="eyebrow">标签</p>
                 <h1>预训练</h1>
             </section>
 
@@ -689,6 +708,7 @@ RLHF DPO RLAIF 它们的具体算法不同，但目标相近：用偏好信号�
 减少幻觉通常需要结合：
 更好的训练数据 检索增强 工具调用 更严格的评估 输出约束 总结 LLM 的训练可以粗略理解为三步：预训练让模型学语言和知识，指令微调让模型学会当助手，偏好对齐让模型回答得更符合人类期待。
 理解这个流程后，你会更容易判断一个模型能力来自哪里，也更容易理解为什么“会聊天”和“懂事实”并不是同一件事。</p>
+                    <a class="read-more" href="../../aitech/llm-training-basics/index.html">阅读全文</a>
                 </article>
                 
             </div>

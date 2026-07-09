@@ -21,7 +21,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -31,13 +32,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -156,6 +160,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -325,6 +330,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -490,6 +496,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -643,6 +650,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../tags/index.html">标签</a>
         </div>
         
@@ -655,7 +663,7 @@
 
     
     
-    <main class="main-layout has-toc">
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
         
         <aside class="article-toc" aria-label="文章目录">
             <div class="article-toc-inner">
@@ -676,6 +684,16 @@
         
         <div class="main-content">
             <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+    <span aria-hidden="true">/</span>
+    <span>Self-Attention 入门：模型如何决定该看哪里</span>
+</nav>
+
                 <h1>Self-Attention 入门：模型如何决定该看哪里</h1>
                 <div class="meta">
                     <span class="date">2026-07-06</span>
@@ -743,6 +761,20 @@
 <p>Q、K、V 是它的基本语言，多头注意力让模型从多个角度看文本，causal mask 则保证生成模型不能偷看未来。理解这些，就能更清楚地理解 Transformer 为什么能成为 LLM 的基础结构。</p>
 
                 </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/tokenizer-basics/index.html">
+                        <span>上一篇</span>
+                        <strong>Tokenizer 入门：大模型为什么不直接读文字</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/positional-encoding-basics/index.html">
+                        <span>下一篇</span>
+                        <strong>位置编码入门：Transformer 如何理解顺序</strong>
+                    </a>
+                    
+                </nav>
             </article>
         </div>
         

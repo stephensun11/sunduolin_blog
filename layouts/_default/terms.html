@@ -5,11 +5,20 @@
 </head>
 <body>
     {{ partial "site-header.html" . }}
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">Index</p>
-                <h1>{{ .Title }}</h1>
+                {{ $displayTitle := .Title }}
+                {{ if eq .Title "Categories" }}{{ $displayTitle = "分类" }}{{ end }}
+                {{ if eq .Title "Subcategories" }}{{ $displayTitle = "子分类" }}{{ end }}
+                {{ if eq .Title "Tags" }}{{ $displayTitle = "标签" }}{{ end }}
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="{{ partial "internal-link.html" "/" }}">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <span>{{ $displayTitle }}</span>
+                </nav>
+                <p class="eyebrow">索引</p>
+                <h1>{{ $displayTitle }}</h1>
             </section>
             <div class="terms-grid">
                 {{ range .Data.Terms }}

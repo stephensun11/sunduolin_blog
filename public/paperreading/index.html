@@ -8,7 +8,8 @@
 
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -18,13 +19,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -143,6 +147,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -312,6 +317,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -477,6 +483,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -630,6 +637,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../tags/index.html">标签</a>
         </div>
         
@@ -640,10 +648,15 @@
     </div>
 </header>
 
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">Column</p>
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="../index.html">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <span>PaperReading - 论文解读</span>
+                </nav>
+                <p class="eyebrow">栏目</p>
                 <h1>PaperReading - 论文解读</h1>
                 <p>深度解读NLP、CV、多模态、RL等领域的经典和前沿论文</p>
             </section>
@@ -674,6 +687,7 @@
                     </div>
                     <div class="summary">论文简介 《Attention Is All You Need》是由Google团队在2017年提出的开创性论文，提出了Transformer架构。
 核心贡献 自注意力机制: 无需RNN即可处理序列数据 多头注意力: 同时关注不同位置的信息 位置编码: 注入序列位置信息 代码示例 import torch import torch.nn as nn class MultiHeadAttention(nn.Module): def __init__(self, d_model, num_heads): super().__init__() self.d_model = d_model self.num_heads = num_heads def forward(self, q, k, v): # 实现细节... pass 总结 Transformer已成为现代NLP和AI的基石。</div>
+                    <a class="read-more" href="../paperreading/attention-is-all-you-need/index.html">阅读全文</a>
                 </article>
                 
                 

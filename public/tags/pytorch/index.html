@@ -8,7 +8,8 @@
 
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -18,13 +19,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -143,6 +147,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -312,6 +317,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -477,6 +483,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -630,6 +637,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../tags/index.html">标签</a>
         </div>
         
@@ -640,10 +648,21 @@
     </div>
 </header>
 
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">tag</p>
+                
+                
+                
+                
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="../../index.html">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="../../tags/index.html">标签</a>
+                    <span aria-hidden="true">/</span>
+                    <span>PyTorch</span>
+                </nav>
+                <p class="eyebrow">标签</p>
                 <h1>PyTorch</h1>
             </section>
 
@@ -666,7 +685,8 @@
                         <span class="subcategory">LLM基本原理</span>
                         <span class="tag">PyTorch</span><span class="tag">Transformer</span><span class="tag">教程</span>
                     </div>
-                    <p>环境准备 pip install torch torchvision pip install transformers 快速开始 from transformers import pipeline # 使用预训练模型 classifier = pipeline(&#34;sentiment-analysis&#34;) result = classifier(&#34;Hello, I&#39;m learning AI!&#34;) print(result) 训练自己的模型 准备数据集 配置训练参数 开始训练 评估模型性能 下一步 关注本栏目获取更多实战技巧！</p>
+                    <p>从环境准备、Transformers pipeline 快速调用，到训练自定义模型的基本流程，给刚开始实践 Transformer 的读者一个最小可运行入口。</p>
+                    <a class="read-more" href="../../aitech/transformer-tutorial/index.html">阅读全文</a>
                 </article>
                 
             </div>

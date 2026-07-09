@@ -62,7 +62,7 @@
       <link>https://example.com/aitech/transformer-tutorial/</link>
       <pubDate>Sun, 05 Jul 2026 10:00:00 +0800</pubDate>
       <guid>https://example.com/aitech/transformer-tutorial/</guid>
-      <description>环境准备 pip install torch torchvision pip install transformers 快速开始 from transformers import pipeline # 使用预训练模型 classifier = pipeline(&amp;#34;sentiment-analysis&amp;#34;) result = classifier(&amp;#34;Hello, I&amp;#39;m learning AI!&amp;#34;) print(result) 训练自己的模型 准备数据集 配置训练参数 开始训练 评估模型性能 下一步 关注本栏目获取更多实战技巧！</description>
+      <description>从环境准备、Transformers pipeline 快速调用，到训练自定义模型的基本流程，给刚开始实践 Transformer 的读者一个最小可运行入口。</description>
     </item>
   </channel>
 </rss>

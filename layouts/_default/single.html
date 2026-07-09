@@ -20,7 +20,7 @@
     {{ partial "site-header.html" . }}
     {{ $toc := .TableOfContents }}
     {{ $hasToc := gt (len (findRE "<a\\s+href=" (printf "%s" $toc))) 0 }}
-    <main class="main-layout{{ if $hasToc }} has-toc{{ end }}">
+    <main class="main-layout{{ if $hasToc }} has-toc{{ end }}" id="main-content" tabindex="-1">
         {{ if $hasToc }}
         <aside class="article-toc" aria-label="文章目录">
             <div class="article-toc-inner">
@@ -31,6 +31,7 @@
         {{ end }}
         <div class="main-content">
             <article class="post">
+                {{ partial "breadcrumbs.html" . }}
                 <h1>{{ .Title }}</h1>
                 <div class="meta">
                     <span class="date">{{ .Date.Format "2006-01-02" }}</span>
@@ -45,6 +46,20 @@
                 <div class="post-content">
                     {{ .Content }}
                 </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    {{ with .PrevInSection }}
+                    <a class="article-page-link previous" href="{{ partial "internal-link.html" .RelPermalink }}">
+                        <span>上一篇</span>
+                        <strong>{{ .Title }}</strong>
+                    </a>
+                    {{ end }}
+                    {{ with .NextInSection }}
+                    <a class="article-page-link next" href="{{ partial "internal-link.html" .RelPermalink }}">
+                        <span>下一篇</span>
+                        <strong>{{ .Title }}</strong>
+                    </a>
+                    {{ end }}
+                </nav>
             </article>
         </div>
         {{ partial "sidebar.html" . }}

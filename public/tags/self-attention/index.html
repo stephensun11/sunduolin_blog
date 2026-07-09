@@ -8,7 +8,8 @@
 
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -18,13 +19,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -143,6 +147,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -312,6 +317,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -477,6 +483,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -630,6 +637,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../tags/index.html">标签</a>
         </div>
         
@@ -640,10 +648,21 @@
     </div>
 </header>
 
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">tag</p>
+                
+                
+                
+                
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="../../index.html">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="../../tags/index.html">标签</a>
+                    <span aria-hidden="true">/</span>
+                    <span>Self-Attention</span>
+                </nav>
+                <p class="eyebrow">标签</p>
                 <h1>Self-Attention</h1>
             </section>
 
@@ -681,6 +700,7 @@ QK^T 计算当前位置和其他位置的匹配程度。 除以 sqrt(d) 是为�
 为什么需要 Multi-Head Attention 单个注意力头只能从一种角度看上下文。多头注意力允许模型同时关注不同关系。
 有的头可能关注语法结构，有的头可能关注实体引用，有的头可能关注局部搭配。虽然我们不应该把每个头都解释得太死，但多头机制确实给了模型更丰富的表达空间。
 Head 1: 关注主谓关系 Head 2: 关注指代关系 Head 3: 关注局部短语 多个 head 的结果会拼接起来，再经过线性层融合。</p>
+                    <a class="read-more" href="../../aitech/self-attention-basics/index.html">阅读全文</a>
                 </article>
                 
             </div>

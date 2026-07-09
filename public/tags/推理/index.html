@@ -8,7 +8,8 @@
 
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -18,13 +19,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -143,6 +147,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -312,6 +317,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -477,6 +483,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -630,6 +637,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../tags/index.html">标签</a>
         </div>
         
@@ -640,10 +648,21 @@
     </div>
 </header>
 
-    <main class="main-layout">
+    <main class="main-layout" id="main-content" tabindex="-1">
         <div class="main-content">
             <section class="section-header">
-                <p class="eyebrow">tag</p>
+                
+                
+                
+                
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+                    <a href="../../index.html">首页</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="../../tags/index.html">标签</a>
+                    <span aria-hidden="true">/</span>
+                    <span>推理</span>
+                </nav>
+                <p class="eyebrow">标签</p>
                 <h1>推理</h1>
             </section>
 
@@ -680,6 +699,7 @@ KV Cache 是什么 Decoder-only 模型生成文本时，每次只生成一个新
 这样生成下一个 token 时，模型只需要计算新 token 的 Q/K/V，并复用之前缓存的 K/V。
 历史 token 的 K/V -&gt; 缓存 新 token -&gt; 只计算新增部分 这能显著加速自回归生成。
 KV Cache 为什么占显存 KV Cache 需要保存每一层、每个 attention head、每个历史 token 的 K/V 向量。</p>
+                    <a class="read-more" href="../../aitech/context-window-kv-cache/index.html">阅读全文</a>
                 </article>
                 
             </div>

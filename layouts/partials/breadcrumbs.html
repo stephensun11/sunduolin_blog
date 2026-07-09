@@ -1,0 +1,14 @@
+{{- $current := . -}}
+<nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="{{ partial "internal-link.html" "/" }}">首页</a>
+    {{- with index $current.Params.categories 0 }}
+    <span aria-hidden="true">/</span>
+    <a href="{{ partial "internal-link.html" (printf "/categories/%s/" (urlize .)) }}">{{ . }}</a>
+    {{- end }}
+    {{- with index $current.Params.subcategories 0 }}
+    <span aria-hidden="true">/</span>
+    <a href="{{ partial "internal-link.html" (printf "/subcategories/%s/" (urlize .)) }}">{{ . }}</a>
+    {{- end }}
+    <span aria-hidden="true">/</span>
+    <span>{{ $current.Title }}</span>
+</nav>

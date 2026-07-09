@@ -21,7 +21,8 @@
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
-    <header class="site-header">
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
     <div class="page site-header-inner">
         <a class="brand" href="../../index.html" aria-label="回到首页">
             <span class="brand-mark" aria-hidden="true">D</span>
@@ -31,13 +32,16 @@
     <div class="nav-inner">
         
         
+        
         <div class="nav-item">
+            
             <a class="nav-link" href="../../index.html">首页</a>
         </div>
         
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
@@ -156,6 +160,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
@@ -325,6 +330,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
@@ -490,6 +496,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
@@ -643,6 +650,7 @@
         
         
         <div class="nav-item">
+            
             <a class="nav-link" href="../../tags/index.html">标签</a>
         </div>
         
@@ -655,7 +663,7 @@
 
     
     
-    <main class="main-layout has-toc">
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
         
         <aside class="article-toc" aria-label="文章目录">
             <div class="article-toc-inner">
@@ -676,6 +684,16 @@
         
         <div class="main-content">
             <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+    <span aria-hidden="true">/</span>
+    <span>Tokenizer 入门：大模型为什么不直接读文字</span>
+</nav>
+
                 <h1>Tokenizer 入门：大模型为什么不直接读文字</h1>
                 <div class="meta">
                     <span class="date">2026-07-06</span>
@@ -742,6 +760,20 @@
 <p>它决定文本怎么被切分，决定输入会消耗多少 token，也影响模型处理不同语言和代码的效率。理解 tokenizer，能帮助你更准确地理解上下文窗口、调用成本和提示词长度限制。</p>
 
                 </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/transformer-architecture/index.html">
+                        <span>上一篇</span>
+                        <strong>Transformer 架构入门：从 Encoder-Decoder 到 Decoder-only</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/self-attention-basics/index.html">
+                        <span>下一篇</span>
+                        <strong>Self-Attention 入门：模型如何决定该看哪里</strong>
+                    </a>
+                    
+                </nav>
             </article>
         </div>
         
