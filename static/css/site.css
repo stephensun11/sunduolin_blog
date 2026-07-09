@@ -587,6 +587,42 @@ h3 {
   overflow-wrap: anywhere;
 }
 
+.tertiary-nav-group + .tertiary-nav-group {
+  margin-top: 10px;
+}
+
+.tertiary-nav-topic {
+  color: var(--green);
+  font-weight: 900;
+}
+
+.tertiary-nav-article {
+  margin-left: 10px;
+  padding-left: 12px !important;
+  border-left: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.tertiary-nav-article.direct {
+  margin-left: 0;
+}
+
+.tertiary-nav a:hover {
+  color: var(--red);
+}
+
+.tertiary-nav-empty {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.topic-section,
+.post-item[id] {
+  scroll-margin-top: 96px;
+}
+
 .article-toc {
   max-height: calc(100vh - 116px);
   overflow: auto;

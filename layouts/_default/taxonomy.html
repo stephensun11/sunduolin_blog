@@ -23,30 +23,47 @@
                 <h1>{{ if eq .Data.Singular "subcategory" }}子分类：{{ end }}{{ .Title }}</h1>
             </section>
 
+            {{ $pages := .Pages.ByDate.Reverse }}
             {{ $topics := slice }}
-            {{ range .Pages }}
+            {{ range $pages }}
                 {{ range .Params.topics }}
                     {{ $topics = $topics | append . }}
                 {{ end }}
             {{ end }}
             {{ $topics = sort (uniq $topics) }}
 
-            {{ if and (eq .Data.Singular "subcategory") (gt (len $topics) 0) }}
+            {{ if eq .Data.Singular "subcategory" }}
             <div class="taxonomy-layout">
                 <aside class="tertiary-nav">
                     <h2>三级目录</h2>
+                    {{ if gt (len $topics) 0 }}
                     {{ range $topic := $topics }}
-                    <a href="#topic-{{ urlize $topic }}">{{ $topic }}</a>
+                    <div class="tertiary-nav-group">
+                        <a class="tertiary-nav-topic" href="#topic-{{ urlize $topic }}">{{ $topic }}</a>
+                        {{ range $pages }}
+                        {{ if in .Params.topics $topic }}
+                        <a class="tertiary-nav-article" href="#post-{{ .File.UniqueID }}">{{ .Title }}</a>
+                        {{ end }}
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                    {{ else }}
+                    {{ range $pages }}
+                    <a class="tertiary-nav-article direct" href="#post-{{ .File.UniqueID }}">{{ .Title }}</a>
+                    {{ else }}
+                    <span class="tertiary-nav-empty">暂无文章</span>
+                    {{ end }}
                     {{ end }}
                 </aside>
                 <div class="topic-list">
+                    {{ if gt (len $topics) 0 }}
                     {{ range $topic := $topics }}
                     <section class="topic-section" id="topic-{{ urlize $topic }}">
                         <h2 class="section-title">{{ $topic }}</h2>
                         <div class="post-list">
-                            {{ range $.Pages.ByDate.Reverse }}
+                            {{ range $pages }}
                             {{ if in .Params.topics $topic }}
-                            <article class="post-item">
+                            <article class="post-item" id="post-{{ .File.UniqueID }}">
                                 <h2><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h2>
                                 <div class="meta">
                                     <span class="date">{{ .Date.Format "2006-01-02" }}</span>
@@ -62,11 +79,30 @@
                         </div>
                     </section>
                     {{ end }}
+                    {{ else }}
+                    <div class="post-list">
+                        {{ range $pages }}
+                        <article class="post-item" id="post-{{ .File.UniqueID }}">
+                            <h2><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h2>
+                            <div class="meta">
+                                <span class="date">{{ .Date.Format "2006-01-02" }}</span>
+                                {{ range .Params.categories }}<span class="category">{{ . }}</span>{{ end }}
+                                {{ range .Params.subcategories }}<span class="subcategory">{{ . }}</span>{{ end }}
+                                {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
+                            </div>
+                            <p>{{ .Summary }}</p>
+                            <a class="read-more" href="{{ partial "internal-link.html" .RelPermalink }}">阅读全文</a>
+                        </article>
+                        {{ else }}
+                        <div class="empty-hint">该子分类暂无文章</div>
+                        {{ end }}
+                    </div>
+                    {{ end }}
                 </div>
             </div>
             {{ else }}
             <div class="post-list">
-                {{ range .Pages.ByDate.Reverse }}
+                {{ range $pages }}
                 <article class="post-item">
                     <h2><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h2>
                     <div class="meta">
