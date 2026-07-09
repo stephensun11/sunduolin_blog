@@ -30,15 +30,19 @@
                 <nav class="breadcrumbs" aria-label="面包屑导航">
                     <a href="{{ partial "internal-link.html" "/" }}">首页</a>
                     <span aria-hidden="true">/</span>
-                    {{ if $parentCategory }}
-                    <a href="{{ partial "internal-link.html" (printf "/categories/%s/" (urlize $parentCategory)) }}">{{ $parentCategory }}</a>
+                    {{ if eq .Data.Singular "category" }}
+                    <span>{{ .Title }}</span>
                     {{ else }}
+                        {{ if $parentCategory }}
+                    <a href="{{ partial "internal-link.html" (printf "/categories/%s/" (urlize $parentCategory)) }}">{{ $parentCategory }}</a>
+                        {{ else }}
                     <a href="{{ partial "internal-link.html" (printf "/%s/" .Data.Plural) }}">{{ $taxonomyLabel }}</a>
-                    {{ end }}
+                        {{ end }}
                     <span aria-hidden="true">/</span>
                     <span>{{ .Title }}</span>
+                    {{ end }}
                 </nav>
-                <p class="eyebrow">{{ if $parentCategory }}{{ $parentCategory }}{{ else }}{{ $taxonomyLabel }}{{ end }}</p>
+                <p class="eyebrow">{{ if eq .Data.Singular "category" }}{{ .Title }}{{ else }}{{ if $parentCategory }}{{ $parentCategory }}{{ else }}{{ $taxonomyLabel }}{{ end }}{{ end }}</p>
                 <h1>{{ .Title }}</h1>
             </section>
 
