@@ -2,6 +2,111 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://example.com/subcategories/2026/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/weekly/weekly-2026-07-template/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%91%A8%E8%AE%B0/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/%E5%91%A8%E8%AE%B0/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/weekly/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%A8%A1%E6%9D%BF/</loc>
+    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/math/information-theory-entropy-cross-entropy/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/ai%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/kl%E6%95%A3%E5%BA%A6/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/math/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E7%86%B5/</loc>
+    <lastmod>2026-07-09T11:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/math/calculus-optimization-gradient-descent/</loc>
+    <lastmod>2026-07-09T11:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2026-07-09T11:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</loc>
+    <lastmod>2026-07-09T11:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/</loc>
+    <lastmod>2026-07-09T11:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2026-07-09T11:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</loc>
+    <lastmod>2026-07-09T11:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/math/linear-algebra-for-ai-vectors-matrices/</loc>
+    <lastmod>2026-07-09T11:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%90%91%E9%87%8F/</loc>
+    <lastmod>2026-07-09T11:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E7%9F%A9%E9%98%B5/</loc>
+    <lastmod>2026-07-09T11:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/</loc>
+    <lastmod>2026-07-09T11:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/</loc>
+    <lastmod>2026-07-09T11:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/math/probability-for-ai-random-variables/</loc>
+    <lastmod>2026-07-09T11:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%9C%9F%E6%9C%9B/</loc>
+    <lastmod>2026-07-09T11:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/</loc>
+    <lastmod>2026-07-09T11:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/</loc>
+    <lastmod>2026-07-09T11:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/</loc>
+    <lastmod>2026-07-09T11:00:00+08:00</lastmod>
+  </url><url>
     <loc>https://example.com/categories/aitech/</loc>
     <lastmod>2026-07-09T10:00:00+08:00</lastmod>
   </url><url>
@@ -9,12 +114,6 @@
     <lastmod>2026-07-09T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/attention/</loc>
-    <lastmod>2026-07-09T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/categories/</loc>
-    <lastmod>2026-07-09T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/</loc>
     <lastmod>2026-07-09T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/gqa/</loc>
@@ -33,12 +132,6 @@
     <lastmod>2026-07-09T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/mqa/</loc>
-    <lastmod>2026-07-09T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/subcategories/</loc>
-    <lastmod>2026-07-09T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/</loc>
     <lastmod>2026-07-09T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/aitech/attention-mha-mqa-gqa/</loc>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>周记 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/categories/%E5%91%A8%E8%AE%B0/</link>
+    <description>Recent content in 周记 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 11:40:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/categories/%E5%91%A8%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2026 年 07 月周记模板：本周记录从这里开始</title>
+      <link>https://example.com/weekly/weekly-2026-07-template/</link>
+      <pubDate>Thu, 09 Jul 2026 11:40:00 +0800</pubDate>
+      <guid>https://example.com/weekly/weekly-2026-07-template/</guid>
+      <description>一个用于后续每周记录的周记模板，按本周学习、项目进展、阅读输入和下周计划整理。</description>
+    </item>
+  </channel>
+</rss>

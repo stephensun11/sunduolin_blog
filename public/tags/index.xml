@@ -6,8 +6,127 @@
     <description>Recent content in Tags on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2026 11:40:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>周记</title>
+      <link>https://example.com/tags/%E5%91%A8%E8%AE%B0/</link>
+      <pubDate>Thu, 09 Jul 2026 11:40:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E5%91%A8%E8%AE%B0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>模板</title>
+      <link>https://example.com/tags/%E6%A8%A1%E6%9D%BF/</link>
+      <pubDate>Thu, 09 Jul 2026 11:40:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E6%A8%A1%E6%9D%BF/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AI数学</title>
+      <link>https://example.com/tags/ai%E6%95%B0%E5%AD%A6/</link>
+      <pubDate>Thu, 09 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/ai%E6%95%B0%E5%AD%A6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>KL散度</title>
+      <link>https://example.com/tags/kl%E6%95%A3%E5%BA%A6/</link>
+      <pubDate>Thu, 09 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/kl%E6%95%A3%E5%BA%A6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>交叉熵</title>
+      <link>https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/</link>
+      <pubDate>Thu, 09 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>信息论</title>
+      <link>https://example.com/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/</link>
+      <pubDate>Thu, 09 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>熵</title>
+      <link>https://example.com/tags/%E7%86%B5/</link>
+      <pubDate>Thu, 09 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E7%86%B5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>优化</title>
+      <link>https://example.com/tags/%E4%BC%98%E5%8C%96/</link>
+      <pubDate>Thu, 09 Jul 2026 11:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E4%BC%98%E5%8C%96/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>反向传播</title>
+      <link>https://example.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</link>
+      <pubDate>Thu, 09 Jul 2026 11:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>微积分</title>
+      <link>https://example.com/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/</link>
+      <pubDate>Thu, 09 Jul 2026 11:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>梯度下降</title>
+      <link>https://example.com/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</link>
+      <pubDate>Thu, 09 Jul 2026 11:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>向量</title>
+      <link>https://example.com/tags/%E5%90%91%E9%87%8F/</link>
+      <pubDate>Thu, 09 Jul 2026 11:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E5%90%91%E9%87%8F/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>矩阵</title>
+      <link>https://example.com/tags/%E7%9F%A9%E9%98%B5/</link>
+      <pubDate>Thu, 09 Jul 2026 11:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E7%9F%A9%E9%98%B5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>线性代数</title>
+      <link>https://example.com/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/</link>
+      <pubDate>Thu, 09 Jul 2026 11:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>期望</title>
+      <link>https://example.com/tags/%E6%9C%9F%E6%9C%9B/</link>
+      <pubDate>Thu, 09 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E6%9C%9F%E6%9C%9B/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>概率论</title>
+      <link>https://example.com/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/</link>
+      <pubDate>Thu, 09 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>随机变量</title>
+      <link>https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/</link>
+      <pubDate>Thu, 09 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Attention</title>
       <link>https://example.com/tags/attention/</link>

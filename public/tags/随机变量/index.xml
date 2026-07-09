@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>随机变量 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/</link>
+    <description>Recent content in 随机变量 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 11:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI 数学基础：随机变量、分布与期望</title>
+      <link>https://example.com/math/probability-for-ai-random-variables/</link>
+      <pubDate>Thu, 09 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-for-ai-random-variables/</guid>
+      <description>用 AI 学习中最常见的场景理解随机变量、概率分布、期望和方差。</description>
+    </item>
+  </channel>
+</rss>

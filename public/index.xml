@@ -6,8 +6,43 @@
     <description>Recent content on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2026 11:40:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>2026 年 07 月周记模板：本周记录从这里开始</title>
+      <link>https://example.com/weekly/weekly-2026-07-template/</link>
+      <pubDate>Thu, 09 Jul 2026 11:40:00 +0800</pubDate>
+      <guid>https://example.com/weekly/weekly-2026-07-template/</guid>
+      <description>一个用于后续每周记录的周记模板，按本周学习、项目进展、阅读输入和下周计划整理。</description>
+    </item>
+    <item>
+      <title>AI 数学基础：熵、交叉熵与 KL 散度</title>
+      <link>https://example.com/math/information-theory-entropy-cross-entropy/</link>
+      <pubDate>Thu, 09 Jul 2026 11:30:00 +0800</pubDate>
+      <guid>https://example.com/math/information-theory-entropy-cross-entropy/</guid>
+      <description>从不确定性和分布距离的角度理解熵、交叉熵与 KL 散度，以及它们为什么会出现在分类和语言模型训练中。</description>
+    </item>
+    <item>
+      <title>AI 数学基础：梯度、链式法则与优化</title>
+      <link>https://example.com/math/calculus-optimization-gradient-descent/</link>
+      <pubDate>Thu, 09 Jul 2026 11:20:00 +0800</pubDate>
+      <guid>https://example.com/math/calculus-optimization-gradient-descent/</guid>
+      <description>解释梯度为什么指向最快上升方向，以及反向传播和梯度下降如何让神经网络学会调整参数。</description>
+    </item>
+    <item>
+      <title>AI 数学基础：向量、矩阵与线性变换</title>
+      <link>https://example.com/math/linear-algebra-for-ai-vectors-matrices/</link>
+      <pubDate>Thu, 09 Jul 2026 11:10:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-for-ai-vectors-matrices/</guid>
+      <description>从表示、变换和相似度三个角度理解向量与矩阵为什么是深度学习的基本语言。</description>
+    </item>
+    <item>
+      <title>AI 数学基础：随机变量、分布与期望</title>
+      <link>https://example.com/math/probability-for-ai-random-variables/</link>
+      <pubDate>Thu, 09 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-for-ai-random-variables/</guid>
+      <description>用 AI 学习中最常见的场景理解随机变量、概率分布、期望和方差。</description>
+    </item>
     <item>
       <title>从 MHA 到 GQA：LLM 注意力机制的 KV 头复用</title>
       <link>https://example.com/aitech/attention-mha-mqa-gqa/</link>

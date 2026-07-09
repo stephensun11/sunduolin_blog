@@ -21,7 +21,9 @@ relativeURLs = true
     AiNews = ["行业动态", "产品发布", "政策法规"]
     AiTech = ["LLM基本原理", "LLM 基础技术", "LLM训练", "LLM最新技术", "强化学习", "部署实践"]
     CSTech = ["Git", "Python", "Linux", "tmux"]
+    "数学" = ["概率论", "线性代数", "微积分与优化", "信息论"]
     PaperReading = ["NLP", "CV", "多模态", "RL"]
+    "周记" = ["2026"]
 
 [[menu.main]]
   name = "首页"
@@ -155,6 +157,48 @@ relativeURLs = true
   parent = "paperreading"
 
 [[menu.main]]
-  name = "标签"
+  name = "数学"
   weight = 6
+  url = "/categories/数学/"
+  identifier = "math"
+
+[[menu.main]]
+  name = "概率论"
+  weight = 1
+  url = "/subcategories/概率论/"
+  parent = "math"
+
+[[menu.main]]
+  name = "线性代数"
+  weight = 2
+  url = "/subcategories/线性代数/"
+  parent = "math"
+
+[[menu.main]]
+  name = "微积分与优化"
+  weight = 3
+  url = "/subcategories/微积分与优化/"
+  parent = "math"
+
+[[menu.main]]
+  name = "信息论"
+  weight = 4
+  url = "/subcategories/信息论/"
+  parent = "math"
+
+[[menu.main]]
+  name = "周记"
+  weight = 7
+  url = "/categories/周记/"
+  identifier = "weekly"
+
+[[menu.main]]
+  name = "2026"
+  weight = 1
+  url = "/subcategories/2026/"
+  parent = "weekly"
+
+[[menu.main]]
+  name = "标签"
+  weight = 8
   url = "/tags/"

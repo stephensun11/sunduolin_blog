@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>线性代数 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/</link>
+    <description>Recent content in 线性代数 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 11:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI 数学基础：向量、矩阵与线性变换</title>
+      <link>https://example.com/math/linear-algebra-for-ai-vectors-matrices/</link>
+      <pubDate>Thu, 09 Jul 2026 11:10:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-for-ai-vectors-matrices/</guid>
+      <description>从表示、变换和相似度三个角度理解向量与矩阵为什么是深度学习的基本语言。</description>
+    </item>
+  </channel>
+</rss>
