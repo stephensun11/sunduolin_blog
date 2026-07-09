@@ -2,58 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transformer 实战教程 - Duolin Sun&#39; Blog</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; line-height: 1.6; }
-        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; }
-        .main-layout { display: grid; grid-template-columns: minmax(0, 1fr); max-width: 1100px; margin: 2rem auto; padding: 0 1rem; gap: 1.5rem; align-items: start; }
-        .main-layout.has-toc { grid-template-columns: 240px minmax(0, 1fr); width: 80vw; max-width: 80vw; }
-        .main-content { min-width: 0; }
-        .article-toc { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow: auto; }
-        .article-toc-inner { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .article-toc h2 { color: #667eea; font-size: 1rem; margin-bottom: 0.75rem; }
-        .article-toc nav ul { list-style: none; margin: 0; padding: 0; }
-        .article-toc nav ul ul { margin-left: 0.75rem; padding-left: 0.75rem; border-left: 1px solid #eee; }
-        .article-toc nav li { margin: 0; }
-        .article-toc nav a { display: block; color: #555; text-decoration: none; padding: 0.3rem 0; font-size: 0.9rem; line-height: 1.35; overflow-wrap: anywhere; }
-        .article-toc nav a:hover { color: #667eea; }
-        .post { background: white; border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .post h1 { color: #333; margin-bottom: 0.5rem; font-size: 1.8rem; }
-        .post .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
-        .post .category { display: inline-block; background: #667eea; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
-        .post .subcategory { display: inline-block; background: #764ba2; color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; text-decoration: none; }
-        .post .subcategory:hover { opacity: 0.85; }
-        .post .tag { display: inline-block; background: #f0f0f0; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
-        .post .tag a { color: inherit; text-decoration: none; }
-        .post .tag a:hover { color: #667eea; }
-        .post-content { color: #333; }
-        .post-content h2 { color: #667eea; margin: 1.5rem 0 1rem; }
-        .post-content h3 { color: #764ba2; margin: 1.25rem 0 0.75rem; }
-        .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6 { scroll-margin-top: 1rem; }
-        .post-content p { margin-bottom: 1rem; }
-        .post-content ul, .post-content ol { margin-left: 2rem; margin-bottom: 1rem; }
-        .post-content code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Monaco', 'Courier New', monospace; font-size: 0.9em; }
-        .post-content pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
-        .post-content pre code { background: none; color: inherit; padding: 0; }
-        .post-content a { color: #667eea; text-decoration: none; }
-        .post-content a:hover { text-decoration: underline; }
-        .post-content blockquote { border-left: 4px solid #667eea; padding: 0.5rem 1rem; margin: 1rem 0; background: #f9f9ff; color: #555; }
-        .post-content img { max-width: 100%; height: auto; display: block; margin: 1rem auto; border-radius: 8px; }
-        .post-content .math-display { overflow-x: auto; margin: 1rem 0; padding: 0.25rem 0; }
-        .post-content .math-inline { white-space: nowrap; }
-        .post-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .post-content th, .post-content td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
-        .post-content th { background: #f5f5f5; }
-        footer { background: #333; color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
-        @media (max-width: 960px) {
-            .main-layout.has-toc { grid-template-columns: 1fr; width: auto; max-width: 1100px; }
-            .article-toc { position: static; max-height: none; }
-            .article-toc nav { max-height: 16rem; overflow: auto; }
-        }
-        @media (max-width: 768px) { .sidebar { width: 100%; } .post { padding: 1.25rem; } }
-    </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformer 实战教程 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
     <script>
         window.MathJax = {
             tex: {
@@ -69,22 +21,13 @@
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Duolin Sun&#39; Blog</h1>
-    </header>
-    <style>
-    .site-nav { background: #333; padding: 0; position: relative; }
-    .site-nav .nav-inner { display: flex; align-items: stretch; }
-    .site-nav .nav-item { position: relative; }
-    .site-nav .nav-link { display: block; color: white; text-decoration: none; padding: 1rem 1.25rem; font-size: 0.95rem; }
-    .site-nav .nav-link:hover { color: #667eea; background: rgba(255,255,255,0.05); }
-    .site-nav .nav-link.active { color: #667eea; }
-    .site-nav .dropdown { display: none; position: absolute; top: 100%; left: 0; background: #444; min-width: 160px; z-index: 100; border-radius: 0 0 4px 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-    .site-nav .nav-item:hover .dropdown { display: block; }
-    .site-nav .dropdown a { display: block; color: #ddd; text-decoration: none; padding: 0.6rem 1.25rem; font-size: 0.9rem; }
-    .site-nav .dropdown a:hover { color: #667eea; background: rgba(255,255,255,0.05); }
-</style>
-<nav class="site-nav">
+    <header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
     <div class="nav-inner">
         
         
@@ -98,11 +41,114 @@
             <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
             <div class="dropdown">
                 
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
                 <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                    
                 
-                <a href="../../subcategories/%E4%BA%A7%E5%93%81%E5%8F%91%E5%B8%83/index.html">产品发布</a>
                 
-                <a href="../../subcategories/%E6%94%BF%E7%AD%96%E6%B3%95%E8%A7%84/index.html">政策法规</a>
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
                 
             </div>
         </div>
@@ -113,13 +159,165 @@
             <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
             <div class="dropdown">
                 
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                    
                 <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
                 
-                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
                 
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
                 <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                    
                 
-                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
                 
             </div>
         </div>
@@ -130,13 +328,161 @@
             <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
             <div class="dropdown">
                 
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
                 <a href="../../subcategories/git/index.html">Git</a>
+                    
                 
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
                 <a href="../../subcategories/python/index.html">Python</a>
+                    
                 
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
                 <a href="../../subcategories/linux/index.html">Linux</a>
+                    
                 
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
                 <a href="../../subcategories/tmux/index.html">tmux</a>
+                    
+                
                 
             </div>
         </div>
@@ -147,13 +493,149 @@
             <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
             <div class="dropdown">
                 
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                    
                 <a href="../../subcategories/nlp/index.html">NLP</a>
+                    
                 
-                <a href="../../subcategories/cv/index.html">CV</a>
                 
-                <a href="../../subcategories/%E5%A4%9A%E6%A8%A1%E6%80%81/index.html">多模态</a>
                 
-                <a href="../../subcategories/rl/index.html">RL</a>
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
                 
             </div>
         </div>
@@ -168,9 +650,12 @@
     </div>
 </nav>
 
+    </div>
+</header>
+
     
     
-    <div class="main-layout has-toc">
+    <main class="main-layout has-toc">
         
         <aside class="article-toc" aria-label="文章目录">
             <div class="article-toc-inner">
@@ -187,13 +672,11 @@
         </aside>
         
         <div class="main-content">
-            <div class="post">
+            <article class="post">
                 <h1>Transformer 实战教程</h1>
                 <div class="meta">
-                    <span>2026-07-05</span>
-                    
+                    <span class="date">2026-07-05</span>
                     <span class="category">AiTech</span>
-                    
                     
                     <a class="subcategory" href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
                     
@@ -227,13 +710,15 @@
 <p>关注本栏目获取更多实战技巧！</p>
 
                 </div>
-            </div>
+            </article>
         </div>
         
 
-    </div>
-    <footer>
-        <p>&copy; 2026 Duolin Sun&#39; Blog. Powered by Hugo.</p>
-    </footer>
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
 </body>
 </html>

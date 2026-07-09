@@ -1,0 +1,9 @@
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="{{ partial "internal-link.html" "/" }}" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>{{ .Site.Title }}</span>
+        </a>
+        {{ partial "nav.html" . }}
+    </div>
+</header>
