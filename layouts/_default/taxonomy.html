@@ -12,15 +12,34 @@
                 {{ if eq .Data.Plural "categories" }}{{ $taxonomyLabel = "分类" }}{{ end }}
                 {{ if eq .Data.Plural "subcategories" }}{{ $taxonomyLabel = "子分类" }}{{ end }}
                 {{ if eq .Data.Plural "tags" }}{{ $taxonomyLabel = "标签" }}{{ end }}
+                {{ $parentCategory := "" }}
+                {{ if eq .Data.Singular "subcategory" }}
+                    {{ range first 1 .Pages.ByDate.Reverse }}
+                        {{ with index .Params.categories 0 }}
+                            {{ $parentCategory = . }}
+                        {{ end }}
+                    {{ end }}
+                    {{ if not $parentCategory }}
+                        {{ range $category, $subcategories := .Site.Params.section_subcategories }}
+                            {{ if in $subcategories $.Title }}
+                                {{ $parentCategory = $category }}
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
                 <nav class="breadcrumbs" aria-label="面包屑导航">
                     <a href="{{ partial "internal-link.html" "/" }}">首页</a>
                     <span aria-hidden="true">/</span>
+                    {{ if $parentCategory }}
+                    <a href="{{ partial "internal-link.html" (printf "/categories/%s/" (urlize $parentCategory)) }}">{{ $parentCategory }}</a>
+                    {{ else }}
                     <a href="{{ partial "internal-link.html" (printf "/%s/" .Data.Plural) }}">{{ $taxonomyLabel }}</a>
+                    {{ end }}
                     <span aria-hidden="true">/</span>
                     <span>{{ .Title }}</span>
                 </nav>
-                <p class="eyebrow">{{ $taxonomyLabel }}</p>
-                <h1>{{ if eq .Data.Singular "subcategory" }}子分类：{{ end }}{{ .Title }}</h1>
+                <p class="eyebrow">{{ if $parentCategory }}{{ $parentCategory }}{{ else }}{{ $taxonomyLabel }}{{ end }}</p>
+                <h1>{{ .Title }}</h1>
             </section>
 
             {{ $pages := .Pages.ByDate.Reverse }}
