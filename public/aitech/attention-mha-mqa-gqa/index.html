@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从 MHA 到 GQA：LLM 注意力机制的 KV 头复用 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                    
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/git/index.html">Git</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/python/index.html">Python</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+                
+                
+                    
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                    
+                
+                
+            </div>
+        </div>
+        
+        
+        
+        <div class="nav-item">
+            
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+        
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么要关心-mhamqagqa">为什么要关心 MHA、MQA、GQA</a></li>
+    <li><a href="#三者的直观关系">三者的直观关系</a></li>
+    <li><a href="#mha标准多头注意力">MHA：标准多头注意力</a></li>
+    <li><a href="#mqa所有-query-头共享一组-kv">MQA：所有 Query 头共享一组 KV</a></li>
+    <li><a href="#gqa更常用的折中方案">GQA：更常用的折中方案</a></li>
+    <li><a href="#kv-cache-为什么会变小">KV cache 为什么会变小</a></li>
+    <li><a href="#一份统一的-pytorch-实现">一份统一的 PyTorch 实现</a></li>
+    <li><a href="#怎么选">怎么选</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+    <span aria-hidden="true">/</span>
+    <span>从 MHA 到 GQA：LLM 注意力机制的 KV 头复用</span>
+</nav>
+
+                <h1>从 MHA 到 GQA：LLM 注意力机制的 KV 头复用</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/attention/index.html">Attention</a></span>
+                    
+                    <span class="tag"><a href="../../tags/mha/index.html">MHA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/mqa/index.html">MQA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/gqa/index.html">GQA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/kv-cache/index.html">KV Cache</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么要关心-mhamqagqa">为什么要关心 MHA、MQA、GQA</h2>
+<p>Transformer 的 Attention 最早通常使用 MHA，也就是 Multi-Head Attention。每个注意力头都有自己独立的 Query、Key、Value 投影，表达能力强，也最容易理解。</p>
+<p>但到了 LLM 推理阶段，问题会变得很现实：生成每个 token 时，模型都需要读取前面所有 token 的 Key 和 Value。上下文越长，KV cache 占用越大，访存压力也越高。</p>
+<p>MQA 和 GQA 的核心动机就是减少 KV cache。它们不改变 Query 头的数量，而是减少 Key、Value 头的数量，让多个 Query 头共享同一组 Key、Value。</p>
+<h2 id="三者的直观关系">三者的直观关系</h2>
+<p><img src="../../images/aitech/llm-basic-tech/mha-mqa-gqa.png" alt="MHA、MQA、GQA 对比"></p>
+<p>可以先用一句话建立直觉：</p>
+<ul>
+<li><strong>MHA</strong>：每个 Query 头都有自己的 Key、Value 头。</li>
+<li><strong>MQA</strong>：所有 Query 头共享同一组 Key、Value 头。</li>
+<li><strong>GQA</strong>：把 Query 头分组，每组共享一组 Key、Value 头。</li>
+</ul>
+<p>如果总共有 <code>H</code> 个 Query 头，<code>G</code> 个 KV 组：</p>
+<ul>
+<li><code>G = H</code> 时，GQA 等价于 MHA。</li>
+<li><code>G = 1</code> 时，GQA 等价于 MQA。</li>
+<li><code>1 &lt; G &lt; H</code> 时，GQA 介于 MHA 和 MQA 之间。</li>
+</ul>
+<p>所以 GQA 可以看成 MHA 和 MQA 之间的折中方案：它比 MQA 保留更多 Key、Value 表达能力，又比 MHA 更节省推理显存和带宽。</p>
+<h2 id="mha标准多头注意力">MHA：标准多头注意力</h2>
+<p>MHA 中，Query、Key、Value 都会被切成多个头。假设隐藏维度是 <code>hidden_size</code>，注意力头数是 <code>num_heads</code>，那么每个头的维度是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>head_dim = hidden_size / num_heads
+</span></span></code></pre></div><p>投影后的形状通常是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Q: [batch, num_heads, seq_len, head_dim]
+</span></span><span style="display:flex;"><span>K: [batch, num_heads, seq_len, head_dim]
+</span></span><span style="display:flex;"><span>V: [batch, num_heads, seq_len, head_dim]
+</span></span></code></pre></div><p>每个头独立计算注意力，再把所有头的输出拼接起来，经过输出投影回到原始隐藏维度。</p>
+<p>MHA 的优点是表达能力强，缺点是 KV cache 很大。因为每一层、每一个 token、每一个头都要保存 Key 和 Value。</p>
+<h2 id="mqa所有-query-头共享一组-kv">MQA：所有 Query 头共享一组 KV</h2>
+<p>MQA 保留多个 Query 头，但 Key 和 Value 只有一组。</p>
+<p>形状会变成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Q: [batch, num_heads, seq_len, head_dim]
+</span></span><span style="display:flex;"><span>K: [batch, 1, seq_len, head_dim]
+</span></span><span style="display:flex;"><span>V: [batch, 1, seq_len, head_dim]
+</span></span></code></pre></div><p>计算注意力时，Key 和 Value 会通过广播被多个 Query 头共享。这样做可以显著减少 KV cache，因为原来需要保存 <code>num_heads</code> 份 Key、Value，现在只需要保存 1 份。</p>
+<p>MQA 的代价是表达能力可能下降。所有 Query 头看的是同一套 Key、Value，模型在不同头之间可使用的信息会更少。</p>
+<h2 id="gqa更常用的折中方案">GQA：更常用的折中方案</h2>
+<p>GQA 把 Query 头分成若干组，每组共享一组 Key、Value。</p>
+<p>如果 <code>num_heads = 32</code>，<code>num_kv_heads = 8</code>，那么每 4 个 Query 头共享 1 个 KV 头：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>32 个 Query 头
+</span></span><span style="display:flex;"><span>8 个 KV 头
+</span></span><span style="display:flex;"><span>每个 KV 头服务 4 个 Query 头
+</span></span></code></pre></div><p>GQA 的形状是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Q: [batch, num_heads, seq_len, head_dim]
+</span></span><span style="display:flex;"><span>K: [batch, num_kv_heads, seq_len, head_dim]
+</span></span><span style="display:flex;"><span>V: [batch, num_kv_heads, seq_len, head_dim]
+</span></span></code></pre></div><p>为了和 Query 做注意力计算，工程实现中通常会把 K、V 在 head 维度上 repeat 到 <code>num_heads</code>，或者在更底层的 kernel 里避免真的展开。</p>
+<p>GQA 的关键约束是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>num_heads % num_kv_heads == 0
+</span></span></code></pre></div><p>也就是说，Query 头数必须能被 KV 头数整除。</p>
+<h2 id="kv-cache-为什么会变小">KV cache 为什么会变小</h2>
+<p>忽略 batch、层数、数据类型这些常数，KV cache 的大小大致和下面几个量成正比：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>seq_len * num_kv_heads * head_dim * 2
+</span></span></code></pre></div><p>这里的 <code>2</code> 代表 Key 和 Value 两份缓存。</p>
+<p>MHA 中 <code>num_kv_heads = num_heads</code>。MQA 中 <code>num_kv_heads = 1</code>。GQA 中 <code>num_kv_heads</code> 是介于 1 和 <code>num_heads</code> 之间的数字。</p>
+<p>因此，在长上下文推理里，GQA/MQA 的收益会非常明显。它们不只是省显存，也会减少每次生成 token 时读取 KV cache 的带宽压力。</p>
+<h2 id="一份统一的-pytorch-实现">一份统一的 PyTorch 实现</h2>
+<p>下面这份代码用一个类同时表达 MHA、MQA 和 GQA。关键变量是 <code>num_kv_heads</code>：</p>
+<ul>
+<li><code>num_kv_heads = num_heads</code>：MHA。</li>
+<li><code>num_kv_heads = 1</code>：MQA。</li>
+<li><code>1 &lt; num_kv_heads &lt; num_heads</code>：GQA。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> math
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch <span style="color:#f92672">import</span> nn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">GroupedQueryAttention</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, hidden_size: int, num_heads: int, num_kv_heads: int):
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">assert</span> hidden_size <span style="color:#f92672">%</span> num_heads <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">assert</span> num_heads <span style="color:#f92672">%</span> num_kv_heads <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>hidden_size <span style="color:#f92672">=</span> hidden_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>num_heads <span style="color:#f92672">=</span> num_heads
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>num_kv_heads <span style="color:#f92672">=</span> num_kv_heads
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>head_dim <span style="color:#f92672">=</span> hidden_size <span style="color:#f92672">//</span> num_heads
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>q_proj <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(hidden_size, hidden_size)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>k_proj <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(hidden_size, num_kv_heads <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>head_dim)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>v_proj <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(hidden_size, num_kv_heads <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>head_dim)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>o_proj <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(hidden_size, hidden_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, hidden_states: torch<span style="color:#f92672">.</span>Tensor, attention_mask<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        batch_size, seq_len, _ <span style="color:#f92672">=</span> hidden_states<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        query <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>q_proj(hidden_states)
+</span></span><span style="display:flex;"><span>        key <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>k_proj(hidden_states)
+</span></span><span style="display:flex;"><span>        value <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>v_proj(hidden_states)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        query <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_split_heads(query, self<span style="color:#f92672">.</span>num_heads)
+</span></span><span style="display:flex;"><span>        key <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_split_heads(key, self<span style="color:#f92672">.</span>num_kv_heads)
+</span></span><span style="display:flex;"><span>        value <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_split_heads(value, self<span style="color:#f92672">.</span>num_kv_heads)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        key <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_repeat_kv(key)
+</span></span><span style="display:flex;"><span>        value <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_repeat_kv(value)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        scores <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(query, key<span style="color:#f92672">.</span>transpose(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span>        scores <span style="color:#f92672">=</span> scores <span style="color:#f92672">/</span> math<span style="color:#f92672">.</span>sqrt(self<span style="color:#f92672">.</span>head_dim)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> attention_mask <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            scores <span style="color:#f92672">=</span> scores <span style="color:#f92672">+</span> attention_mask
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        probs <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>softmax(scores, dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(probs, value)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> output<span style="color:#f92672">.</span>transpose(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>contiguous()
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> output<span style="color:#f92672">.</span>view(batch_size, seq_len, self<span style="color:#f92672">.</span>hidden_size)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>o_proj(output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_split_heads</span>(self, tensor: torch<span style="color:#f92672">.</span>Tensor, heads: int):
+</span></span><span style="display:flex;"><span>        batch_size, seq_len, _ <span style="color:#f92672">=</span> tensor<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>        tensor <span style="color:#f92672">=</span> tensor<span style="color:#f92672">.</span>view(batch_size, seq_len, heads, self<span style="color:#f92672">.</span>head_dim)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tensor<span style="color:#f92672">.</span>transpose(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_repeat_kv</span>(self, tensor: torch<span style="color:#f92672">.</span>Tensor):
+</span></span><span style="display:flex;"><span>        repeat_factor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>num_heads <span style="color:#f92672">//</span> self<span style="color:#f92672">.</span>num_kv_heads
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tensor<span style="color:#f92672">.</span>repeat_interleave(repeat_factor, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span></code></pre></div><p>这段代码为了教学清晰，直接使用 <code>repeat_interleave</code> 展开 K、V。真实大模型推理框架通常会在 attention kernel 里处理 KV 头复用，避免真的复制出完整张量。</p>
+<h2 id="怎么选">怎么选</h2>
+<p>如果你在学习 Attention，先把 MHA 搞清楚。它是理解后面所有变体的基础。</p>
+<p>如果你关注推理性能，MQA 和 GQA 就非常重要。MQA 最省 KV cache，但表达能力损失可能更明显；GQA 介于两者之间，是很多现代 LLM 更常用的折中。</p>
+<p>可以把三者记成一条线：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>MHA：效果优先，KV cache 最大
+</span></span><span style="display:flex;"><span>GQA：效果和效率折中，现代 LLM 常用
+</span></span><span style="display:flex;"><span>MQA：效率优先，KV cache 最小
+</span></span></code></pre></div><p>理解这条线，再看模型配置里的 <code>num_attention_heads</code> 和 <code>num_key_value_heads</code>，就能很快判断它使用的是 MHA、MQA 还是 GQA。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/distributed-training-megatron-parallelism/index.html">
+                        <span>上一篇</span>
+                        <strong>Megatron-LM：张量并行、流水线并行与 3D 并行</strong>
+                    </a>
+                    
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

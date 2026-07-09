@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MHA on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/mha/</link>
+    <description>Recent content in MHA on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/mha/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从 MHA 到 GQA：LLM 注意力机制的 KV 头复用</title>
+      <link>https://example.com/aitech/attention-mha-mqa-gqa/</link>
+      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/attention-mha-mqa-gqa/</guid>
+      <description>整理 MHA、MQA、GQA 的区别与联系，解释为什么减少 KV 头可以降低推理显存，并给出一份干净的 PyTorch 实现思路。</description>
+    </item>
+  </channel>
+</rss>

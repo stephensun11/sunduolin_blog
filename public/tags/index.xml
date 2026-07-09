@@ -6,20 +6,55 @@
     <description>Recent content in Tags on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 09:30:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2026 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>3D并行</title>
-      <link>https://example.com/tags/3d%E5%B9%B6%E8%A1%8C/</link>
-      <pubDate>Thu, 09 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/tags/3d%E5%B9%B6%E8%A1%8C/</guid>
+      <title>Attention</title>
+      <link>https://example.com/tags/attention/</link>
+      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/attention/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GQA</title>
+      <link>https://example.com/tags/gqa/</link>
+      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/gqa/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>KV Cache</title>
+      <link>https://example.com/tags/kv-cache/</link>
+      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/kv-cache/</guid>
       <description></description>
     </item>
     <item>
       <title>LLM</title>
       <link>https://example.com/tags/llm/</link>
-      <pubDate>Thu, 09 Jul 2026 09:30:00 +0800</pubDate>
+      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
       <guid>https://example.com/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MHA</title>
+      <link>https://example.com/tags/mha/</link>
+      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/mha/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MQA</title>
+      <link>https://example.com/tags/mqa/</link>
+      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/mqa/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>3D并行</title>
+      <link>https://example.com/tags/3d%E5%B9%B6%E8%A1%8C/</link>
+      <pubDate>Thu, 09 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/3d%E5%B9%B6%E8%A1%8C/</guid>
       <description></description>
     </item>
     <item>
@@ -142,13 +177,6 @@
       <description></description>
     </item>
     <item>
-      <title>KV Cache</title>
-      <link>https://example.com/tags/kv-cache/</link>
-      <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
-      <guid>https://example.com/tags/kv-cache/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Linux</title>
       <link>https://example.com/tags/linux/</link>
       <pubDate>Mon, 06 Jul 2026 22:25:00 +0800</pubDate>
@@ -251,13 +279,6 @@
       <link>https://example.com/tags/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</link>
       <pubDate>Mon, 06 Jul 2026 22:15:00 +0800</pubDate>
       <guid>https://example.com/tags/%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Attention</title>
-      <link>https://example.com/tags/attention/</link>
-      <pubDate>Mon, 06 Jul 2026 22:10:00 +0800</pubDate>
-      <guid>https://example.com/tags/attention/</guid>
       <description></description>
     </item>
     <item>
