@@ -1,38 +1,39 @@
 <nav class="site-nav">
     <div class="nav-inner">
-        {{ $currentPage := . }}
-        {{ range .Site.Menus.main }}
-        {{ if .HasChildren }}
+        {{- $currentPage := . -}}
+        {{- range .Site.Menus.main }}
+        {{- if .HasChildren }}
         <div class="nav-item">
-            {{ $active := or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .) }}
+            {{- $active := or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .) }}
             <a class="nav-link{{ if $active }} active{{ end }}" href="{{ partial "internal-link.html" .URL }}">{{ .Name }} ▾</a>
             <div class="dropdown">
-                {{ range .Children }}
-                {{ $child := . }}
-                {{ if strings.HasPrefix $child.URL "/subcategories/" }}
-                    {{ $hasSubcategory := false }}
-                    {{ range site.RegularPages }}
-                        {{ if in .Params.subcategories $child.Name }}
-                            {{ $hasSubcategory = true }}
-                        {{ end }}
-                    {{ end }}
-                    {{ if $hasSubcategory }}
+                {{- range .Children }}
+                {{- $child := . -}}
+                {{- $shouldRender := true -}}
+                {{- if strings.HasPrefix $child.URL "/subcategories/" -}}
+                    {{- $shouldRender = false -}}
+                    {{- range site.RegularPages -}}
+                        {{- if in .Params.subcategories $child.Name -}}
+                            {{- $shouldRender = true -}}
+                        {{- end -}}
+                    {{- end -}}
+                {{- else -}}
+                    {{- if not (site.GetPage $child.URL) -}}
+                        {{- $shouldRender = false -}}
+                    {{- end -}}
+                {{- end -}}
+                {{- if $shouldRender }}
                 <a href="{{ partial "internal-link.html" $child.URL }}">{{ $child.Name }}</a>
-                    {{ end }}
-                {{ else }}
-                    {{ with site.GetPage $child.URL }}
-                <a href="{{ partial "internal-link.html" $child.URL }}">{{ $child.Name }}</a>
-                    {{ end }}
-                {{ end }}
-                {{ end }}
+                {{- end }}
+                {{- end }}
             </div>
         </div>
-        {{ else }}
+        {{- else }}
         <div class="nav-item">
-            {{ $active := $currentPage.IsMenuCurrent "main" . }}
+            {{- $active := $currentPage.IsMenuCurrent "main" . }}
             <a class="nav-link{{ if $active }} active{{ end }}" href="{{ partial "internal-link.html" .URL }}">{{ .Name }}</a>
         </div>
-        {{ end }}
-        {{ end }}
+        {{- end }}
+        {{- end }}
     </div>
 </nav>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计学习方法读书笔记：SVM、提升方法与 EM - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么把这三章放在一起">为什么把这三章放在一起</a></li>
+    <li><a href="#svm最大化分类间隔">SVM：最大化分类间隔</a></li>
+    <li><a href="#软间隔与核函数">软间隔与核函数</a></li>
+    <li><a href="#拉格朗日对偶">拉格朗日对偶</a></li>
+    <li><a href="#提升方法把弱模型加起来">提升方法：把弱模型加起来</a></li>
+    <li><a href="#加法模型与前向分步算法">加法模型与前向分步算法</a></li>
+    <li><a href="#em含隐变量时怎么估计参数">EM：含隐变量时怎么估计参数</a></li>
+    <li><a href="#三者对照">三者对照</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+    <span aria-hidden="true">/</span>
+    <span>统计学习方法读书笔记：SVM、提升方法与 EM</span>
+</nav>
+
+                <h1>统计学习方法读书笔记：SVM、提升方法与 EM</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.html">统计学习方法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/svm/index.html">SVM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/boosting/index.html">Boosting</a></span>
+                    
+                    <span class="tag"><a href="../../tags/em%E7%AE%97%E6%B3%95/index.html">EM算法</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么把这三章放在一起">为什么把这三章放在一起</h2>
+<p>SVM、提升方法和 EM 看起来不属于同一类模型，但它们都在展示传统机器学习里非常重要的优化思想。</p>
+<p>SVM 通过间隔最大化把分类问题变成凸优化。提升方法通过加法模型把多个弱分类器组合成强分类器。EM 则处理含隐变量的概率模型参数估计。</p>
+<p>它们分别对应三个关键词：间隔、组合、隐变量。</p>
+<h2 id="svm最大化分类间隔">SVM：最大化分类间隔</h2>
+<p>支持向量机的核心直觉是：不仅要分对，还要分得有余量。</p>
+<p>在线性可分情况下，SVM 寻找一个超平面，让离超平面最近的样本点距离尽可能大。这个距离就是间隔。</p>
+<p>最大间隔带来的好处是分类边界更稳定，对未见数据通常更有泛化能力。</p>
+<p>真正决定分类面的样本点叫支持向量。它们离边界最近，也最关键。</p>
+<h2 id="软间隔与核函数">软间隔与核函数</h2>
+<p>现实数据往往不是线性可分的。</p>
+<p>软间隔 SVM 允许少量样本被分错或落入间隔内，同时用惩罚项控制错误程度。这样模型就能在拟合训练集和保持间隔之间折中。</p>
+<p>核函数解决的是非线性问题。它让模型在高维特征空间中寻找线性分类面，但计算时不必显式构造高维映射。</p>
+<p>常见核函数包括：</p>
+<ul>
+<li>线性核</li>
+<li>多项式核</li>
+<li>高斯核</li>
+</ul>
+<p>核方法最值得记住的点是：通过内积形式，把非线性分类转成高维空间里的线性分类。</p>
+<h2 id="拉格朗日对偶">拉格朗日对偶</h2>
+<p>SVM 章节里对偶问题非常重要。</p>
+<p>原问题从权重向量和间隔出发，对偶问题则把优化变量转成训练样本对应的系数。这样不仅方便引入核函数，也让支持向量的作用变得清楚。</p>
+<p>如果读 SVM 时觉得推导困难，可以先抓住目标：最大间隔、允许软错误、用核函数处理非线性。对偶推导是实现这套目标的数学工具。</p>
+<h2 id="提升方法把弱模型加起来">提升方法：把弱模型加起来</h2>
+<p>提升方法的核心思想是把多个弱分类器组合成一个强分类器。</p>
+<p>AdaBoost 是最经典的例子。它会反复训练弱分类器，每一轮更加关注前面被分错的样本。</p>
+<p>直觉上，模型在不断补自己的短板。前一轮做得不好的地方，下一轮给更高权重。</p>
+<p>最终模型是多个弱分类器的加权组合。</p>
+<h2 id="加法模型与前向分步算法">加法模型与前向分步算法</h2>
+<p>从更一般的角度看，提升方法可以理解为加法模型：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>F(x) = f1(x) + f2(x) + ... + fm(x)
+</span></span></code></pre></div><p>每一步固定已经学到的部分，只新增一个基函数。</p>
+<p>这种“逐步加模型”的思路后来在梯度提升树、GBDT、XGBoost 等方法中继续发展。</p>
+<p>所以 Boosting 不只是一种算法，更是一种组合模型的建模方式。</p>
+<h2 id="em含隐变量时怎么估计参数">EM：含隐变量时怎么估计参数</h2>
+<p>EM 算法用于含隐变量的概率模型。</p>
+<p>如果完整数据可见，最大似然估计可能比较直接。但当一部分变量不可观测时，直接最大化似然会变得困难。</p>
+<p>EM 的做法是交替两步：</p>
+<ul>
+<li>E 步：根据当前参数估计隐变量的分布。</li>
+<li>M 步：在这个估计基础上更新参数。</li>
+</ul>
+<p>它像是在“补全缺失信息”和“更新模型参数”之间来回迭代。</p>
+<h2 id="三者对照">三者对照</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>核心问题</th>
+<th>关键思想</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVM</td>
+<td>分类边界怎么更稳</td>
+<td>最大间隔、核函数、对偶优化</td>
+</tr>
+<tr>
+<td>Boosting</td>
+<td>弱模型怎么变强</td>
+<td>样本重加权、加法模型</td>
+</tr>
+<tr>
+<td>EM</td>
+<td>隐变量怎么处理</td>
+<td>估计隐变量分布，再更新参数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="小结">小结</h2>
+<p>SVM 训练我们理解间隔和对偶。Boosting 训练我们理解组合模型。EM 训练我们理解隐变量和迭代估计。</p>
+<p>这三章的共同价值，是让机器学习不再只是“套模型”，而是看到模型背后不同类型的优化结构。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/statistical-learning-classic-classifiers/index.html">
+                        <span>上一篇</span>
+                        <strong>统计学习方法读书笔记：决策树、逻辑回归与最大熵</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/statistical-learning-sequence-models/index.html">
+                        <span>下一篇</span>
+                        <strong>统计学习方法读书笔记：HMM 与 CRF</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

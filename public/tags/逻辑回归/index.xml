@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>逻辑回归 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</link>
+    <description>Recent content in 逻辑回归 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 22:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>统计学习方法读书笔记：决策树、逻辑回归与最大熵</title>
+      <link>https://example.com/aitech/statistical-learning-classic-classifiers/</link>
+      <pubDate>Thu, 09 Jul 2026 22:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-classic-classifiers/</guid>
+      <description>整理决策树、逻辑斯谛回归和最大熵模型，理解特征选择、条件概率建模和约束下的最大不确定性。</description>
+    </item>
+  </channel>
+</rss>

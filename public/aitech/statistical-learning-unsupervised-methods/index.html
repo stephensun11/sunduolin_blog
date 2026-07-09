@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计学习方法读书笔记：无监督学习的结构发现 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#无监督学习在找什么">无监督学习在找什么</a></li>
+    <li><a href="#聚类把相似样本放在一起">聚类：把相似样本放在一起</a></li>
+    <li><a href="#svd矩阵分解的基础工具">SVD：矩阵分解的基础工具</a></li>
+    <li><a href="#pca找最大方差方向">PCA：找最大方差方向</a></li>
+    <li><a href="#lsaplsa-与-lda从矩阵到主题">LSA、PLSA 与 LDA：从矩阵到主题</a></li>
+    <li><a href="#mcmc从复杂分布中采样">MCMC：从复杂分布中采样</a></li>
+    <li><a href="#pagerank图上的重要性">PageRank：图上的重要性</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+    <span aria-hidden="true">/</span>
+    <span>统计学习方法读书笔记：无监督学习的结构发现</span>
+</nav>
+
+                <h1>统计学习方法读书笔记：无监督学习的结构发现</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.html">统计学习方法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E8%81%9A%E7%B1%BB/index.html">聚类</a></span>
+                    
+                    <span class="tag"><a href="../../tags/pca/index.html">PCA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/svd/index.html">SVD</a></span>
+                    
+                    <span class="tag"><a href="../../tags/lda/index.html">LDA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/pagerank/index.html">PageRank</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="无监督学习在找什么">无监督学习在找什么</h2>
+<p>无监督学习没有标签，目标不是直接预测 y，而是在数据里找结构。</p>
+<p>这个结构可以是样本之间的类别簇，可以是低维表示，可以是文本主题，也可以是图上的重要性排序。</p>
+<p>《统计学习方法》第 2 版把无监督学习放在第 2 篇，从聚类一路讲到 PageRank。读这部分时，可以把关键词放在“表示”和“结构”上。</p>
+<h2 id="聚类把相似样本放在一起">聚类：把相似样本放在一起</h2>
+<p>聚类的目标是让同一组样本更相似，不同组样本更不相似。</p>
+<p>常见方法包括层次聚类和 k-means。</p>
+<p>k-means 的思路很直接：</p>
+<ol>
+<li>初始化 k 个中心。</li>
+<li>把每个样本分配给最近的中心。</li>
+<li>用每一类样本的均值更新中心。</li>
+<li>重复直到稳定。</li>
+</ol>
+<p>k-means 的优点是简单高效，局限是需要提前指定 k，并且对初始化、距离度量和异常点敏感。</p>
+<h2 id="svd矩阵分解的基础工具">SVD：矩阵分解的基础工具</h2>
+<p>奇异值分解把矩阵拆成三个矩阵：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X = U Sigma V^T
+</span></span></code></pre></div><p>它可以看成把数据中的主要方向提取出来。</p>
+<p>SVD 是很多方法的底层工具。降维、推荐系统、文本语义分析都能看到它的影子。</p>
+<p>直觉上，SVD 会把一个复杂矩阵拆成若干重要成分，保留大的奇异值，就能得到一个低秩近似。</p>
+<h2 id="pca找最大方差方向">PCA：找最大方差方向</h2>
+<p>主成分分析希望找到一组新坐标轴，让数据投影到这些方向后方差尽可能大。</p>
+<p>第一主成分是数据变化最大的方向，第二主成分是在和第一主成分正交的约束下变化最大的方向，依此类推。</p>
+<p>PCA 的常见用途是降维和去噪。</p>
+<p>在机器学习中，它提醒我们一个重要思想：不是所有维度都同等重要，很多数据可以用更低维的结构解释。</p>
+<h2 id="lsaplsa-与-lda从矩阵到主题">LSA、PLSA 与 LDA：从矩阵到主题</h2>
+<p>文本数据可以表示成“词-文档”矩阵。</p>
+<p>LSA 使用矩阵分解，从词和文档共现关系里提取潜在语义结构。</p>
+<p>PLSA 进一步引入概率模型，把文档看成主题混合，主题再生成词。</p>
+<p>LDA 在 PLSA 的基础上加入贝叶斯先验，使用狄利克雷分布描述文档的主题分布和主题的词分布。</p>
+<p>这条线很适合理解主题模型的发展：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>矩阵分解 -&gt; 概率主题 -&gt; 贝叶斯主题模型
+</span></span></code></pre></div><h2 id="mcmc从复杂分布中采样">MCMC：从复杂分布中采样</h2>
+<p>有些概率模型的后验分布很难直接计算。</p>
+<p>马尔可夫链蒙特卡罗方法的目标是构造一个马尔可夫链，让它的平稳分布就是我们想要的目标分布。然后通过采样近似计算。</p>
+<p>MCMC 在 LDA 等贝叶斯模型中很重要。它的核心价值是：当精确推断困难时，可以用采样逼近。</p>
+<h2 id="pagerank图上的重要性">PageRank：图上的重要性</h2>
+<p>PageRank 最初用于网页排序。</p>
+<p>它把网页看成图中的节点，链接看成边。一个页面重要，通常意味着有很多重要页面指向它。</p>
+<p>这个定义是递归的，所以 PageRank 会通过迭代计算稳定的重要性分数。</p>
+<p>从机器学习角度看，PageRank 很适合理解图结构、随机游走和平稳分布。</p>
+<h2 id="小结">小结</h2>
+<p>无监督学习不是一组零散算法，而是在无标签数据中寻找结构。</p>
+<p>聚类找样本群组，SVD 和 PCA 找低维表示，LSA/PLSA/LDA 找文本主题，MCMC 解决复杂分布采样，PageRank 在图上定义重要性。</p>
+<p>这些方法看似传统，但它们背后的表示学习、概率建模和图计算思想，仍然是理解现代 AI 的基础。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/statistical-learning-sequence-models/index.html">
+                        <span>上一篇</span>
+                        <strong>统计学习方法读书笔记：HMM 与 CRF</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/statistical-learning-practical-map/index.html">
+                        <span>下一篇</span>
+                        <strong>统计学习方法读书笔记：方法对照与复习地图</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计学习方法读书笔记：全书框架与学习路线 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#这套笔记怎么定位">这套笔记怎么定位</a></li>
+    <li><a href="#全书结构">全书结构</a></li>
+    <li><a href="#统计学习的三要素">统计学习的三要素</a></li>
+    <li><a href="#监督学习主线">监督学习主线</a></li>
+    <li><a href="#无监督学习主线">无监督学习主线</a></li>
+    <li><a href="#建议阅读顺序">建议阅读顺序</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+    <span aria-hidden="true">/</span>
+    <span>统计学习方法读书笔记：全书框架与学习路线</span>
+</nav>
+
+                <h1>统计学习方法读书笔记：全书框架与学习路线</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.html">统计学习方法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9D%8E%E8%88%AA/index.html">李航</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/index.html">监督学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/index.html">无监督学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="这套笔记怎么定位">这套笔记怎么定位</h2>
+<p>《统计学习方法》第 2 版的内容很密，适合作为传统机器学习的系统索引。它不是一本靠故事推进的书，而是沿着“模型、策略、算法”这条线，把常见统计学习方法逐个拆开。</p>
+<p>这组博客不会复刻书中推导，也不会逐页摘抄原文。我会按本地 PDF 的书签目录做学习笔记，把每章放到更容易回顾的框架里：它解决什么问题、核心假设是什么、优化目标是什么、和其它方法有什么关系。</p>
+<h2 id="全书结构">全书结构</h2>
+<p>PDF 书签显示，全书主体分成两大篇：</p>
+<table>
+<thead>
+<tr>
+<th>篇章</th>
+<th>内容主线</th>
+<th>关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 篇 监督学习</td>
+<td>从输入到输出的预测模型</td>
+<td>感知机、kNN、朴素贝叶斯、决策树、逻辑回归、SVM、Boosting、EM、HMM、CRF</td>
+</tr>
+<tr>
+<td>第 2 篇 无监督学习</td>
+<td>从无标签数据中发现结构</td>
+<td>聚类、SVD、PCA、LSA、PLSA、MCMC、LDA、PageRank</td>
+</tr>
+</tbody>
+</table>
+<p>书末还有几个重要附录：梯度下降、牛顿法和拟牛顿法、拉格朗日对偶性、矩阵子空间、KL 散度和狄利克雷分布。这些附录不是边角料，而是理解前面算法的数学工具箱。</p>
+<h2 id="统计学习的三要素">统计学习的三要素</h2>
+<p>阅读这本书最重要的抓手是三个词：</p>
+<ul>
+<li>模型</li>
+<li>策略</li>
+<li>算法</li>
+</ul>
+<p>模型定义假设空间，也就是我们准备从哪些函数里挑一个。策略定义学习目标，比如经验风险最小化、结构风险最小化、最大似然或最大后验。算法负责求解，比如梯度下降、坐标下降、动态规划、EM 或对偶优化。</p>
+<p>几乎每一章都能用这三问拆开：</p>
+<ol>
+<li>模型长什么样？</li>
+<li>目标函数是什么？</li>
+<li>怎么把目标函数优化出来？</li>
+</ol>
+<h2 id="监督学习主线">监督学习主线</h2>
+<p>监督学习部分可以按模型复杂度理解。</p>
+<p>最开始的感知机、kNN 和朴素贝叶斯，是非常基础但很有代表性的三种思路。感知机强调线性分类面，kNN 强调局部邻近关系，朴素贝叶斯强调概率生成假设。</p>
+<p>然后进入决策树、逻辑回归、最大熵和 SVM。这几章开始把“模型表达能力”“损失函数”“正则化”和“优化方法”放在一起讨论。尤其是 SVM，间隔最大化和拉格朗日对偶是传统机器学习里非常经典的一条线。</p>
+<p>后面的提升方法、EM、HMM、CRF，则开始处理更复杂的问题：组合多个弱模型、含隐变量的估计、序列结构建模。</p>
+<h2 id="无监督学习主线">无监督学习主线</h2>
+<p>无监督学习部分可以按“找结构”理解。</p>
+<p>聚类是在样本之间找群组。SVD 和 PCA 是在线性代数视角下找低维结构。LSA、PLSA 和 LDA 面向文本主题表示，从矩阵分解走向概率主题模型。MCMC 是为了从复杂分布中采样，PageRank 则把图上的重要性建模成稳定分布。</p>
+<p>这部分和现代 AI 很有关系。Embedding、降维、主题建模、图排序、采样推断，都能在这些章节里找到旧而稳的根。</p>
+<h2 id="建议阅读顺序">建议阅读顺序</h2>
+<p>如果只是为了建立机器学习基础，可以先按下面顺序读：</p>
+<ol>
+<li>统计学习及监督学习概论。</li>
+<li>感知机、kNN、朴素贝叶斯。</li>
+<li>决策树、逻辑回归与最大熵。</li>
+<li>SVM、提升方法。</li>
+<li>EM、HMM、CRF。</li>
+<li>聚类、SVD、PCA。</li>
+<li>PLSA、LDA、PageRank。</li>
+</ol>
+<p>附录建议穿插看。比如读 SVM 时看拉格朗日对偶；读逻辑回归和最大熵时看梯度优化；读 LDA 时再补 KL 散度和狄利克雷分布。</p>
+<h2 id="小结">小结</h2>
+<p>这本书的价值不在于记住每个算法公式，而在于训练一种看模型的方式：先问假设空间，再问目标函数，最后问求解算法。</p>
+<p>后面的笔记会沿着这条线整理每一组方法，尽量把公式背后的直觉讲清楚。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/attention-mha-mqa-gqa/index.html">
+                        <span>上一篇</span>
+                        <strong>从 MHA 到 GQA：LLM 注意力机制的 KV 头复用</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/statistical-learning-supervised-basics/index.html">
+                        <span>下一篇</span>
+                        <strong>统计学习方法读书笔记：监督学习基础三件套</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

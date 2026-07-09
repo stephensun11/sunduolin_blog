@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>复习路线 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E5%A4%8D%E4%B9%A0%E8%B7%AF%E7%BA%BF/</link>
+    <description>Recent content in 复习路线 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 22:30:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E5%A4%8D%E4%B9%A0%E8%B7%AF%E7%BA%BF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>统计学习方法读书笔记：方法对照与复习地图</title>
+      <link>https://example.com/aitech/statistical-learning-practical-map/</link>
+      <pubDate>Thu, 09 Jul 2026 22:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-practical-map/</guid>
+      <description>把统计学习方法中的主要模型按任务、建模方式和优化方法串起来，形成一张复习地图。</description>
+    </item>
+  </channel>
+</rss>

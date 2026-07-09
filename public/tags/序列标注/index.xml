@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>序列标注 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E5%BA%8F%E5%88%97%E6%A0%87%E6%B3%A8/</link>
+    <description>Recent content in 序列标注 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 22:20:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E5%BA%8F%E5%88%97%E6%A0%87%E6%B3%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>统计学习方法读书笔记：HMM 与 CRF</title>
+      <link>https://example.com/aitech/statistical-learning-sequence-models/</link>
+      <pubDate>Thu, 09 Jul 2026 22:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-sequence-models/</guid>
+      <description>整理隐马尔可夫模型和条件随机场，理解生成式序列模型与判别式序列模型的区别。</description>
+    </item>
+  </channel>
+</rss>

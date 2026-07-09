@@ -2,22 +2,124 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://example.com/categories/aitech/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%A4%8D%E4%B9%A0%E8%B7%AF%E7%BA%BF/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/statistical-learning-practical-map/</loc>
+    <lastmod>2026-07-09T22:30:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/lda/</loc>
+    <lastmod>2026-07-09T22:25:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/pagerank/</loc>
+    <lastmod>2026-07-09T22:25:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/pca/</loc>
+    <lastmod>2026-07-09T22:25:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/svd/</loc>
+    <lastmod>2026-07-09T22:25:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/statistical-learning-unsupervised-methods/</loc>
+    <lastmod>2026-07-09T22:25:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E8%81%9A%E7%B1%BB/</loc>
+    <lastmod>2026-07-09T22:25:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/crf/</loc>
+    <lastmod>2026-07-09T22:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/hmm/</loc>
+    <lastmod>2026-07-09T22:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%BA%8F%E5%88%97%E6%A0%87%E6%B3%A8/</loc>
+    <lastmod>2026-07-09T22:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/statistical-learning-sequence-models/</loc>
+    <lastmod>2026-07-09T22:20:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/boosting/</loc>
+    <lastmod>2026-07-09T22:15:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/em%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2026-07-09T22:15:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/svm/</loc>
+    <lastmod>2026-07-09T22:15:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/statistical-learning-margin-ensemble-em/</loc>
+    <lastmod>2026-07-09T22:15:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E5%86%B3%E7%AD%96%E6%A0%91/</loc>
+    <lastmod>2026-07-09T22:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%9C%80%E5%A4%A7%E7%86%B5/</loc>
+    <lastmod>2026-07-09T22:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/statistical-learning-classic-classifiers/</loc>
+    <lastmod>2026-07-09T22:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/</loc>
+    <lastmod>2026-07-09T22:10:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/knn/</loc>
+    <lastmod>2026-07-09T22:05:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/</loc>
+    <lastmod>2026-07-09T22:05:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/</loc>
+    <lastmod>2026-07-09T22:05:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/statistical-learning-supervised-basics/</loc>
+    <lastmod>2026-07-09T22:05:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2026-07-09T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E6%9D%8E%E8%88%AA/</loc>
+    <lastmod>2026-07-09T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2026-07-09T22:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/aitech/statistical-learning-lihang-overview/</loc>
+    <lastmod>2026-07-09T22:00:00+08:00</lastmod>
+  </url><url>
     <loc>https://example.com/subcategories/2026/</loc>
     <lastmod>2026-07-09T11:40:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/weekly/weekly-2026-07-template/</loc>
-    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/categories/</loc>
-    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/</loc>
-    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/subcategories/</loc>
-    <lastmod>2026-07-09T11:40:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/</loc>
     <lastmod>2026-07-09T11:40:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/%E5%91%A8%E8%AE%B0/</loc>
@@ -106,12 +208,6 @@
   </url><url>
     <loc>https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/</loc>
     <lastmod>2026-07-09T11:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/categories/aitech/</loc>
-    <lastmod>2026-07-09T10:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://example.com/aitech/</loc>
-    <lastmod>2026-07-09T10:00:00+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/attention/</loc>
     <lastmod>2026-07-09T10:00:00+08:00</lastmod>

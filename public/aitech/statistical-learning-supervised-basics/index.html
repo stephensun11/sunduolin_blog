@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计学习方法读书笔记：监督学习基础三件套 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#从监督学习开始">从监督学习开始</a></li>
+    <li><a href="#感知机线性分类面的起点">感知机：线性分类面的起点</a></li>
+    <li><a href="#感知机的局限">感知机的局限</a></li>
+    <li><a href="#k近邻用局部相似性分类">k近邻：用局部相似性分类</a></li>
+    <li><a href="#k-值的影响">k 值的影响</a></li>
+    <li><a href="#朴素贝叶斯从生成式概率建模">朴素贝叶斯：从生成式概率建模</a></li>
+    <li><a href="#为什么叫朴素">为什么叫朴素</a></li>
+    <li><a href="#三个模型的对照">三个模型的对照</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+    <span aria-hidden="true">/</span>
+    <span>统计学习方法读书笔记：监督学习基础三件套</span>
+</nav>
+
+                <h1>统计学习方法读书笔记：监督学习基础三件套</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.html">统计学习方法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%84%9F%E7%9F%A5%E6%9C%BA/index.html">感知机</a></span>
+                    
+                    <span class="tag"><a href="../../tags/knn/index.html">kNN</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/index.html">朴素贝叶斯</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="从监督学习开始">从监督学习开始</h2>
+<p>监督学习的基本任务是：给定训练数据，学习一个从输入到输出的映射。</p>
+<p>分类、回归、序列标注都可以放进这个框架。区别在于输出空间不同，损失函数不同，模型结构也不同。</p>
+<p>这部分最适合先抓住三个基础模型：感知机、k近邻和朴素贝叶斯。它们分别代表三种很典型的机器学习思路。</p>
+<h2 id="感知机线性分类面的起点">感知机：线性分类面的起点</h2>
+<p>感知机处理二分类问题。它假设数据可以被一个超平面分开：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>w · x + b = 0
+</span></span></code></pre></div><p>如果样本在超平面一侧，就判为正类；在另一侧，就判为负类。</p>
+<p>感知机的学习策略很直接：只要有样本被分错，就根据这个样本更新参数，让分类面朝正确方向移动。</p>
+<p>可以把它理解成一种“犯错驱动”的算法。每次错误都会推动模型修正边界。</p>
+<h2 id="感知机的局限">感知机的局限</h2>
+<p>感知机最重要的前提是线性可分。</p>
+<p>如果数据本身不能被线性超平面分开，普通感知机就无法收敛到一个完美分类器。这个局限也提醒我们：模型假设非常重要。不是算法努力一点，就能解决假设空间里不存在的函数。</p>
+<p>这也是后来核方法、神经网络、多层非线性变换出现的原因之一。</p>
+<h2 id="k近邻用局部相似性分类">k近邻：用局部相似性分类</h2>
+<p>k近邻没有显式训练一个参数模型。它的预测逻辑是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>找到离测试样本最近的 k 个训练样本，用它们投票决定类别。
+</span></span></code></pre></div><p>kNN 的核心假设是：相近的样本通常有相近的标签。</p>
+<p>这个方法很直观，也很适合理解机器学习里的三个问题：</p>
+<ul>
+<li>距离度量怎么选？</li>
+<li>k 值怎么选？</li>
+<li>搜索效率怎么保证？</li>
+</ul>
+<p>距离度量决定“近”的含义，k 值决定局部范围，搜索结构决定预测速度。</p>
+<h2 id="k-值的影响">k 值的影响</h2>
+<p>k 太小，模型容易受噪声影响。比如 k=1 时，一个异常点就可能直接决定结果。</p>
+<p>k 太大，模型会变得过于平滑，局部结构被平均掉。</p>
+<p>所以 kNN 看似简单，实际上已经包含了偏差和方差的取舍：小 k 方差大，大 k 偏差大。</p>
+<h2 id="朴素贝叶斯从生成式概率建模">朴素贝叶斯：从生成式概率建模</h2>
+<p>朴素贝叶斯是生成式模型。它关注的是联合概率：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(X, Y)
+</span></span></code></pre></div><p>分类时使用贝叶斯公式：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(Y | X) = P(X | Y) P(Y) / P(X)
+</span></span></code></pre></div><p>因为对所有类别来说 <code>P(X)</code> 一样，预测时只需要比较：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(X | Y) P(Y)
+</span></span></code></pre></div><p>其中 <code>P(Y)</code> 是先验概率，<code>P(X | Y)</code> 是类别条件概率。</p>
+<h2 id="为什么叫朴素">为什么叫朴素</h2>
+<p>“朴素”来自条件独立假设。</p>
+<p>模型假设在给定类别后，各个特征之间相互独立：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(X | Y) = P(X1 | Y) P(X2 | Y) ... P(Xn | Y)
+</span></span></code></pre></div><p>这个假设在真实世界里经常不严格成立，但它大幅简化了参数估计，也让朴素贝叶斯在文本分类等任务里非常高效。</p>
+<h2 id="三个模型的对照">三个模型的对照</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>核心思想</th>
+<th>优点</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>感知机</td>
+<td>学一个线性分类面</td>
+<td>简单、更新直观</td>
+<td>依赖线性可分</td>
+</tr>
+<tr>
+<td>kNN</td>
+<td>相似样本有相似标签</td>
+<td>无需显式训练</td>
+<td>预测慢、依赖距离度量</td>
+</tr>
+<tr>
+<td>朴素贝叶斯</td>
+<td>用概率生成假设分类</td>
+<td>快、适合高维稀疏特征</td>
+<td>条件独立假设较强</td>
+</tr>
+</tbody>
+</table>
+<h2 id="小结">小结</h2>
+<p>感知机让我们看到线性模型如何通过错误更新学习。kNN 让我们看到非参数方法如何依赖样本空间的邻近结构。朴素贝叶斯让我们看到概率生成模型如何把分类问题转成后验概率比较。</p>
+<p>这三类思路会在后续章节不断变形和升级。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/statistical-learning-lihang-overview/index.html">
+                        <span>上一篇</span>
+                        <strong>统计学习方法读书笔记：全书框架与学习路线</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/statistical-learning-classic-classifiers/index.html">
+                        <span>下一篇</span>
+                        <strong>统计学习方法读书笔记：决策树、逻辑回归与最大熵</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

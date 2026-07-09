@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>统计学习方法 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/</link>
+    <description>Recent content in 统计学习方法 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 09 Jul 2026 22:30:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>统计学习方法读书笔记：方法对照与复习地图</title>
+      <link>https://example.com/aitech/statistical-learning-practical-map/</link>
+      <pubDate>Thu, 09 Jul 2026 22:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-practical-map/</guid>
+      <description>把统计学习方法中的主要模型按任务、建模方式和优化方法串起来，形成一张复习地图。</description>
+    </item>
+    <item>
+      <title>统计学习方法读书笔记：无监督学习的结构发现</title>
+      <link>https://example.com/aitech/statistical-learning-unsupervised-methods/</link>
+      <pubDate>Thu, 09 Jul 2026 22:25:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-unsupervised-methods/</guid>
+      <description>整理无监督学习部分，从聚类、矩阵分解、主题模型、MCMC 到 PageRank，理解无标签数据中的结构发现。</description>
+    </item>
+    <item>
+      <title>统计学习方法读书笔记：HMM 与 CRF</title>
+      <link>https://example.com/aitech/statistical-learning-sequence-models/</link>
+      <pubDate>Thu, 09 Jul 2026 22:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-sequence-models/</guid>
+      <description>整理隐马尔可夫模型和条件随机场，理解生成式序列模型与判别式序列模型的区别。</description>
+    </item>
+    <item>
+      <title>统计学习方法读书笔记：SVM、提升方法与 EM</title>
+      <link>https://example.com/aitech/statistical-learning-margin-ensemble-em/</link>
+      <pubDate>Thu, 09 Jul 2026 22:15:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-margin-ensemble-em/</guid>
+      <description>整理支持向量机、提升方法和 EM 算法，理解间隔最大化、加法模型和隐变量估计。</description>
+    </item>
+    <item>
+      <title>统计学习方法读书笔记：决策树、逻辑回归与最大熵</title>
+      <link>https://example.com/aitech/statistical-learning-classic-classifiers/</link>
+      <pubDate>Thu, 09 Jul 2026 22:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-classic-classifiers/</guid>
+      <description>整理决策树、逻辑斯谛回归和最大熵模型，理解特征选择、条件概率建模和约束下的最大不确定性。</description>
+    </item>
+    <item>
+      <title>统计学习方法读书笔记：监督学习基础三件套</title>
+      <link>https://example.com/aitech/statistical-learning-supervised-basics/</link>
+      <pubDate>Thu, 09 Jul 2026 22:05:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-supervised-basics/</guid>
+      <description>整理统计学习概论、感知机、k近邻和朴素贝叶斯，理解线性分类、邻近假设和生成式概率模型。</description>
+    </item>
+    <item>
+      <title>统计学习方法读书笔记：全书框架与学习路线</title>
+      <link>https://example.com/aitech/statistical-learning-lihang-overview/</link>
+      <pubDate>Thu, 09 Jul 2026 22:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/statistical-learning-lihang-overview/</guid>
+      <description>根据《统计学习方法》第 2 版的目录结构，整理监督学习、无监督学习和优化附录之间的主线。</description>
+    </item>
+  </channel>
+</rss>

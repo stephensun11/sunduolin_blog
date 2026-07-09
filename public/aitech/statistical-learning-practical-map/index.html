@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计学习方法读书笔记：方法对照与复习地图 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么需要一张地图">为什么需要一张地图</a></li>
+    <li><a href="#按任务划分">按任务划分</a></li>
+    <li><a href="#按生成式和判别式划分">按生成式和判别式划分</a></li>
+    <li><a href="#按参数模型和非参数模型划分">按参数模型和非参数模型划分</a></li>
+    <li><a href="#按优化方法划分">按优化方法划分</a></li>
+    <li><a href="#和现代-ai-的连接">和现代 AI 的连接</a></li>
+    <li><a href="#复习建议">复习建议</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+    <span aria-hidden="true">/</span>
+    <span>统计学习方法读书笔记：方法对照与复习地图</span>
+</nav>
+
+                <h1>统计学习方法读书笔记：方法对照与复习地图</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.html">统计学习方法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%A4%8D%E4%B9%A0%E8%B7%AF%E7%BA%BF/index.html">复习路线</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9/index.html">模型选择</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么需要一张地图">为什么需要一张地图</h2>
+<p>《统计学习方法》覆盖的算法很多。如果逐章读，很容易记住一堆名字，却忘了它们之间的关系。</p>
+<p>更好的复习方式，是把方法按几个维度重新排列：</p>
+<ul>
+<li>任务类型</li>
+<li>模型形式</li>
+<li>学习策略</li>
+<li>优化算法</li>
+</ul>
+<p>这样看到一个方法时，就能知道它在整个机器学习版图中的位置。</p>
+<h2 id="按任务划分">按任务划分</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>代表方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>二分类</td>
+<td>感知机、逻辑回归、SVM、AdaBoost</td>
+</tr>
+<tr>
+<td>多分类</td>
+<td>kNN、朴素贝叶斯、决策树、逻辑回归扩展</td>
+</tr>
+<tr>
+<td>序列标注</td>
+<td>HMM、CRF</td>
+</tr>
+<tr>
+<td>聚类</td>
+<td>层次聚类、k-means</td>
+</tr>
+<tr>
+<td>降维</td>
+<td>SVD、PCA</td>
+</tr>
+<tr>
+<td>主题建模</td>
+<td>LSA、PLSA、LDA</td>
+</tr>
+<tr>
+<td>图排序</td>
+<td>PageRank</td>
+</tr>
+</tbody>
+</table>
+<p>任务是最容易理解的一层。先知道问题是什么，再考虑模型。</p>
+<h2 id="按生成式和判别式划分">按生成式和判别式划分</h2>
+<p>生成式模型学习联合概率或数据生成过程：</p>
+<ul>
+<li>朴素贝叶斯</li>
+<li>HMM</li>
+<li>PLSA</li>
+<li>LDA</li>
+</ul>
+<p>判别式模型直接学习决策边界或条件概率：</p>
+<ul>
+<li>感知机</li>
+<li>逻辑回归</li>
+<li>SVM</li>
+<li>最大熵</li>
+<li>CRF</li>
+</ul>
+<p>生成式模型通常假设更完整，判别式模型通常更直接面向预测。</p>
+<p>这条线非常重要，因为它能解释很多模型的差异：朴素贝叶斯和逻辑回归、HMM 和 CRF，就是典型对照。</p>
+<h2 id="按参数模型和非参数模型划分">按参数模型和非参数模型划分</h2>
+<p>参数模型假设模型可以由固定数量的参数描述，例如：</p>
+<ul>
+<li>感知机</li>
+<li>逻辑回归</li>
+<li>SVM</li>
+<li>HMM</li>
+<li>CRF</li>
+</ul>
+<p>非参数方法不一定真的没有参数，而是不预先固定模型复杂度，代表是 kNN。</p>
+<p>kNN 的“训练”很轻，但预测时依赖训练集和距离搜索。这和逻辑回归这类先训练参数、预测时快速计算的方法形成对照。</p>
+<h2 id="按优化方法划分">按优化方法划分</h2>
+<p>不同模型背后的优化方法也很有辨识度：</p>
+<table>
+<thead>
+<tr>
+<th>优化思想</th>
+<th>代表方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>错误驱动更新</td>
+<td>感知机</td>
+</tr>
+<tr>
+<td>贪心划分</td>
+<td>决策树</td>
+</tr>
+<tr>
+<td>最大似然</td>
+<td>逻辑回归、朴素贝叶斯、HMM</td>
+</tr>
+<tr>
+<td>对偶优化</td>
+<td>SVM</td>
+</tr>
+<tr>
+<td>前向分步</td>
+<td>Boosting</td>
+</tr>
+<tr>
+<td>交替优化</td>
+<td>EM</td>
+</tr>
+<tr>
+<td>动态规划</td>
+<td>HMM、CRF 解码</td>
+</tr>
+<tr>
+<td>采样近似</td>
+<td>MCMC、LDA</td>
+</tr>
+<tr>
+<td>迭代收敛</td>
+<td>PageRank</td>
+</tr>
+</tbody>
+</table>
+<p>把优化方法记住，比背单个算法更有用。因为新模型往往只是旧优化思想的组合或变形。</p>
+<h2 id="和现代-ai-的连接">和现代 AI 的连接</h2>
+<p>这些传统方法并没有过时。</p>
+<p>逻辑回归和最大熵帮助理解 softmax 分类。SVM 帮助理解间隔和表示空间。EM 帮助理解隐变量估计。HMM、CRF 帮助理解序列结构。SVD、PCA、LDA 帮助理解表示学习和主题结构。PageRank 帮助理解图上的随机游走和重要性传播。</p>
+<p>现代深度学习更大、更灵活，但很多基本问题没有变：</p>
+<ul>
+<li>怎么定义目标函数？</li>
+<li>怎么控制模型复杂度？</li>
+<li>怎么处理隐变量？</li>
+<li>怎么利用结构信息？</li>
+<li>怎么做近似推断？</li>
+</ul>
+<h2 id="复习建议">复习建议</h2>
+<p>如果时间有限，可以先按下面路线复习：</p>
+<ol>
+<li>模型、策略、算法三要素。</li>
+<li>感知机、逻辑回归、SVM 三个线性分类模型。</li>
+<li>朴素贝叶斯与 HMM 这条生成式概率线。</li>
+<li>最大熵与 CRF 这条判别式概率线。</li>
+<li>Boosting 和 EM 两种重要优化范式。</li>
+<li>SVD、PCA、LDA、PageRank 这些无监督结构方法。</li>
+</ol>
+<p>每一轮复习都问同样三个问题：模型是什么，目标是什么，怎么优化。</p>
+<h2 id="小结">小结</h2>
+<p>《统计学习方法》最好不要当公式词典读，而要当机器学习思想地图读。</p>
+<p>模型、策略、算法是主轴；生成式和判别式是重要分叉；优化方法是把各章串起来的线。只要这张图建立起来，后面再读深度学习和大模型，也会更容易看见它们和传统机器学习之间的连续性。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/statistical-learning-unsupervised-methods/index.html">
+                        <span>上一篇</span>
+                        <strong>统计学习方法读书笔记：无监督学习的结构发现</strong>
+                    </a>
+                    
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计学习方法读书笔记：决策树、逻辑回归与最大熵 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#这一组方法的共同点">这一组方法的共同点</a></li>
+    <li><a href="#决策树递归地选择特征">决策树：递归地选择特征</a></li>
+    <li><a href="#熵与信息增益">熵与信息增益</a></li>
+    <li><a href="#剪枝防止树记住训练集">剪枝：防止树记住训练集</a></li>
+    <li><a href="#逻辑回归线性模型输出概率">逻辑回归：线性模型输出概率</a></li>
+    <li><a href="#最大似然与交叉熵">最大似然与交叉熵</a></li>
+    <li><a href="#最大熵模型满足约束但不乱加假设">最大熵模型：满足约束但不乱加假设</a></li>
+    <li><a href="#三者对照">三者对照</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+    <span aria-hidden="true">/</span>
+    <span>统计学习方法读书笔记：决策树、逻辑回归与最大熵</span>
+</nav>
+
+                <h1>统计学习方法读书笔记：决策树、逻辑回归与最大熵</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.html">统计学习方法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%86%B3%E7%AD%96%E6%A0%91/index.html">决策树</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/index.html">逻辑回归</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%80%E5%A4%A7%E7%86%B5/index.html">最大熵</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="这一组方法的共同点">这一组方法的共同点</h2>
+<p>决策树、逻辑回归和最大熵模型都在处理分类问题，但它们的视角很不一样。</p>
+<p>决策树像是在构造一套可解释的判断规则。逻辑回归直接建模类别的条件概率。最大熵模型则从约束出发，在满足已知事实的前提下选择最不偏的分布。</p>
+<p>这三章很适合放在一起读，因为它们把模型表达、概率解释和优化目标连了起来。</p>
+<h2 id="决策树递归地选择特征">决策树：递归地选择特征</h2>
+<p>决策树把分类过程表示成一棵树。</p>
+<p>每个内部节点是一个特征判断，每条边对应判断结果，每个叶节点对应最终类别。</p>
+<p>训练决策树的关键是：每一步选哪个特征来切分数据？</p>
+<p>常见标准包括：</p>
+<ul>
+<li>信息增益</li>
+<li>信息增益比</li>
+<li>基尼指数</li>
+</ul>
+<p>这些指标本质上都在衡量一次划分能让数据变得多“纯”。</p>
+<h2 id="熵与信息增益">熵与信息增益</h2>
+<p>熵可以理解为不确定性。一个节点里的样本类别越混乱，熵越高；类别越集中，熵越低。</p>
+<p>信息增益衡量的是：用某个特征划分后，不确定性减少了多少。</p>
+<p>如果一个特征能把样本分成非常纯的子集，它的信息增益就高。决策树会优先选择这种特征。</p>
+<p>但信息增益偏好取值多的特征，所以 C4.5 使用信息增益比修正这种偏好。</p>
+<h2 id="剪枝防止树记住训练集">剪枝：防止树记住训练集</h2>
+<p>决策树很容易过拟合。</p>
+<p>如果一直切分到每个叶子都很纯，模型可能只是记住训练数据中的细节，而不是学到稳定规律。</p>
+<p>剪枝就是控制复杂度。可以先生成完整树再剪掉一些分支，也可以在生长过程中提前停止。</p>
+<p>从统计学习角度看，剪枝是在经验风险和模型复杂度之间做平衡。</p>
+<h2 id="逻辑回归线性模型输出概率">逻辑回归：线性模型输出概率</h2>
+<p>逻辑回归虽然名字里有“回归”，但常用于分类。</p>
+<p>二分类逻辑回归把线性函数映射到 0 到 1 之间：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(Y = 1 | x) = sigmoid(w · x + b)
+</span></span></code></pre></div><p>sigmoid 函数让模型输出可以解释为概率。</p>
+<p>相比感知机只关心分类是否正确，逻辑回归关心模型对类别的概率估计。这一点对后续最大熵、条件随机场和神经网络里的 softmax 都很重要。</p>
+<h2 id="最大似然与交叉熵">最大似然与交叉熵</h2>
+<p>逻辑回归通常用最大似然估计参数。</p>
+<p>从优化角度看，最大化训练数据的条件概率，等价于最小化负对数似然。对于分类问题，这个目标也可以理解成交叉熵损失。</p>
+<p>这让逻辑回归成为一个非常重要的桥梁：它既是传统线性分类器，也是理解现代神经网络分类头的基础。</p>
+<h2 id="最大熵模型满足约束但不乱加假设">最大熵模型：满足约束但不乱加假设</h2>
+<p>最大熵原则的直觉是：在满足已知约束的所有分布中，选择熵最大的那个。</p>
+<p>熵最大意味着不确定性最大，也就是不额外引入没有证据支持的偏好。</p>
+<p>最大熵模型常用特征函数表达约束。它会让模型分布在这些特征上的期望和训练数据中的经验期望一致。</p>
+<p>这听起来抽象，但思想很干净：已知的事实必须满足，未知的部分不要乱猜。</p>
+<h2 id="三者对照">三者对照</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>模型形式</th>
+<th>关键问题</th>
+<th>典型优点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>决策树</td>
+<td>树结构规则</td>
+<td>选特征与剪枝</td>
+<td>可解释性强</td>
+</tr>
+<tr>
+<td>逻辑回归</td>
+<td>条件概率模型</td>
+<td>最大似然估计</td>
+<td>简洁、稳定、概率输出</td>
+</tr>
+<tr>
+<td>最大熵</td>
+<td>约束下的概率模型</td>
+<td>特征约束与优化</td>
+<td>原理优雅、可扩展</td>
+</tr>
+</tbody>
+</table>
+<h2 id="小结">小结</h2>
+<p>决策树强调可解释规则，逻辑回归强调条件概率，最大熵强调约束下的不偏选择。</p>
+<p>这三种模型共同构成了理解分类方法的重要中间层：比感知机、kNN 更系统，也为 SVM、CRF 和神经网络分类模型打下基础。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/statistical-learning-supervised-basics/index.html">
+                        <span>上一篇</span>
+                        <strong>统计学习方法读书笔记：监督学习基础三件套</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/statistical-learning-margin-ensemble-em/index.html">
+                        <span>下一篇</span>
+                        <strong>统计学习方法读书笔记：SVM、提升方法与 EM</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

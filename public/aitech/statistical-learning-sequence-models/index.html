@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计学习方法读书笔记：HMM 与 CRF - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#序列问题有什么不同">序列问题有什么不同</a></li>
+    <li><a href="#hmm生成式序列模型">HMM：生成式序列模型</a></li>
+    <li><a href="#hmm-的三个基本问题">HMM 的三个基本问题</a></li>
+    <li><a href="#viterbi找最优路径">Viterbi：找最优路径</a></li>
+    <li><a href="#crf条件概率下的序列标注">CRF：条件概率下的序列标注</a></li>
+    <li><a href="#生成式与判别式的区别">生成式与判别式的区别</a></li>
+    <li><a href="#crf-的特征函数">CRF 的特征函数</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+    <span aria-hidden="true">/</span>
+    <span>统计学习方法读书笔记：HMM 与 CRF</span>
+</nav>
+
+                <h1>统计学习方法读书笔记：HMM 与 CRF</h1>
+                <div class="meta">
+                    <span class="date">2026-07-09</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/index.html">统计学习方法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/hmm/index.html">HMM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/crf/index.html">CRF</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%BA%8F%E5%88%97%E6%A0%87%E6%B3%A8/index.html">序列标注</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="序列问题有什么不同">序列问题有什么不同</h2>
+<p>前面的分类模型通常假设每个样本独立预测。</p>
+<p>序列标注问题不同。一个位置的标签往往和前后位置有关，比如中文分词、词性标注、命名实体识别。预测时不能只看单个位置，还要考虑标签之间的转移关系。</p>
+<p>HMM 和 CRF 都是经典序列模型。它们的共同点是利用状态序列建模，不同点是概率方向不同。</p>
+<h2 id="hmm生成式序列模型">HMM：生成式序列模型</h2>
+<p>隐马尔可夫模型包含两类序列：</p>
+<ul>
+<li>隐状态序列</li>
+<li>观测序列</li>
+</ul>
+<p>隐状态不可直接看到，观测序列可以看到。模型假设隐状态按马尔可夫过程转移，每个隐状态生成一个观测。</p>
+<p>HMM 的三个基本要素是：</p>
+<ul>
+<li>初始状态概率</li>
+<li>状态转移概率</li>
+<li>观测生成概率</li>
+</ul>
+<p>这三个要素定义了一个完整的生成过程。</p>
+<h2 id="hmm-的三个基本问题">HMM 的三个基本问题</h2>
+<p>HMM 经典地对应三个问题：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>含义</th>
+<th>常用算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>概率计算</td>
+<td>给定模型，观测序列出现概率是多少</td>
+<td>前向后向算法</td>
+</tr>
+<tr>
+<td>学习</td>
+<td>给定观测序列，估计模型参数</td>
+<td>Baum-Welch / EM</td>
+</tr>
+<tr>
+<td>预测</td>
+<td>给定观测序列，找最可能隐状态序列</td>
+<td>Viterbi</td>
+</tr>
+</tbody>
+</table>
+<p>这三个问题非常值得记。很多序列模型都会有类似的计算、学习和解码问题。</p>
+<h2 id="viterbi找最优路径">Viterbi：找最优路径</h2>
+<p>Viterbi 算法是动态规划。</p>
+<p>它不是枚举所有可能状态序列，而是逐步保留到当前位置为止的最优路径分数。每一步只需要看上一时刻的最优状态转移。</p>
+<p>这利用了 HMM 的马尔可夫性质：当前状态只依赖前一个状态。</p>
+<p>动态规划的价值在这里非常明显：指数级路径搜索变成了可计算的问题。</p>
+<h2 id="crf条件概率下的序列标注">CRF：条件概率下的序列标注</h2>
+<p>条件随机场，尤其是线性链 CRF，常用于序列标注。</p>
+<p>和 HMM 不同，CRF 直接建模：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(Y | X)
+</span></span></code></pre></div><p>也就是给定观测序列 X，标签序列 Y 的条件概率。</p>
+<p>这让 CRF 可以更灵活地使用输入特征，不必像 HMM 那样强假设观测由状态独立生成。</p>
+<h2 id="生成式与判别式的区别">生成式与判别式的区别</h2>
+<p>HMM 是生成式模型，关注联合概率：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(X, Y)
+</span></span></code></pre></div><p>CRF 是判别式模型，关注条件概率：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(Y | X)
+</span></span></code></pre></div><p>生成式模型有完整的数据生成假设，结构清晰，但假设可能较强。判别式模型直接面向预测目标，通常能使用更丰富的特征。</p>
+<p>这也是从朴素贝叶斯到逻辑回归、从 HMM 到 CRF 的一条常见对照线。</p>
+<h2 id="crf-的特征函数">CRF 的特征函数</h2>
+<p>CRF 用特征函数描述输入、当前位置标签和相邻标签之间的关系。</p>
+<p>例如在命名实体识别里，可以设计这样的特征：</p>
+<ul>
+<li>当前词是否是数字。</li>
+<li>当前词是否出现在地名词典。</li>
+<li>前一个标签是否是 B-PER。</li>
+<li>当前标签是否是 I-PER。</li>
+</ul>
+<p>线性链 CRF 会给这些特征学习权重，再通过全局归一化得到标签序列概率。</p>
+<h2 id="小结">小结</h2>
+<p>HMM 和 CRF 都处理序列结构。HMM 从生成过程出发，适合理解隐状态、转移概率和动态规划。CRF 从条件概率出发，适合理解判别式序列标注和特征函数。</p>
+<p>如果只记一件事：HMM 是 <code>P(X, Y)</code>，CRF 是 <code>P(Y | X)</code>。这就是两者最核心的分水岭。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/statistical-learning-margin-ensemble-em/index.html">
+                        <span>上一篇</span>
+                        <strong>统计学习方法读书笔记：SVM、提升方法与 EM</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/statistical-learning-unsupervised-methods/index.html">
+                        <span>下一篇</span>
+                        <strong>统计学习方法读书笔记：无监督学习的结构发现</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>
