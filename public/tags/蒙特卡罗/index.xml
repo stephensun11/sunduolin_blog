@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>蒙特卡罗 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E8%92%99%E7%89%B9%E5%8D%A1%E7%BD%97/</link>
+    <description>Recent content in 蒙特卡罗 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 08:15:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E8%92%99%E7%89%B9%E5%8D%A1%E7%BD%97/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>概率论：采样、蒙特卡罗与经验估计</title>
+      <link>https://example.com/math/probability-sampling-monte-carlo/</link>
+      <pubDate>Fri, 10 Jul 2026 08:15:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-sampling-monte-carlo/</guid>
+      <description>理解为什么机器学习经常用样本平均近似期望，以及采样方差如何影响训练和推理稳定性。</description>
+    </item>
+  </channel>
+</rss>

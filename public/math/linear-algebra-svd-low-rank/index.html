@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线性代数：SVD、低秩近似与推荐系统 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#svd-是什么">SVD 是什么</a></li>
+    <li><a href="#为什么-svd-比特征分解更通用">为什么 SVD 比特征分解更通用</a></li>
+    <li><a href="#低秩近似">低秩近似</a></li>
+    <li><a href="#推荐系统的直觉">推荐系统的直觉</a></li>
+    <li><a href="#文本中的-lsa">文本中的 LSA</a></li>
+    <li><a href="#svd-和-pca-的关系">SVD 和 PCA 的关系</a></li>
+    <li><a href="#奇异值谱">奇异值谱</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+    <span aria-hidden="true">/</span>
+    <span>线性代数：SVD、低秩近似与推荐系统</span>
+</nav>
+
+                <h1>线性代数：SVD、低秩近似与推荐系统</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a></span>
+                    
+                    <span class="tag"><a href="../../tags/svd/index.html">SVD</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BD%8E%E7%A7%A9%E8%BF%91%E4%BC%BC/index.html">低秩近似</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/index.html">推荐系统</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="svd-是什么">SVD 是什么</h2>
+<p>奇异值分解，也就是 SVD，可以把任意矩阵分解成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>A = U Sigma V^T
+</span></span></code></pre></div><p>其中：</p>
+<ul>
+<li><code>U</code> 表示左侧的一组正交方向。</li>
+<li><code>V</code> 表示右侧的一组正交方向。</li>
+<li><code>Sigma</code> 是对角矩阵，对角线上的值叫奇异值。</li>
+</ul>
+<p>奇异值越大，说明对应方向承载的信息越强。</p>
+<h2 id="为什么-svd-比特征分解更通用">为什么 SVD 比特征分解更通用</h2>
+<p>特征分解通常要求方阵，而且很多漂亮性质还需要对称矩阵。</p>
+<p>SVD 更通用。它可以用于任意形状的矩阵：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>A: [m, n]
+</span></span></code></pre></div><p>这对机器学习很重要，因为数据矩阵经常不是方阵。比如用户-物品评分矩阵、文档-词矩阵、样本-特征矩阵，都天然是长方形。</p>
+<h2 id="低秩近似">低秩近似</h2>
+<p>如果只保留最大的前 <code>k</code> 个奇异值，就得到低秩近似：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>A_k = U_k Sigma_k V_k^T
+</span></span></code></pre></div><p>当 <code>k</code> 比原始维度小很多时，<code>A_k</code> 就是对 <code>A</code> 的压缩。</p>
+<p>直觉上，我们只保留最重要的方向，把噪声和细碎变化丢掉。</p>
+<p>这在机器学习里非常常见：</p>
+<ul>
+<li>降维。</li>
+<li>去噪。</li>
+<li>压缩模型或数据。</li>
+<li>文本语义表示。</li>
+<li>推荐系统矩阵补全。</li>
+</ul>
+<h2 id="推荐系统的直觉">推荐系统的直觉</h2>
+<p>想象一个用户-电影评分矩阵：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>R[user, movie]
+</span></span></code></pre></div><p>这个矩阵通常很稀疏，因为每个用户只看过少量电影。</p>
+<p>低秩假设认为：用户偏好和电影属性可以由少数潜在因子解释。比如科幻、喜剧、动作、文艺等隐含维度。</p>
+<p>矩阵分解会把评分矩阵近似为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>R ~= P Q^T
+</span></span></code></pre></div><p>其中 <code>P</code> 是用户向量，<code>Q</code> 是电影向量。预测评分就变成两个向量的点积。</p>
+<p>这和 embedding 的思想很接近：把离散对象放进连续向量空间，再用向量运算表达关系。</p>
+<h2 id="文本中的-lsa">文本中的 LSA</h2>
+<p>潜在语义分析 LSA 也使用类似思想。</p>
+<p>把文档-词频矩阵做 SVD，只保留主要奇异值，就能得到低维语义空间。</p>
+<p>在这个空间里，同义词、相关文档可能更接近。虽然现代 NLP 已经大量使用神经 embedding，但矩阵分解是理解语义空间的经典入口。</p>
+<h2 id="svd-和-pca-的关系">SVD 和 PCA 的关系</h2>
+<p>PCA 可以通过协方差矩阵的特征分解来做，也可以通过中心化数据矩阵的 SVD 来做。</p>
+<p>如果数据矩阵是 <code>X</code>，SVD 会直接找到数据的主要方向。</p>
+<p>这也是为什么很多数值实现里更喜欢用 SVD：它通常更稳定，也更适合处理不同形状的数据矩阵。</p>
+<h2 id="奇异值谱">奇异值谱</h2>
+<p>观察奇异值大小，可以判断矩阵的信息集中程度。</p>
+<p>如果前几个奇异值很大，后面快速变小，说明矩阵有明显低秩结构。</p>
+<p>如果奇异值下降很慢，说明信息分散，低秩压缩会损失更多。</p>
+<p>这种“谱”的视角在模型分析、压缩和表示学习里都很有用。</p>
+<h2 id="小结">小结</h2>
+<p>SVD 把矩阵拆成方向和强度，低秩近似保留最重要的信息方向。它连接了降维、去噪、推荐系统、文本语义和 PCA。</p>
+<p>如果说特征分解帮助理解方阵结构，那么 SVD 是机器学习里更通用的矩阵分解工具。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/linear-algebra-eigen-pca/index.html">
+                        <span>上一篇</span>
+                        <strong>线性代数：特征值、特征向量与 PCA</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/linear-algebra-positive-definite-covariance/index.html">
+                        <span>下一篇</span>
+                        <strong>线性代数：二次型、正定矩阵与协方差</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

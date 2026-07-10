@@ -6,8 +6,36 @@
     <description>Recent content in 线性代数 on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 11:10:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2026 08:35:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性代数：二次型、正定矩阵与协方差</title>
+      <link>https://example.com/math/linear-algebra-positive-definite-covariance/</link>
+      <pubDate>Fri, 10 Jul 2026 08:35:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-positive-definite-covariance/</guid>
+      <description>把二次型、正定矩阵和协方差矩阵联系起来，理解优化曲面、距离度量和多元高斯的线性代数基础。</description>
+    </item>
+    <item>
+      <title>线性代数：SVD、低秩近似与推荐系统</title>
+      <link>https://example.com/math/linear-algebra-svd-low-rank/</link>
+      <pubDate>Fri, 10 Jul 2026 08:30:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-svd-low-rank/</guid>
+      <description>理解奇异值分解如何把矩阵拆成方向和强度，以及为什么低秩近似能用于压缩、降噪和推荐。</description>
+    </item>
+    <item>
+      <title>线性代数：特征值、特征向量与 PCA</title>
+      <link>https://example.com/math/linear-algebra-eigen-pca/</link>
+      <pubDate>Fri, 10 Jul 2026 08:25:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-eigen-pca/</guid>
+      <description>用机器学习视角理解特征值和特征向量，并把它们连接到 PCA 的最大方差方向。</description>
+    </item>
+    <item>
+      <title>线性代数：最小二乘与线性回归</title>
+      <link>https://example.com/math/linear-algebra-least-squares-linear-regression/</link>
+      <pubDate>Fri, 10 Jul 2026 08:20:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-least-squares-linear-regression/</guid>
+      <description>从矩阵视角理解线性回归为什么可以写成最小二乘，以及正规方程背后的投影直觉。</description>
+    </item>
     <item>
       <title>AI 数学基础：向量、矩阵与线性变换</title>
       <link>https://example.com/math/linear-algebra-for-ai-vectors-matrices/</link>

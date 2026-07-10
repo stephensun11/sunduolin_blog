@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>降维 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E9%99%8D%E7%BB%B4/</link>
+    <description>Recent content in 降维 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 08:25:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E9%99%8D%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性代数：特征值、特征向量与 PCA</title>
+      <link>https://example.com/math/linear-algebra-eigen-pca/</link>
+      <pubDate>Fri, 10 Jul 2026 08:25:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-eigen-pca/</guid>
+      <description>用机器学习视角理解特征值和特征向量，并把它们连接到 PCA 的最大方差方向。</description>
+    </item>
+  </channel>
+</rss>

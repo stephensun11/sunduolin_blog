@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概率论：采样、蒙特卡罗与经验估计 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么机器学习离不开采样">为什么机器学习离不开采样</a></li>
+    <li><a href="#蒙特卡罗估计">蒙特卡罗估计</a></li>
+    <li><a href="#mini-batch-训练就是一种估计">mini-batch 训练就是一种估计</a></li>
+    <li><a href="#估计方差">估计方差</a></li>
+    <li><a href="#大数定律的直觉">大数定律的直觉</a></li>
+    <li><a href="#重要性采样的直觉">重要性采样的直觉</a></li>
+    <li><a href="#生成模型里的采样">生成模型里的采样</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+    <span aria-hidden="true">/</span>
+    <span>概率论：采样、蒙特卡罗与经验估计</span>
+</nav>
+
+                <h1>概率论：采样、蒙特卡罗与经验估计</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E9%87%87%E6%A0%B7/index.html">采样</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E8%92%99%E7%89%B9%E5%8D%A1%E7%BD%97/index.html">蒙特卡罗</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%9F%E6%9C%9B/index.html">期望</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么机器学习离不开采样">为什么机器学习离不开采样</h2>
+<p>机器学习理论里经常写期望：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>E[loss(f(x), y)]
+</span></span></code></pre></div><p>但真实训练时，我们拿不到完整的数据分布，只能拿到有限样本。于是训练会用样本平均去近似期望：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>1/n * sum_i loss(f(x_i), y_i)
+</span></span></code></pre></div><p>这就是经验风险最小化的基本想法。</p>
+<p>采样把“对整个分布求平均”变成“对抽到的样本求平均”。</p>
+<h2 id="蒙特卡罗估计">蒙特卡罗估计</h2>
+<p>蒙特卡罗方法的核心很朴素：如果一个量可以写成期望，就可以用随机样本的平均来近似。</p>
+<p>假设：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>mu = E[g(X)]
+</span></span></code></pre></div><p>从分布中采样：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x1, x2, ..., xn
+</span></span></code></pre></div><p>估计量是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>mu_hat = 1/n * sum_i g(x_i)
+</span></span></code></pre></div><p>样本越多，估计通常越稳定。</p>
+<h2 id="mini-batch-训练就是一种估计">mini-batch 训练就是一种估计</h2>
+<p>神经网络训练时，全量数据上的梯度可能很贵。实际训练通常抽一个 mini-batch：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>gradient_batch = average gradient on batch
+</span></span></code></pre></div><p>这不是完整梯度，而是完整梯度的随机估计。</p>
+<p>batch 越小，估计噪声通常越大；batch 越大，估计更稳定，但计算和显存成本也更高。</p>
+<p>所以 batch size 不只是工程参数，它也影响优化里的随机性。</p>
+<h2 id="估计方差">估计方差</h2>
+<p>采样估计会有波动。这个波动可以用方差理解。</p>
+<p>如果估计量方差很大，就会出现：</p>
+<ul>
+<li>训练 loss 抖动明显。</li>
+<li>强化学习回报估计不稳定。</li>
+<li>生成采样结果差异很大。</li>
+<li>评估指标在小测试集上波动明显。</li>
+</ul>
+<p>降低方差的方法包括增加样本数量、使用更稳定的估计器、做 baseline、控制采样温度等。</p>
+<h2 id="大数定律的直觉">大数定律的直觉</h2>
+<p>大数定律告诉我们，独立同分布样本的平均值会随着样本数量增加而接近期望。</p>
+<p>对机器学习来说，这解释了为什么“更多数据”通常能让估计更靠谱。</p>
+<p>但它不保证小样本一定稳定，也不保证训练集分布和真实线上分布一致。样本平均只是在当前采样机制下接近期望。</p>
+<p>如果采样有偏，估计也会有偏。</p>
+<h2 id="重要性采样的直觉">重要性采样的直觉</h2>
+<p>有时目标分布不好采样，但另一个分布更容易采样。重要性采样会从容易采样的分布里取样，再用权重校正。</p>
+<p>直觉上，它在说：如果某些样本不是从目标分布自然来的，就要按概率比重新加权。</p>
+<p>推荐系统、强化学习离线评估、稀有事件估计里都可能遇到类似思想。</p>
+<p>这一块不需要一开始就深挖公式，但要知道采样分布和目标分布不一致时，直接平均可能会出问题。</p>
+<h2 id="生成模型里的采样">生成模型里的采样</h2>
+<p>语言模型推理时也在采样。</p>
+<p>模型给出下一个 token 的概率分布后，可以用不同策略选 token：</p>
+<ul>
+<li>greedy：永远选概率最大的 token。</li>
+<li>temperature sampling：调整分布尖锐程度。</li>
+<li>top-k：只在概率最高的 k 个 token 中采样。</li>
+<li>top-p：只在累计概率达到阈值的候选集合中采样。</li>
+</ul>
+<p>这些策略都在控制随机性。随机性更强，结果更丰富，但也更容易跑偏。</p>
+<h2 id="小结">小结</h2>
+<p>采样是机器学习把概率理论落到计算里的桥。样本平均近似期望，mini-batch 梯度近似全量梯度，生成模型通过采样把概率分布变成具体输出。</p>
+<p>理解采样，就能更好地理解训练波动、评估置信度和生成随机性。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/probability-mle-map-cross-entropy/index.html">
+                        <span>上一篇</span>
+                        <strong>概率论：最大似然、MAP 与交叉熵</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/linear-algebra-least-squares-linear-regression/index.html">
+                        <span>下一篇</span>
+                        <strong>线性代数：最小二乘与线性回归</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

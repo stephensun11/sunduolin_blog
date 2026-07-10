@@ -6,8 +6,15 @@
     <description>Recent content in 信息论 on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 11:30:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2026 08:45:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>信息论：互信息、表示学习与信息瓶颈</title>
+      <link>https://example.com/math/information-theory-mutual-information-representation/</link>
+      <pubDate>Fri, 10 Jul 2026 08:45:00 +0800</pubDate>
+      <guid>https://example.com/math/information-theory-mutual-information-representation/</guid>
+      <description>从互信息理解变量之间共享了多少信息，并连接到表示学习、特征选择和信息瓶颈思想。</description>
+    </item>
     <item>
       <title>AI 数学基础：熵、交叉熵与 KL 散度</title>
       <link>https://example.com/math/information-theory-entropy-cross-entropy/</link>

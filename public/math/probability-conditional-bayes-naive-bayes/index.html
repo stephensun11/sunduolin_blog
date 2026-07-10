@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概率论：条件概率、贝叶斯公式与朴素贝叶斯 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么先学条件概率">为什么先学条件概率</a></li>
+    <li><a href="#条件概率">条件概率</a></li>
+    <li><a href="#乘法公式">乘法公式</a></li>
+    <li><a href="#贝叶斯公式">贝叶斯公式</a></li>
+    <li><a href="#朴素贝叶斯为什么朴素">朴素贝叶斯为什么朴素</a></li>
+    <li><a href="#文本分类里的直觉">文本分类里的直觉</a></li>
+    <li><a href="#和现代模型的关系">和现代模型的关系</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+    <span aria-hidden="true">/</span>
+    <span>概率论：条件概率、贝叶斯公式与朴素贝叶斯</span>
+</nav>
+
+                <h1>概率论：条件概率、贝叶斯公式与朴素贝叶斯</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87/index.html">条件概率</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E8%B4%9D%E5%8F%B6%E6%96%AF/index.html">贝叶斯</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/index.html">朴素贝叶斯</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么先学条件概率">为什么先学条件概率</h2>
+<p>机器学习里几乎所有“看到输入以后再判断”的问题，都可以写成条件概率。</p>
+<p>分类不是只问 <code>P(y)</code>，而是问 <code>P(y | x)</code>。语言模型不是只问某个 token 的概率，而是问 <code>P(next token | context)</code>。强化学习里的策略也常写成 <code>pi(a | s)</code>，表示在状态 <code>s</code> 下选择动作 <code>a</code> 的概率。</p>
+<p>条件概率让模型从“总体上可能发生什么”，转向“在已经观察到一些信息后，什么更可能发生”。</p>
+<h2 id="条件概率">条件概率</h2>
+<p>条件概率的定义是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(A | B) = P(A and B) / P(B)
+</span></span></code></pre></div><p>这里要求 <code>P(B) &gt; 0</code>。</p>
+<p>直觉是：既然已经知道 <code>B</code> 发生了，样本空间就缩小到 <code>B</code> 内部。我们只关心在这个更小的世界里，<code>A</code> 发生的比例。</p>
+<p>在机器学习里，<code>B</code> 经常是观测到的特征，<code>A</code> 经常是要预测的标签。</p>
+<h2 id="乘法公式">乘法公式</h2>
+<p>把条件概率公式移项，可以得到：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(A and B) = P(A | B) P(B)
+</span></span></code></pre></div><p>这条式子非常基础，但很有用。它告诉我们，联合概率可以被拆成“先发生一个事件，再在这个条件下发生另一个事件”。</p>
+<p>如果扩展到多个变量，就会得到链式分解：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(x1, x2, x3) = P(x1) P(x2 | x1) P(x3 | x1, x2)
+</span></span></code></pre></div><p>自回归语言模型正是这种思想的深度学习版本：一句话的概率被拆成一连串下一个 token 的条件概率。</p>
+<h2 id="贝叶斯公式">贝叶斯公式</h2>
+<p>贝叶斯公式把 <code>P(A | B)</code> 和 <code>P(B | A)</code> 联系起来：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(A | B) = P(B | A) P(A) / P(B)
+</span></span></code></pre></div><p>在机器学习里，经常写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(y | x) = P(x | y) P(y) / P(x)
+</span></span></code></pre></div><p>这几个量的含义很清楚：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>P(y)</code></td>
+<td>先验概率，还没看输入时某个类别本来有多常见</td>
+</tr>
+<tr>
+<td>`P(x</td>
+<td>y)`</td>
+</tr>
+<tr>
+<td>`P(y</td>
+<td>x)`</td>
+</tr>
+<tr>
+<td><code>P(x)</code></td>
+<td>证据项，负责归一化</td>
+</tr>
+</tbody>
+</table>
+<p>预测分类时，<code>P(x)</code> 对所有类别一样，所以常比较：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(x | y) P(y)
+</span></span></code></pre></div><p>这就是很多生成式分类模型的基本思路。</p>
+<h2 id="朴素贝叶斯为什么朴素">朴素贝叶斯为什么朴素</h2>
+<p>朴素贝叶斯的关键假设是：给定类别后，各个特征条件独立。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(x1, x2, ..., xn | y) = P(x1 | y) P(x2 | y) ... P(xn | y)
+</span></span></code></pre></div><p>这个假设经常不完全真实。文本里的词明显会互相影响，图像里的像素也不是独立的。</p>
+<p>但它带来的好处很大：原本很难估计的高维联合概率，被拆成很多低维概率。样本不多时，这种简化反而常常很稳。</p>
+<h2 id="文本分类里的直觉">文本分类里的直觉</h2>
+<p>假设要判断一封邮件是不是垃圾邮件。</p>
+<p>朴素贝叶斯会比较：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(spam | words) 和 P(normal | words)
+</span></span></code></pre></div><p>根据贝叶斯公式，可以转成比较：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(spam) * product_i P(word_i | spam)
+</span></span><span style="display:flex;"><span>P(normal) * product_i P(word_i | normal)
+</span></span></code></pre></div><p>如果“中奖”“免费”“点击”这类词在垃圾邮件中更常见，它们会提高 <code>P(spam | words)</code>。</p>
+<p>实际计算时通常取对数，避免很多小概率相乘造成数值下溢：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>log P(y) + sum_i log P(word_i | y)
+</span></span></code></pre></div><h2 id="和现代模型的关系">和现代模型的关系</h2>
+<p>朴素贝叶斯很简单，但它教会我们三件事：</p>
+<ol>
+<li>预测可以看成后验概率估计。</li>
+<li>强假设可以降低估计难度。</li>
+<li>对数概率比原始概率更适合计算。</li>
+</ol>
+<p>这些思想在现代模型里仍然存在。语言模型训练的是条件概率，交叉熵本质上在惩罚正确 token 的负对数概率，很多对齐算法也会直接比较对数概率差。</p>
+<h2 id="小结">小结</h2>
+<p>条件概率描述“已知信息后的不确定性”，贝叶斯公式把先验、似然和后验连起来，朴素贝叶斯则用条件独立假设把高维概率拆成可估计的小块。</p>
+<p>理解这一条线，再看分类、生成、语言模型和强化学习策略，会顺很多。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/information-theory-entropy-cross-entropy/index.html">
+                        <span>上一篇</span>
+                        <strong>AI 数学基础：熵、交叉熵与 KL 散度</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/probability-common-distributions-for-ml/index.html">
+                        <span>下一篇</span>
+                        <strong>概率论：机器学习里常见的概率分布</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

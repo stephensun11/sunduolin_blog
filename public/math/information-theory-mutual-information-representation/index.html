@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>信息论：互信息、表示学习与信息瓶颈 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#互信息想衡量什么">互信息想衡量什么</a></li>
+    <li><a href="#公式直觉">公式直觉</a></li>
+    <li><a href="#特征选择里的互信息">特征选择里的互信息</a></li>
+    <li><a href="#表示学习里的问题">表示学习里的问题</a></li>
+    <li><a href="#信息瓶颈">信息瓶颈</a></li>
+    <li><a href="#自监督学习中的影子">自监督学习中的影子</a></li>
+    <li><a href="#估计互信息很难">估计互信息很难</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+    <span aria-hidden="true">/</span>
+    <span>信息论：互信息、表示学习与信息瓶颈</span>
+</nav>
+
+                <h1>信息论：互信息、表示学习与信息瓶颈</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BA%92%E4%BF%A1%E6%81%AF/index.html">互信息</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E8%A1%A8%E7%A4%BA%E5%AD%A6%E4%B9%A0/index.html">表示学习</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BF%A1%E6%81%AF%E7%93%B6%E9%A2%88/index.html">信息瓶颈</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="互信息想衡量什么">互信息想衡量什么</h2>
+<p>熵衡量一个变量的不确定性。条件熵衡量在知道另一个变量后，剩下多少不确定性。</p>
+<p>互信息衡量的是：知道一个变量后，另一个变量的不确定性减少了多少。</p>
+<p>直觉上，互信息回答：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X 和 Y 共享了多少信息？
+</span></span></code></pre></div><p>如果两个变量独立，知道 <code>X</code> 对判断 <code>Y</code> 没帮助，互信息就是 0。</p>
+<h2 id="公式直觉">公式直觉</h2>
+<p>互信息可以写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>I(X; Y) = H(Y) - H(Y | X)
+</span></span></code></pre></div><p>意思是：原本 <code>Y</code> 的不确定性是 <code>H(Y)</code>，知道 <code>X</code> 后剩下 <code>H(Y | X)</code>，减少的部分就是 <code>X</code> 提供的信息。</p>
+<p>也可以对称地写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>I(X; Y) = H(X) - H(X | Y)
+</span></span></code></pre></div><p>所以互信息对 <code>X</code> 和 <code>Y</code> 是对称的。</p>
+<h2 id="特征选择里的互信息">特征选择里的互信息</h2>
+<p>如果一个特征和标签互信息很高，说明这个特征对预测标签有帮助。</p>
+<p>例如在垃圾邮件分类里，“免费”“中奖”“点击”这些词可能和垃圾标签有较高互信息。</p>
+<p>这就是为什么互信息可以用于特征选择：保留和目标变量共享信息多的特征，丢掉几乎无关的特征。</p>
+<p>当然，高互信息不等于因果关系。它只说明统计相关的信息共享。</p>
+<h2 id="表示学习里的问题">表示学习里的问题</h2>
+<p>表示学习想学一个表示 <code>Z</code>，让它既保留任务相关信息，又丢掉无关噪声。</p>
+<p>可以粗略理解为：</p>
+<ul>
+<li><code>Z</code> 要和标签 <code>Y</code> 有足够高的互信息。</li>
+<li><code>Z</code> 不应该把输入 <code>X</code> 里的所有细节都原封不动记下来。</li>
+</ul>
+<p>这就是信息瓶颈思想的直觉：好的表示应该压缩输入，但保留对任务有用的信息。</p>
+<h2 id="信息瓶颈">信息瓶颈</h2>
+<p>信息瓶颈可以写成一个权衡：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>保留 I(Z; Y)
+</span></span><span style="display:flex;"><span>压缩 I(Z; X)
+</span></span></code></pre></div><p>它希望表示 <code>Z</code> 不要只是复制输入 <code>X</code>，而要提取对预测 <code>Y</code> 有用的部分。</p>
+<p>这和机器学习中的泛化有关系。模型如果记住太多训练样本细节，可能过拟合；如果表示过度压缩，又可能丢掉关键信息。</p>
+<h2 id="自监督学习中的影子">自监督学习中的影子</h2>
+<p>很多自监督学习方法虽然不直接写互信息公式，但背后也有类似动机：让相关视图的表示接近，让无关样本的表示分开。</p>
+<p>对比学习里，正样本对应该共享语义信息，负样本对应该区分开。</p>
+<p>这可以看成在学习一种表示，使它保留增强前后共同的信息，而忽略数据增强带来的无关变化。</p>
+<h2 id="估计互信息很难">估计互信息很难</h2>
+<p>互信息定义清楚，但在高维连续变量上很难准确估计。</p>
+<p>深度学习里的表示往往维度高、分布复杂，直接估计互信息并不容易。</p>
+<p>所以实践中更多使用代理目标，比如对比损失、交叉熵、重构损失或正则化项，间接推动表示保留有用信息。</p>
+<h2 id="小结">小结</h2>
+<p>互信息衡量两个变量共享的信息量。它能帮助我们理解特征选择、表示学习和信息瓶颈：好的表示不是保留全部输入，而是保留对任务有用的信息。</p>
+<p>信息论给机器学习提供的不是一个随手可算的万能指标，而是一种看待表示和泛化的语言。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/calculus-optimization-convexity-newton/index.html">
+                        <span>上一篇</span>
+                        <strong>微积分与优化：凸性、Hessian 与牛顿法</strong>
+                    </a>
+                    
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

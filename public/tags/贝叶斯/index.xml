@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>贝叶斯 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF/</link>
+    <description>Recent content in 贝叶斯 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 08:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>概率论：条件概率、贝叶斯公式与朴素贝叶斯</title>
+      <link>https://example.com/math/probability-conditional-bayes-naive-bayes/</link>
+      <pubDate>Fri, 10 Jul 2026 08:00:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-conditional-bayes-naive-bayes/</guid>
+      <description>从条件概率出发理解贝叶斯公式，以及为什么朴素贝叶斯能把文本分类问题拆成可估计的概率。</description>
+    </item>
+  </channel>
+</rss>

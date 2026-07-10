@@ -6,8 +6,15 @@
     <description>Recent content in 交叉熵 on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 11:30:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2026 08:10:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>概率论：最大似然、MAP 与交叉熵</title>
+      <link>https://example.com/math/probability-mle-map-cross-entropy/</link>
+      <pubDate>Fri, 10 Jul 2026 08:10:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-mle-map-cross-entropy/</guid>
+      <description>把最大似然、最大后验和交叉熵放在同一条线上，理解训练目标为什么常写成负对数概率。</description>
+    </item>
     <item>
       <title>AI 数学基础：熵、交叉熵与 KL 散度</title>
       <link>https://example.com/math/information-theory-entropy-cross-entropy/</link>

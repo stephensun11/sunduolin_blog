@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线性代数：最小二乘与线性回归 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么从线性回归学线代">为什么从线性回归学线代</a></li>
+    <li><a href="#把数据写成矩阵">把数据写成矩阵</a></li>
+    <li><a href="#最小二乘目标">最小二乘目标</a></li>
+    <li><a href="#几何直觉投影">几何直觉：投影</a></li>
+    <li><a href="#正规方程">正规方程</a></li>
+    <li><a href="#欠定超定与秩">欠定、超定与秩</a></li>
+    <li><a href="#岭回归与稳定性">岭回归与稳定性</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+    <span aria-hidden="true">/</span>
+    <span>线性代数：最小二乘与线性回归</span>
+</nav>
+
+                <h1>线性代数：最小二乘与线性回归</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98/index.html">最小二乘</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/index.html">线性回归</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%8A%95%E5%BD%B1/index.html">投影</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么从线性回归学线代">为什么从线性回归学线代</h2>
+<p>线性回归是最适合把线性代数和机器学习连起来的模型。</p>
+<p>它足够简单，但包含了很多关键思想：矩阵表示、参数估计、损失函数、投影、正则化和泛化。</p>
+<p>如果理解了线性回归里的线代结构，再看更复杂的神经网络线性层、注意力投影和 embedding 变换，会轻松很多。</p>
+<h2 id="把数据写成矩阵">把数据写成矩阵</h2>
+<p>假设有 <code>n</code> 个样本，每个样本有 <code>d</code> 个特征。</p>
+<p>可以把所有样本堆成一个矩阵：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X: [n, d]
+</span></span></code></pre></div><p>标签写成向量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>y: [n]
+</span></span></code></pre></div><p>线性模型写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>y_hat = Xw
+</span></span></code></pre></div><p>这里 <code>w</code> 是要学习的参数。</p>
+<h2 id="最小二乘目标">最小二乘目标</h2>
+<p>线性回归希望预测值接近真实值。最常见的目标是平方误差：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>min_w ||Xw - y||_2^2
+</span></span></code></pre></div><p>这个式子叫最小二乘。</p>
+<p>从机器学习角度看，它是经验风险最小化；从概率角度看，如果假设观测噪声是高斯分布，它也对应最大似然估计。</p>
+<h2 id="几何直觉投影">几何直觉：投影</h2>
+<p><code>Xw</code> 能表示什么？</p>
+<p>它表示 <code>X</code> 的列向量的线性组合。也就是说，所有可能的预测 <code>Xw</code> 都落在 <code>X</code> 的列空间里。</p>
+<p>如果真实标签 <code>y</code> 不在这个列空间里，就无法完全拟合。最小二乘会找一个列空间里的点，让它离 <code>y</code> 最近。</p>
+<p>这个最近点就是 <code>y</code> 在列空间上的投影。</p>
+<p>所以最小二乘不只是优化问题，也是几何投影问题。</p>
+<h2 id="正规方程">正规方程</h2>
+<p>对目标函数求导并令梯度为 0，可以得到正规方程：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X^T X w = X^T y
+</span></span></code></pre></div><p>如果 <code>X^T X</code> 可逆，解是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>w = (X^T X)^(-1) X^T y
+</span></span></code></pre></div><p>实际工程里通常不会显式求逆，因为数值稳定性和计算效率都不理想。更常用的是梯度下降、QR 分解、SVD 或成熟线性代数库。</p>
+<p>但正规方程仍然值得理解，因为它展示了最小二乘的结构。</p>
+<h2 id="欠定超定与秩">欠定、超定与秩</h2>
+<p>如果样本数多于特征数，方程通常是超定的，不能完全满足所有样本，只能找最小误差解。</p>
+<p>如果特征数多于样本数，方程可能是欠定的，会有很多解。</p>
+<p>矩阵的秩决定了特征中有多少独立信息。特征高度相关时，<code>X^T X</code> 可能病态，参数会变得不稳定。</p>
+<p>这就是为什么线性回归里会讨论多重共线性。</p>
+<h2 id="岭回归与稳定性">岭回归与稳定性</h2>
+<p>岭回归在目标里加入 L2 正则：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>min_w ||Xw - y||_2^2 + lambda ||w||_2^2
+</span></span></code></pre></div><p>对应的方程变成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(X^T X + lambda I)w = X^T y
+</span></span></code></pre></div><p><code>lambda I</code> 会让矩阵更稳定，也会限制参数大小。它牺牲一点训练误差，换来更好的泛化和数值稳定性。</p>
+<h2 id="小结">小结</h2>
+<p>最小二乘把线性回归写成矩阵优化问题。它的核心直觉是：在特征矩阵的列空间里，找离真实标签最近的投影。</p>
+<p>线性回归看似简单，但它把表示、优化、概率假设和正则化都串起来了。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/probability-sampling-monte-carlo/index.html">
+                        <span>上一篇</span>
+                        <strong>概率论：采样、蒙特卡罗与经验估计</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/linear-algebra-eigen-pca/index.html">
+                        <span>下一篇</span>
+                        <strong>线性代数：特征值、特征向量与 PCA</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

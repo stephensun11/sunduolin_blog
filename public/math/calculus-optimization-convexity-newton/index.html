@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微积分与优化：凸性、Hessian 与牛顿法 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么还要学二阶信息">为什么还要学二阶信息</a></li>
+    <li><a href="#凸函数的直觉">凸函数的直觉</a></li>
+    <li><a href="#一阶条件">一阶条件</a></li>
+    <li><a href="#hessian-描述曲率">Hessian 描述曲率</a></li>
+    <li><a href="#牛顿法">牛顿法</a></li>
+    <li><a href="#为什么深度学习不常直接用牛顿法">为什么深度学习不常直接用牛顿法</a></li>
+    <li><a href="#条件数与优化难度">条件数与优化难度</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+    <span aria-hidden="true">/</span>
+    <span>微积分与优化：凸性、Hessian 与牛顿法</span>
+</nav>
+
+                <h1>微积分与优化：凸性、Hessian 与牛顿法</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E5%BE%AE%E7%A7%AF%E5%88%86/index.html">微积分</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BC%98%E5%8C%96/index.html">优化</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%87%B8%E4%BC%98%E5%8C%96/index.html">凸优化</a></span>
+                    
+                    <span class="tag"><a href="../../tags/hessian/index.html">Hessian</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%89%9B%E9%A1%BF%E6%B3%95/index.html">牛顿法</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么还要学二阶信息">为什么还要学二阶信息</h2>
+<p>梯度告诉我们函数在哪个方向上升最快。梯度下降反过来走，就能降低损失。</p>
+<p>但梯度只是一阶信息。它告诉你往哪走，却不告诉你这条路弯得有多厉害。</p>
+<p>Hessian 矩阵提供二阶信息，描述函数在不同方向上的曲率。理解曲率之后，再看学习率、收敛速度、鞍点和牛顿法，会更有画面。</p>
+<h2 id="凸函数的直觉">凸函数的直觉</h2>
+<p>凸函数最重要的特点是：局部最小值就是全局最小值。</p>
+<p>直觉上，凸函数像一个向上的碗。只要找到碗底，就找到了全局最优。</p>
+<p>很多传统机器学习模型有凸优化形式，比如线性回归、逻辑回归、SVM 的某些目标。深度神经网络通常不是凸的，但凸优化仍然是理解优化的基础参照系。</p>
+<h2 id="一阶条件">一阶条件</h2>
+<p>对于可微函数，最优点附近常满足：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>gradient f(x) = 0
+</span></span></code></pre></div><p>这只是候选条件。梯度为 0 的点可能是局部最小，也可能是局部最大，还可能是鞍点。</p>
+<p>深度学习里鞍点很常见。某个点上梯度很小，不代表模型已经到了好位置。</p>
+<h2 id="hessian-描述曲率">Hessian 描述曲率</h2>
+<p>Hessian 是二阶偏导数组成的矩阵：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>H_ij = partial^2 f / partial x_i partial x_j
+</span></span></code></pre></div><p>如果 Hessian 正定，函数在该点附近像向上的碗，倾向于局部最小。</p>
+<p>如果 Hessian 有负特征值，说明存在向下弯的方向。</p>
+<p>这就是为什么特征值、正定矩阵和优化会连在一起：矩阵的谱结构描述了损失曲面的形状。</p>
+<h2 id="牛顿法">牛顿法</h2>
+<p>梯度下降只使用梯度：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x_new = x - eta * gradient
+</span></span></code></pre></div><p>牛顿法使用 Hessian：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x_new = x - H^(-1) gradient
+</span></span></code></pre></div><p>它会根据曲率自动调整不同方向上的步长。曲率大的方向少走一点，曲率小的方向多走一点。</p>
+<p>在接近最优点时，牛顿法可能收敛非常快。</p>
+<h2 id="为什么深度学习不常直接用牛顿法">为什么深度学习不常直接用牛顿法</h2>
+<p>神经网络参数量巨大，Hessian 的规模也巨大。</p>
+<p>如果模型有十亿参数，Hessian 就是十亿乘十亿的矩阵，显式存储和求逆都不可行。</p>
+<p>所以深度学习更常用一阶优化器，比如 SGD、Momentum、Adam。它们牺牲一些二阶精确性，换来可扩展性。</p>
+<p>但二阶思想并没有消失。学习率自适应、预条件、拟牛顿法、自然梯度，都在尝试用便宜方式利用曲率信息。</p>
+<h2 id="条件数与优化难度">条件数与优化难度</h2>
+<p>如果损失曲面在某些方向很陡，在另一些方向很平，优化会变得困难。</p>
+<p>这可以用条件数理解。条件数大，说明不同方向曲率差异大，梯度下降容易在峡谷里来回摆动。</p>
+<p>特征归一化、BatchNorm、合适初始化、残差连接，都可以从某种程度上改善优化几何。</p>
+<h2 id="小结">小结</h2>
+<p>梯度是一阶方向，Hessian 是二阶曲率。凸性让优化问题更可控，牛顿法利用曲率加快收敛，但在大规模深度学习里成本太高。</p>
+<p>理解这些概念，不是为了手写牛顿法训练大模型，而是为了看懂优化器为什么会这样设计。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/linear-algebra-positive-definite-covariance/index.html">
+                        <span>上一篇</span>
+                        <strong>线性代数：二次型、正定矩阵与协方差</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/information-theory-mutual-information-representation/index.html">
+                        <span>下一篇</span>
+                        <strong>信息论：互信息、表示学习与信息瓶颈</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

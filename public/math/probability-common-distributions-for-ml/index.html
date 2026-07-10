@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概率论：机器学习里常见的概率分布 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么要认识分布">为什么要认识分布</a></li>
+    <li><a href="#伯努利分布一次二选一">伯努利分布：一次二选一</a></li>
+    <li><a href="#categorical-分布一次多选一">Categorical 分布：一次多选一</a></li>
+    <li><a href="#二项分布多次伯努利">二项分布：多次伯努利</a></li>
+    <li><a href="#泊松分布单位区间里的计数">泊松分布：单位区间里的计数</a></li>
+    <li><a href="#高斯分布连续变量与噪声">高斯分布：连续变量与噪声</a></li>
+    <li><a href="#多元高斯协方差开始重要">多元高斯：协方差开始重要</a></li>
+    <li><a href="#dirichlet-分布分布上的分布">Dirichlet 分布：分布上的分布</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+    <span aria-hidden="true">/</span>
+    <span>概率论：机器学习里常见的概率分布</span>
+</nav>
+
+                <h1>概率论：机器学习里常见的概率分布</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%88%86%E5%B8%83/index.html">分布</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E9%AB%98%E6%96%AF%E5%88%86%E5%B8%83/index.html">高斯分布</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BC%AF%E5%8A%AA%E5%88%A9%E5%88%86%E5%B8%83/index.html">伯努利分布</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="为什么要认识分布">为什么要认识分布</h2>
+<p>概率分布不是为了背公式。对机器学习来说，分布回答的是：我们对数据、标签、噪声、参数或动作的不确定性，打算用什么形状来描述。</p>
+<p>选错分布，模型假设就会别扭。比如二分类标签天然适合伯努利分布；连续误差常用高斯假设；多类别标签常用 Categorical 分布。</p>
+<p>这篇只整理最常见、最容易在机器学习里遇到的分布。</p>
+<h2 id="伯努利分布一次二选一">伯努利分布：一次二选一</h2>
+<p>伯努利分布描述一次 0/1 事件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X ~ Bernoulli(p)
+</span></span></code></pre></div><p><code>X = 1</code> 的概率是 <code>p</code>，<code>X = 0</code> 的概率是 <code>1 - p</code>。</p>
+<p>机器学习里的典型场景：</p>
+<ul>
+<li>二分类标签。</li>
+<li>一个 token 是否命中某个条件。</li>
+<li>一个样本是否被模型判对。</li>
+<li>dropout 中某个神经元是否保留。</li>
+</ul>
+<p>二分类交叉熵可以理解为伯努利分布下的负对数似然。</p>
+<h2 id="categorical-分布一次多选一">Categorical 分布：一次多选一</h2>
+<p>Categorical 分布描述多类别中的一次选择。</p>
+<p>比如三分类模型输出：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>概率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>猫</td>
+<td>0.70</td>
+</tr>
+<tr>
+<td>狗</td>
+<td>0.20</td>
+</tr>
+<tr>
+<td>鸟</td>
+<td>0.10</td>
+</tr>
+</tbody>
+</table>
+<p>这就是一个 Categorical 分布。</p>
+<p>语言模型对词表中下一个 token 的预测，也是 Categorical 分布。softmax 的作用，就是把一组 logits 转成一个合法的概率分布。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>p_i = exp(z_i) / sum_j exp(z_j)
+</span></span></code></pre></div><h2 id="二项分布多次伯努利">二项分布：多次伯努利</h2>
+<p>二项分布描述 <code>n</code> 次独立 0/1 实验里，成功次数是多少：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X ~ Binomial(n, p)
+</span></span></code></pre></div><p>它适合理解“重复试验的命中次数”。例如模型在一批样本上的正确个数，可以粗略看成二项分布。当然真实训练中样本不完全独立，难度也不完全相同，但这个视角有助于理解准确率的波动。</p>
+<p>如果 batch 很小，正确率上下跳动会很明显；batch 变大，统计量会更稳定。</p>
+<h2 id="泊松分布单位区间里的计数">泊松分布：单位区间里的计数</h2>
+<p>泊松分布常用于描述一段时间或空间内发生的次数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X ~ Poisson(lambda)
+</span></span></code></pre></div><p>它适合稀疏计数场景，比如某类事件的出现次数、点击流中的稀有行为、日志中的异常告警数量。</p>
+<p>在推荐、广告和风控里，经常会遇到计数型数据。理解泊松分布，有助于判断什么时候不应该直接用高斯误差去套所有问题。</p>
+<h2 id="高斯分布连续变量与噪声">高斯分布：连续变量与噪声</h2>
+<p>高斯分布也叫正态分布：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>X ~ Normal(mu, sigma^2)
+</span></span></code></pre></div><p>它在机器学习里出现得非常频繁：</p>
+<ul>
+<li>线性回归常假设误差服从高斯分布。</li>
+<li>初始化权重时常从高斯或近似高斯分布采样。</li>
+<li>VAE 中会让潜变量接近标准高斯。</li>
+<li>扩散模型会不断添加和去除高斯噪声。</li>
+</ul>
+<p>高斯分布的两个参数很直观：<code>mu</code> 控制中心位置，<code>sigma^2</code> 控制分散程度。</p>
+<h2 id="多元高斯协方差开始重要">多元高斯：协方差开始重要</h2>
+<p>当随机变量变成向量时，就有了多元高斯：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x ~ Normal(mu, Sigma)
+</span></span></code></pre></div><p>这里 <code>mu</code> 是均值向量，<code>Sigma</code> 是协方差矩阵。</p>
+<p>协方差矩阵描述不同维度如何一起变化。PCA、马氏距离、高斯混合模型都离不开这个对象。</p>
+<p>如果只记一句话：一维高斯看均值和方差，多维高斯看均值向量和协方差矩阵。</p>
+<h2 id="dirichlet-分布分布上的分布">Dirichlet 分布：分布上的分布</h2>
+<p>Dirichlet 分布可以理解为“概率向量的分布”。它生成的结果本身是一组和为 1 的概率。</p>
+<p>这在主题模型里很常见。LDA 会把一篇文档看成多个主题的混合，而主题比例就是一个概率向量。</p>
+<p>Dirichlet 不需要一开始就掌握所有推导，但要知道它解决的是这类问题：我们不仅关心某个类别的概率，还关心“类别概率这组参数本身的不确定性”。</p>
+<h2 id="小结">小结</h2>
+<p>分布是模型假设的一部分。伯努利用于二选一，Categorical 用于多选一，二项用于重复命中次数，泊松用于计数，高斯用于连续噪声，多元高斯引入协方差，Dirichlet 描述概率向量。</p>
+<p>学这些分布，不是为了背密度函数，而是为了看到模型在用什么方式描述不确定性。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/probability-conditional-bayes-naive-bayes/index.html">
+                        <span>上一篇</span>
+                        <strong>概率论：条件概率、贝叶斯公式与朴素贝叶斯</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/probability-mle-map-cross-entropy/index.html">
+                        <span>下一篇</span>
+                        <strong>概率论：最大似然、MAP 与交叉熵</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

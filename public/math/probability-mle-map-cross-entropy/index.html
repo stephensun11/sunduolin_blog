@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概率论：最大似然、MAP 与交叉熵 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#训练模型到底在估计什么">训练模型到底在估计什么</a></li>
+    <li><a href="#似然是什么">似然是什么</a></li>
+    <li><a href="#为什么取对数">为什么取对数</a></li>
+    <li><a href="#分类与交叉熵">分类与交叉熵</a></li>
+    <li><a href="#语言模型里的最大似然">语言模型里的最大似然</a></li>
+    <li><a href="#map把先验也放进来">MAP：把先验也放进来</a></li>
+    <li><a href="#正则化的概率解释">正则化的概率解释</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+    <span aria-hidden="true">/</span>
+    <span>概率论：最大似然、MAP 与交叉熵</span>
+</nav>
+
+                <h1>概率论：最大似然、MAP 与交叉熵</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6/index.html">最大似然</a></span>
+                    
+                    <span class="tag"><a href="../../tags/map/index.html">MAP</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BA%A4%E5%8F%89%E7%86%B5/index.html">交叉熵</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="训练模型到底在估计什么">训练模型到底在估计什么</h2>
+<p>很多机器学习模型都可以这样看：我们假设数据来自某个带参数的概率模型，然后通过训练数据估计参数。</p>
+<p>参数可以是线性回归里的权重，也可以是神经网络里的全部参数。训练的核心问题是：什么样的参数最能解释我们看到的数据？</p>
+<p>最大似然就是最常见的回答。</p>
+<h2 id="似然是什么">似然是什么</h2>
+<p>假设模型参数是 <code>theta</code>，数据是 <code>D</code>。</p>
+<p>概率 <code>P(D | theta)</code> 表示：如果参数是 <code>theta</code>，观察到这批数据的概率有多大。</p>
+<p>当我们把数据看成已知，把 <code>theta</code> 看成变量时，这个量就叫似然：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>L(theta) = P(D | theta)
+</span></span></code></pre></div><p>最大似然估计就是选择让数据最可能出现的参数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>theta_hat = argmax_theta P(D | theta)
+</span></span></code></pre></div><h2 id="为什么取对数">为什么取对数</h2>
+<p>如果数据样本独立同分布：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(D | theta) = product_i P(x_i | theta)
+</span></span></code></pre></div><p>很多小概率相乘会非常小，数值上不稳定。取对数后，乘法变加法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>log P(D | theta) = sum_i log P(x_i | theta)
+</span></span></code></pre></div><p>所以训练时通常最大化 log likelihood，或者等价地最小化 negative log likelihood：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>NLL = - sum_i log P(x_i | theta)
+</span></span></code></pre></div><p>这就是“负对数概率”在机器学习里反复出现的原因。</p>
+<h2 id="分类与交叉熵">分类与交叉熵</h2>
+<p>分类模型输出的是类别分布 <code>q(y | x)</code>。真实标签如果是 one-hot 分布 <code>p(y | x)</code>，训练目标常写成交叉熵：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>H(p, q) = - sum_y p(y | x) log q(y | x)
+</span></span></code></pre></div><p>因为 <code>p</code> 是 one-hot，只有正确类别那一项保留下来：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>loss = - log q(y_true | x)
+</span></span></code></pre></div><p>这正是负对数似然。</p>
+<p>所以分类交叉熵不是凭空发明的损失函数，它就是在最大化模型给正确标签分配的概率。</p>
+<h2 id="语言模型里的最大似然">语言模型里的最大似然</h2>
+<p>语言模型训练目标也可以写成最大似然。</p>
+<p>一句 token 序列：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x1, x2, ..., xT
+</span></span></code></pre></div><p>自回归模型会分解为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(x1, ..., xT) = product_t P(x_t | x_&lt;t)
+</span></span></code></pre></div><p>训练时最小化：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>- sum_t log P(x_t | x_&lt;t)
+</span></span></code></pre></div><p>这和分类交叉熵形式一样，只是类别空间变成了词表，每个位置都要预测下一个 token。</p>
+<h2 id="map把先验也放进来">MAP：把先验也放进来</h2>
+<p>最大似然只看数据对参数的支持程度。最大后验估计，也就是 MAP，会进一步考虑参数先验：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>theta_hat = argmax_theta P(theta | D)
+</span></span></code></pre></div><p>根据贝叶斯公式：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>P(theta | D) proportional to P(D | theta) P(theta)
+</span></span></code></pre></div><p>所以 MAP 等价于同时考虑似然和先验。</p>
+<p>如果先验偏好较小的参数，最后就会出现类似正则化的效果。</p>
+<h2 id="正则化的概率解释">正则化的概率解释</h2>
+<p>线性模型里常见的 L2 正则：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>loss = data_loss + lambda * ||w||_2^2
+</span></span></code></pre></div><p>可以从 MAP 角度理解为：我们给参数 <code>w</code> 一个以 0 为中心的高斯先验，希望权重不要太大。</p>
+<p>L1 正则也有概率解释，常和拉普拉斯先验联系起来。它更鼓励稀疏参数。</p>
+<p>这个视角很重要：正则化不只是工程技巧，也可以看成对参数的先验偏好。</p>
+<h2 id="小结">小结</h2>
+<p>最大似然回答“什么参数最能解释数据”，负对数似然把最大化概率变成最小化损失，交叉熵是分类和语言模型中最常见的负对数似然形式，MAP 则进一步把先验加入参数估计。</p>
+<p>理解这条线，就能把概率论、损失函数和模型训练连起来。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/probability-common-distributions-for-ml/index.html">
+                        <span>上一篇</span>
+                        <strong>概率论：机器学习里常见的概率分布</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/probability-sampling-monte-carlo/index.html">
+                        <span>下一篇</span>
+                        <strong>概率论：采样、蒙特卡罗与经验估计</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MAP on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/map/</link>
+    <description>Recent content in MAP on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 08:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/map/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>概率论：最大似然、MAP 与交叉熵</title>
+      <link>https://example.com/math/probability-mle-map-cross-entropy/</link>
+      <pubDate>Fri, 10 Jul 2026 08:10:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-mle-map-cross-entropy/</guid>
+      <description>把最大似然、最大后验和交叉熵放在同一条线上，理解训练目标为什么常写成负对数概率。</description>
+    </item>
+  </channel>
+</rss>

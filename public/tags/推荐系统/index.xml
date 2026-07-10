@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>推荐系统 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/</link>
+    <description>Recent content in 推荐系统 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 08:30:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性代数：SVD、低秩近似与推荐系统</title>
+      <link>https://example.com/math/linear-algebra-svd-low-rank/</link>
+      <pubDate>Fri, 10 Jul 2026 08:30:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-svd-low-rank/</guid>
+      <description>理解奇异值分解如何把矩阵拆成方向和强度，以及为什么低秩近似能用于压缩、降噪和推荐。</description>
+    </item>
+  </channel>
+</rss>

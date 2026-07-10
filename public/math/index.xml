@@ -6,8 +6,78 @@
     <description>Recent content in 数学 on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 11:30:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2026 08:45:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/math/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>信息论：互信息、表示学习与信息瓶颈</title>
+      <link>https://example.com/math/information-theory-mutual-information-representation/</link>
+      <pubDate>Fri, 10 Jul 2026 08:45:00 +0800</pubDate>
+      <guid>https://example.com/math/information-theory-mutual-information-representation/</guid>
+      <description>从互信息理解变量之间共享了多少信息，并连接到表示学习、特征选择和信息瓶颈思想。</description>
+    </item>
+    <item>
+      <title>微积分与优化：凸性、Hessian 与牛顿法</title>
+      <link>https://example.com/math/calculus-optimization-convexity-newton/</link>
+      <pubDate>Fri, 10 Jul 2026 08:40:00 +0800</pubDate>
+      <guid>https://example.com/math/calculus-optimization-convexity-newton/</guid>
+      <description>从一阶梯度走向二阶曲率，理解凸性、Hessian 和牛顿法为什么是机器学习优化的基础语言。</description>
+    </item>
+    <item>
+      <title>线性代数：二次型、正定矩阵与协方差</title>
+      <link>https://example.com/math/linear-algebra-positive-definite-covariance/</link>
+      <pubDate>Fri, 10 Jul 2026 08:35:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-positive-definite-covariance/</guid>
+      <description>把二次型、正定矩阵和协方差矩阵联系起来，理解优化曲面、距离度量和多元高斯的线性代数基础。</description>
+    </item>
+    <item>
+      <title>线性代数：SVD、低秩近似与推荐系统</title>
+      <link>https://example.com/math/linear-algebra-svd-low-rank/</link>
+      <pubDate>Fri, 10 Jul 2026 08:30:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-svd-low-rank/</guid>
+      <description>理解奇异值分解如何把矩阵拆成方向和强度，以及为什么低秩近似能用于压缩、降噪和推荐。</description>
+    </item>
+    <item>
+      <title>线性代数：特征值、特征向量与 PCA</title>
+      <link>https://example.com/math/linear-algebra-eigen-pca/</link>
+      <pubDate>Fri, 10 Jul 2026 08:25:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-eigen-pca/</guid>
+      <description>用机器学习视角理解特征值和特征向量，并把它们连接到 PCA 的最大方差方向。</description>
+    </item>
+    <item>
+      <title>线性代数：最小二乘与线性回归</title>
+      <link>https://example.com/math/linear-algebra-least-squares-linear-regression/</link>
+      <pubDate>Fri, 10 Jul 2026 08:20:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-least-squares-linear-regression/</guid>
+      <description>从矩阵视角理解线性回归为什么可以写成最小二乘，以及正规方程背后的投影直觉。</description>
+    </item>
+    <item>
+      <title>概率论：采样、蒙特卡罗与经验估计</title>
+      <link>https://example.com/math/probability-sampling-monte-carlo/</link>
+      <pubDate>Fri, 10 Jul 2026 08:15:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-sampling-monte-carlo/</guid>
+      <description>理解为什么机器学习经常用样本平均近似期望，以及采样方差如何影响训练和推理稳定性。</description>
+    </item>
+    <item>
+      <title>概率论：最大似然、MAP 与交叉熵</title>
+      <link>https://example.com/math/probability-mle-map-cross-entropy/</link>
+      <pubDate>Fri, 10 Jul 2026 08:10:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-mle-map-cross-entropy/</guid>
+      <description>把最大似然、最大后验和交叉熵放在同一条线上，理解训练目标为什么常写成负对数概率。</description>
+    </item>
+    <item>
+      <title>概率论：机器学习里常见的概率分布</title>
+      <link>https://example.com/math/probability-common-distributions-for-ml/</link>
+      <pubDate>Fri, 10 Jul 2026 08:05:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-common-distributions-for-ml/</guid>
+      <description>整理伯努利、Categorical、二项、泊松、高斯和 Dirichlet 等机器学习中常见分布的直觉和使用场景。</description>
+    </item>
+    <item>
+      <title>概率论：条件概率、贝叶斯公式与朴素贝叶斯</title>
+      <link>https://example.com/math/probability-conditional-bayes-naive-bayes/</link>
+      <pubDate>Fri, 10 Jul 2026 08:00:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-conditional-bayes-naive-bayes/</guid>
+      <description>从条件概率出发理解贝叶斯公式，以及为什么朴素贝叶斯能把文本分类问题拆成可估计的概率。</description>
+    </item>
     <item>
       <title>AI 数学基础：熵、交叉熵与 KL 散度</title>
       <link>https://example.com/math/information-theory-entropy-cross-entropy/</link>

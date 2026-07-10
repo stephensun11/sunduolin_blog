@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线性代数：特征值、特征向量与 PCA - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#特征向量在说什么">特征向量在说什么</a></li>
+    <li><a href="#为什么机器学习关心特征分解">为什么机器学习关心特征分解</a></li>
+    <li><a href="#pca-的问题">PCA 的问题</a></li>
+    <li><a href="#协方差矩阵与主成分">协方差矩阵与主成分</a></li>
+    <li><a href="#降维怎么做">降维怎么做</a></li>
+    <li><a href="#pca-和神经网络表示">PCA 和神经网络表示</a></li>
+    <li><a href="#注意特征值大小">注意特征值大小</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+    <span aria-hidden="true">/</span>
+    <span>线性代数：特征值、特征向量与 PCA</span>
+</nav>
+
+                <h1>线性代数：特征值、特征向量与 PCA</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%89%B9%E5%BE%81%E5%80%BC/index.html">特征值</a></span>
+                    
+                    <span class="tag"><a href="../../tags/pca/index.html">PCA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E9%99%8D%E7%BB%B4/index.html">降维</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="特征向量在说什么">特征向量在说什么</h2>
+<p>矩阵可以看成线性变换。大多数向量经过矩阵变换后，方向会改变。</p>
+<p>但有些特殊向量只会被拉伸或压缩，方向不变：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Av = lambda v
+</span></span></code></pre></div><p>这里 <code>v</code> 是特征向量，<code>lambda</code> 是特征值。</p>
+<p>直觉上，特征向量是矩阵最自然的方向，特征值描述沿这个方向变换的强度。</p>
+<h2 id="为什么机器学习关心特征分解">为什么机器学习关心特征分解</h2>
+<p>机器学习里很多对象都是矩阵：</p>
+<ul>
+<li>协方差矩阵。</li>
+<li>图的邻接矩阵或拉普拉斯矩阵。</li>
+<li>注意力矩阵。</li>
+<li>Hessian 矩阵。</li>
+<li>相似度矩阵。</li>
+</ul>
+<p>特征分解帮助我们理解这些矩阵的主要方向、稳定性和低维结构。</p>
+<p>比如协方差矩阵的特征向量，可以告诉我们数据变化最大的方向。</p>
+<h2 id="pca-的问题">PCA 的问题</h2>
+<p>PCA 想解决的是降维问题：能不能用更少的维度保留数据里最重要的信息？</p>
+<p>它的核心标准是最大方差。</p>
+<p>如果把数据投影到一个方向上，投影后的方差越大，说明这个方向保留的数据变化越多。PCA 要找的就是第一主成分：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>让投影方差最大的单位方向
+</span></span></code></pre></div><p>后续主成分继续找方差最大的方向，但要求和前面的方向正交。</p>
+<h2 id="协方差矩阵与主成分">协方差矩阵与主成分</h2>
+<p>把数据中心化后，协方差矩阵可以写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>S = X^T X / n
+</span></span></code></pre></div><p>PCA 的主成分就是协方差矩阵的特征向量。</p>
+<p>最大特征值对应的特征向量，是数据方差最大的方向。第二大特征值对应第二重要方向，以此类推。</p>
+<p>所以 PCA 的数学核心就是协方差矩阵的特征分解。</p>
+<h2 id="降维怎么做">降维怎么做</h2>
+<p>如果选前 <code>k</code> 个主成分，组成矩阵：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>W: [d, k]
+</span></span></code></pre></div><p>原始数据可以投影为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Z = XW
+</span></span></code></pre></div><p>这里 <code>Z</code> 是低维表示。</p>
+<p>如果 <code>k</code> 远小于原始维度 <code>d</code>，就完成了降维。</p>
+<p>这也是很多表示学习方法的古典版本：找一个更小的空间，让数据结构尽可能保留下来。</p>
+<h2 id="pca-和神经网络表示">PCA 和神经网络表示</h2>
+<p>PCA 是线性的，神经网络表示通常是非线性的。但 PCA 的思想仍然有用。</p>
+<p>它提醒我们：</p>
+<ul>
+<li>表示空间里有些方向更重要。</li>
+<li>数据可能集中在低维子空间附近。</li>
+<li>降维本质上是在压缩信息。</li>
+<li>协方差结构能揭示特征之间的关系。</li>
+</ul>
+<p>embedding 可视化、特征压缩、预处理、去噪和表示分析里，PCA 仍然很常用。</p>
+<h2 id="注意特征值大小">注意特征值大小</h2>
+<p>特征值越大，说明对应方向上的方差越大。</p>
+<p>如果前几个特征值占了总和的大部分，说明数据主要变化集中在少数方向上，适合降维。</p>
+<p>如果特征值比较均匀，说明每个方向都携带不少信息，强行降维会损失更多。</p>
+<h2 id="小结">小结</h2>
+<p>特征向量是矩阵不改变方向的特殊方向，特征值描述这些方向上的拉伸强度。PCA 用协方差矩阵的特征分解，找到数据方差最大的方向，从而完成线性降维。</p>
+<p>理解 PCA，就理解了很多“低维结构”“主方向”“表示压缩”的基础语言。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/linear-algebra-least-squares-linear-regression/index.html">
+                        <span>上一篇</span>
+                        <strong>线性代数：最小二乘与线性回归</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/linear-algebra-svd-low-rank/index.html">
+                        <span>下一篇</span>
+                        <strong>线性代数：SVD、低秩近似与推荐系统</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

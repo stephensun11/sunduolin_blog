@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线性代数：二次型、正定矩阵与协方差 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#二次型是什么">二次型是什么</a></li>
+    <li><a href="#正定矩阵">正定矩阵</a></li>
+    <li><a href="#为什么优化关心正定">为什么优化关心正定</a></li>
+    <li><a href="#协方差矩阵">协方差矩阵</a></li>
+    <li><a href="#多元高斯与椭球">多元高斯与椭球</a></li>
+    <li><a href="#马氏距离">马氏距离</a></li>
+    <li><a href="#正则化中的二次型">正则化中的二次型</a></li>
+    <li><a href="#小结">小结</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+    <span aria-hidden="true">/</span>
+    <span>线性代数：二次型、正定矩阵与协方差</span>
+</nav>
+
+                <h1>线性代数：二次型、正定矩阵与协方差</h1>
+                <div class="meta">
+                    <span class="date">2026-07-10</span>
+                    <span class="category">数学</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%AD%A3%E5%AE%9A%E7%9F%A9%E9%98%B5/index.html">正定矩阵</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%8D%8F%E6%96%B9%E5%B7%AE/index.html">协方差</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BA%8C%E6%AC%A1%E5%9E%8B/index.html">二次型</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="二次型是什么">二次型是什么</h2>
+<p>二次型通常写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x^T A x
+</span></span></code></pre></div><p>其中 <code>x</code> 是向量，<code>A</code> 是矩阵。</p>
+<p>它会把一个向量映射成一个标量。很多机器学习里的目标函数和距离度量都可以写成二次型。</p>
+<p>比如最简单的 L2 范数平方：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>||x||_2^2 = x^T x
+</span></span></code></pre></div><p>这就是 <code>A = I</code> 时的二次型。</p>
+<h2 id="正定矩阵">正定矩阵</h2>
+<p>如果对任意非零向量 <code>x</code>，都有：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x^T A x &gt; 0
+</span></span></code></pre></div><p>那么矩阵 <code>A</code> 是正定矩阵。</p>
+<p>如果允许等于 0：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x^T A x &gt;= 0
+</span></span></code></pre></div><p>则是半正定矩阵。</p>
+<p>正定性可以理解为：这个矩阵定义的二次曲面总是向上，不会出现负方向。</p>
+<h2 id="为什么优化关心正定">为什么优化关心正定</h2>
+<p>在优化里，Hessian 矩阵描述函数的局部曲率。</p>
+<p>如果 Hessian 是正定的，函数在这个点附近像一个向上的碗，局部最小值更容易判断。</p>
+<p>如果 Hessian 有负特征值，说明某些方向向下弯，可能是鞍点或局部最大附近。</p>
+<p>深度学习的损失曲面很复杂，但“曲率”和“正定性”的语言仍然很有用。二阶优化、牛顿法、拟牛顿法都会用到这些概念。</p>
+<h2 id="协方差矩阵">协方差矩阵</h2>
+<p>协方差矩阵描述多维随机变量各维度之间如何共同变化。</p>
+<p>对随机向量 <code>x</code>，协方差矩阵是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Sigma = E[(x - mu)(x - mu)^T]
+</span></span></code></pre></div><p>它的对角线是每个维度的方差，非对角线是维度之间的协方差。</p>
+<p>协方差矩阵一定是半正定的。因为对任意向量 <code>v</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>v^T Sigma v
+</span></span></code></pre></div><p>表示数据投影到方向 <code>v</code> 后的方差，而方差不可能是负数。</p>
+<h2 id="多元高斯与椭球">多元高斯与椭球</h2>
+<p>多元高斯分布常写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x ~ Normal(mu, Sigma)
+</span></span></code></pre></div><p>这里 <code>Sigma</code> 决定分布的形状。</p>
+<p>如果 <code>Sigma</code> 是单位矩阵，分布在各个方向上扩散程度一样，像一个圆球。</p>
+<p>如果不同方向方差不同，分布会拉成椭球。协方差矩阵的特征向量给出椭球主轴方向，特征值给出沿这些方向的扩散强度。</p>
+<p>这就是线性代数和概率论在多元高斯里汇合的地方。</p>
+<h2 id="马氏距离">马氏距离</h2>
+<p>普通欧氏距离默认每个方向同等重要：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>||x - mu||_2
+</span></span></code></pre></div><p>马氏距离会考虑协方差结构：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>sqrt((x - mu)^T Sigma^(-1) (x - mu))
+</span></span></code></pre></div><p>如果某个方向本来方差很大，那么沿这个方向偏离一点不算太异常；如果某个方向方差很小，偏离一点就更显眼。</p>
+<p>异常检测、聚类和高斯模型中经常会遇到这个思想。</p>
+<h2 id="正则化中的二次型">正则化中的二次型</h2>
+<p>L2 正则可以写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>w^T w
+</span></span></code></pre></div><p>更一般的正则可以写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>w^T A w
+</span></span></code></pre></div><p>不同的 <code>A</code> 表示对参数不同方向施加不同惩罚。</p>
+<p>这说明正则化不只是“让参数小”，也可以是“让参数在某些方向上更受限制”。</p>
+<h2 id="小结">小结</h2>
+<p>二次型是连接几何、优化和概率的重要表达。正定矩阵保证二次型不为负，协方差矩阵天然半正定，多元高斯用协方差矩阵描述不确定性的形状。</p>
+<p>理解这组概念，再看 PCA、牛顿法、高斯模型、异常检测和正则化，会更容易看到同一套数学结构。</p>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../math/linear-algebra-svd-low-rank/index.html">
+                        <span>上一篇</span>
+                        <strong>线性代数：SVD、低秩近似与推荐系统</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../math/calculus-optimization-convexity-newton/index.html">
+                        <span>下一篇</span>
+                        <strong>微积分与优化：凸性、Hessian 与牛顿法</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

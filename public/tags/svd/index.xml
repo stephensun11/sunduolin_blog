@@ -6,8 +6,15 @@
     <description>Recent content in SVD on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 22:25:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2026 08:30:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/svd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性代数：SVD、低秩近似与推荐系统</title>
+      <link>https://example.com/math/linear-algebra-svd-low-rank/</link>
+      <pubDate>Fri, 10 Jul 2026 08:30:00 +0800</pubDate>
+      <guid>https://example.com/math/linear-algebra-svd-low-rank/</guid>
+      <description>理解奇异值分解如何把矩阵拆成方向和强度，以及为什么低秩近似能用于压缩、降噪和推荐。</description>
+    </item>
     <item>
       <title>统计学习方法读书笔记：无监督学习的结构发现</title>
       <link>https://example.com/aitech/statistical-learning-unsupervised-methods/</link>

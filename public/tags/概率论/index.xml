@@ -6,8 +6,36 @@
     <description>Recent content in 概率论 on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 11:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2026 08:15:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>概率论：采样、蒙特卡罗与经验估计</title>
+      <link>https://example.com/math/probability-sampling-monte-carlo/</link>
+      <pubDate>Fri, 10 Jul 2026 08:15:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-sampling-monte-carlo/</guid>
+      <description>理解为什么机器学习经常用样本平均近似期望，以及采样方差如何影响训练和推理稳定性。</description>
+    </item>
+    <item>
+      <title>概率论：最大似然、MAP 与交叉熵</title>
+      <link>https://example.com/math/probability-mle-map-cross-entropy/</link>
+      <pubDate>Fri, 10 Jul 2026 08:10:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-mle-map-cross-entropy/</guid>
+      <description>把最大似然、最大后验和交叉熵放在同一条线上，理解训练目标为什么常写成负对数概率。</description>
+    </item>
+    <item>
+      <title>概率论：机器学习里常见的概率分布</title>
+      <link>https://example.com/math/probability-common-distributions-for-ml/</link>
+      <pubDate>Fri, 10 Jul 2026 08:05:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-common-distributions-for-ml/</guid>
+      <description>整理伯努利、Categorical、二项、泊松、高斯和 Dirichlet 等机器学习中常见分布的直觉和使用场景。</description>
+    </item>
+    <item>
+      <title>概率论：条件概率、贝叶斯公式与朴素贝叶斯</title>
+      <link>https://example.com/math/probability-conditional-bayes-naive-bayes/</link>
+      <pubDate>Fri, 10 Jul 2026 08:00:00 +0800</pubDate>
+      <guid>https://example.com/math/probability-conditional-bayes-naive-bayes/</guid>
+      <description>从条件概率出发理解贝叶斯公式，以及为什么朴素贝叶斯能把文本分类问题拆成可估计的概率。</description>
+    </item>
     <item>
       <title>AI 数学基础：随机变量、分布与期望</title>
       <link>https://example.com/math/probability-for-ai-random-variables/</link>
