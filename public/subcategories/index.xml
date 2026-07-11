@@ -6,8 +6,15 @@
     <description>Recent content in Subcategories on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 10 Jul 2026 08:45:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/subcategories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM训练</title>
+      <link>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</guid>
+      <description></description>
+    </item>
     <item>
       <title>信息论</title>
       <link>https://example.com/subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/</link>
@@ -55,13 +62,6 @@
       <link>https://example.com/subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/</link>
       <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
       <guid>https://example.com/subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LLM训练</title>
-      <link>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</link>
-      <pubDate>Thu, 09 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</guid>
       <description></description>
     </item>
     <item>

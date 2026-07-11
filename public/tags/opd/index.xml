@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>OPD on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/opd/</link>
+    <description>Recent content in OPD on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 11 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/opd/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OPD 蒸馏详解：让学生模型从自己的错误中学习</title>
+      <link>https://example.com/aitech/on-policy-distillation-opd/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/on-policy-distillation-opd/</guid>
+      <description>从分布偏移、Reverse KL 和在线采样出发，系统梳理 On-Policy Distillation 的原理、训练流程、论文脉络、工程实现与常见失败模式。</description>
+    </item>
+  </channel>
+</rss>

@@ -6,8 +6,50 @@
     <description>Recent content in Tags on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 10 Jul 2026 08:45:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GKD</title>
+      <link>https://example.com/tags/gkd/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/gkd/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM</title>
+      <link>https://example.com/tags/llm/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>On-Policy Distillation</title>
+      <link>https://example.com/tags/on-policy-distillation/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/on-policy-distillation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>OPD</title>
+      <link>https://example.com/tags/opd/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/opd/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Reverse KL</title>
+      <link>https://example.com/tags/reverse-kl/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/reverse-kl/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>知识蒸馏</title>
+      <link>https://example.com/tags/%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F/</guid>
+      <description></description>
+    </item>
     <item>
       <title>互信息</title>
       <link>https://example.com/tags/%E4%BA%92%E4%BF%A1%E6%81%AF/</link>
@@ -489,13 +531,6 @@
       <link>https://example.com/tags/kv-cache/</link>
       <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
       <guid>https://example.com/tags/kv-cache/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LLM</title>
-      <link>https://example.com/tags/llm/</link>
-      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>https://example.com/tags/llm/</guid>
       <description></description>
     </item>
     <item>

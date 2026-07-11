@@ -6,8 +6,15 @@
     <description>Recent content in LLM训练 on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 09:30:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OPD 蒸馏详解：让学生模型从自己的错误中学习</title>
+      <link>https://example.com/aitech/on-policy-distillation-opd/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/on-policy-distillation-opd/</guid>
+      <description>从分布偏移、Reverse KL 和在线采样出发，系统梳理 On-Policy Distillation 的原理、训练流程、论文脉络、工程实现与常见失败模式。</description>
+    </item>
     <item>
       <title>Megatron-LM：张量并行、流水线并行与 3D 并行</title>
       <link>https://example.com/aitech/distributed-training-megatron-parallelism/</link>

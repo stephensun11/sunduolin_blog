@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPD 蒸馏详解：让学生模型从自己的错误中学习 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#从传统知识蒸馏说起">从传统知识蒸馏说起</a></li>
+    <li><a href="#off-policy-蒸馏的问题训练前缀与推理前缀错位">Off-policy 蒸馏的问题：训练前缀与推理前缀错位</a></li>
+    <li><a href="#opd-的目标函数">OPD 的目标函数</a></li>
+    <li><a href="#为什么常用-reverse-kl">为什么常用 Reverse KL</a></li>
+    <li><a href="#opdsft-与-rl-到底有什么不同">OPD、SFT 与 RL 到底有什么不同</a></li>
+    <li><a href="#一个最小训练流程">一个最小训练流程</a></li>
+    <li><a href="#工程实现中最值得盯住的细节">工程实现中最值得盯住的细节</a>
+      <ul>
+        <li><a href="#1-教师与学生必须看到同一个前缀">1. 教师与学生必须看到同一个前缀</a></li>
+        <li><a href="#2-同词表最简单跨-tokenizer-更麻烦">2. 同词表最简单，跨 tokenizer 更麻烦</a></li>
+        <li><a href="#3-不要一开始就追求-100-on-policy">3. 不要一开始就追求 100% on-policy</a></li>
+        <li><a href="#4-记录分布是否真的重叠">4. 记录“分布是否真的重叠”</a></li>
+        <li><a href="#5-长序列会放大脆弱性">5. 长序列会放大脆弱性</a></li>
+      </ul>
+    </li>
+    <li><a href="#一套更稳妥的实践配方">一套更稳妥的实践配方</a></li>
+    <li><a href="#如何理解-qwen3-的结果">如何理解 Qwen3 的结果</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+    <span aria-hidden="true">/</span>
+    <span>OPD 蒸馏详解：让学生模型从自己的错误中学习</span>
+</nav>
+
+                <h1>OPD 蒸馏详解：让学生模型从自己的错误中学习</h1>
+                <div class="meta">
+                    <span class="date">2026-07-11</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F/index.html">知识蒸馏</a></span>
+                    
+                    <span class="tag"><a href="../../tags/opd/index.html">OPD</a></span>
+                    
+                    <span class="tag"><a href="../../tags/on-policy-distillation/index.html">On-Policy Distillation</a></span>
+                    
+                    <span class="tag"><a href="../../tags/gkd/index.html">GKD</a></span>
+                    
+                    <span class="tag"><a href="../../tags/reverse-kl/index.html">Reverse KL</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>传统知识蒸馏像是让学生反复观看老师的标准答案，OPD 则更像老师坐在学生旁边，逐步批改学生自己写出的解题过程。</p>
+<p>这一区别看起来只是“谁来生成训练答案”，实际上改变了学生在什么状态上接受监督，也直接触及自回归模型最麻烦的问题之一：<strong>训练时看到的前缀和推理时真正遇到的前缀并不一致</strong>。</p>
+<p>OPD（On-Policy Distillation，在线策略蒸馏）的核心价值可以概括成一句话：<strong>让学生生成轨迹，再让教师对学生实际访问到的每个状态提供稠密的 token 级反馈。</strong> 它试图同时获得 SFT 的稠密监督和在线强化学习的分布匹配。</p>
+<h2 id="从传统知识蒸馏说起">从传统知识蒸馏说起</h2>
+<p><a href="https://arxiv.org/abs/1503.02531">Hinton 等人在 2015 年系统化提出知识蒸馏</a>时，核心思想不是只学习 one-hot 标签，而是学习教师完整的软概率分布。教师对错误类别分配的细小概率也包含信息，这通常被称为“暗知识”（dark knowledge）。</p>
+<p>设教师和学生在词表上的条件分布分别为 <span class="math-inline">(p_T(\cdot\mid h))</span> 和 <span class="math-inline">(p_\theta(\cdot\mid h))</span>，其中 <span class="math-inline">(h)</span> 是当前前缀。常见的 token 级蒸馏目标是前向 KL：</p>
+<div class="math-display">\[
+D_{\mathrm{KL}}(p_T\Vert p_\theta)
+=\sum_{v\in V}p_T(v\mid h)
+\log\frac{p_T(v\mid h)}{p_\theta(v\mid h)}.
+\]</div>
+<p>忽略与学生无关的教师熵后，这就是用教师软标签训练学生的交叉熵。</p>
+<p>对分类模型来说，一个输入通常只对应一次预测；但语言模型是自回归的，当前 token 会成为下一个 token 的输入。因此，“在哪些前缀上计算蒸馏损失”变得非常重要。</p>
+<h2 id="off-policy-蒸馏的问题训练前缀与推理前缀错位">Off-policy 蒸馏的问题：训练前缀与推理前缀错位</h2>
+<p>最常见的离线蒸馏流程是：教师先生成一批高质量回答，学生再对这批固定数据做 SFT 或 logit distillation。它的优点是简单、稳定，教师推理结果也可以缓存复用。</p>
+<p>问题在于，学生训练时主要看到教师写出的正确前缀，推理时却必须接着自己刚刚生成的 token 往下写。一旦学生早期犯错，后续就会进入训练数据很少覆盖的状态，错误还会沿序列累积。这就是序列建模中的 exposure bias。</p>
+<p><a href="https://proceedings.neurips.cc/paper/2015/hash/e995f98d56967d946471af29d7bf99f1-Abstract.html">Scheduled Sampling</a>尝试在训练中逐渐用模型生成 token 替换真实 token；更早的 <a href="https://proceedings.mlr.press/v15/ross11a.html">DAgger</a>则从模仿学习角度给出了一条更清晰的路线：让当前策略访问环境，再请专家标注当前策略真正访问到的状态。</p>
+<p>OPD 可以看作这个思想在语言模型蒸馏中的自然延伸：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>采样 prompt
+</span></span><span style="display:flex;"><span>    ↓
+</span></span><span style="display:flex;"><span>学生模型生成 response
+</span></span><span style="display:flex;"><span>    ↓
+</span></span><span style="display:flex;"><span>教师读取同一条 prompt + 学生 response
+</span></span><span style="display:flex;"><span>    ↓
+</span></span><span style="display:flex;"><span>教师为每个位置给出 token 概率或 log-prob
+</span></span><span style="display:flex;"><span>    ↓
+</span></span><span style="display:flex;"><span>最小化师生分布差异，更新学生
+</span></span><span style="display:flex;"><span>    ↓
+</span></span><span style="display:flex;"><span>用更新后的学生重新生成下一批轨迹
+</span></span></code></pre></div><p>监督信号始终落在学生自己的状态分布上，因此学生会直接学习如何处理自己容易犯错的前缀。</p>
+<h2 id="opd-的目标函数">OPD 的目标函数</h2>
+<p><a href="https://arxiv.org/abs/2306.13649">Agarwal 等人的 GKD 论文</a>在 ICLR 2024 正式发表，它把离线蒸馏和在线蒸馏统一到一个框架中。若 <span class="math-inline">(\lambda)</span> 表示学生生成数据的比例，可以把目标直观地写成：</p>
+<div class="math-display">\[
+\mathcal L_{\mathrm{GKD}}
+=(1-\lambda)\mathcal L_{\mathrm{off}}
++\lambda\mathcal L_{\mathrm{on}}.
+\]</div>
+<ul>
+<li><span class="math-inline">(\lambda=0)</span>：完全使用固定的教师或人工数据；</li>
+<li><span class="math-inline">(\lambda=1)</span>：完全使用学生当前策略生成的数据，也就是纯 OPD；</li>
+<li><span class="math-inline">(0&lt;\lambda&lt;1)</span>：混合训练，常用于冷启动和提高稳定性。</li>
+</ul>
+<p>GKD 的另一个重要结论是：采样分布和分布距离可以分别选择。OPD 并不天然等于 Reverse KL，但在生成式模型中，Reverse KL 是非常常见的选择：</p>
+<div class="math-display">\[
+D_{\mathrm{KL}}(p_\theta\Vert p_T)
+=\sum_{v\in V}p_\theta(v\mid h)
+\log\frac{p_\theta(v\mid h)}{p_T(v\mid h)}.
+\]</div>
+<p>它的期望由学生分布定义，正好可以在学生采样到的状态和 token 上估计。对于学生采样的 token <span class="math-inline">(y_t)</span>，一个常见的即时反馈写法是：</p>
+<div class="math-display">\[
+r_t
+=\log p_T(y_t\mid h_t)
+-\log p_\theta(y_t\mid h_t).
+\]</div>
+<p>教师比学生更认可某个 token 时，<span class="math-inline">(r_t)</span> 为正；教师明显不认可时，反馈为负。在 RL 风格的实现中，可以把它作为每个 token 的 advantage，并用重要性采样目标更新学生。若能获得完整词表或可靠的 top-k logits，也可以直接计算更低方差的分布损失。</p>
+<p>这里有一个容易混淆的细节：<strong>“在学生轨迹上训练”描述的是数据分布，“Forward KL 或 Reverse KL”描述的是优化距离。</strong> 两者不是同一个维度。纯 on-policy GKD 也可以使用 Forward KL，而 Reverse KL 同样可以搭配混合轨迹。</p>
+<h2 id="为什么常用-reverse-kl">为什么常用 Reverse KL</h2>
+<p>Forward KL 倾向于覆盖教师分布的多个模式。如果学生容量远小于教师，它可能不得不用有限容量去照顾教师分布中大量低概率区域，生成结果容易变得过于分散。</p>
+<p>Reverse KL 更偏向 mode-seeking：学生优先集中到教师认可、自己又能够表达的高概率模式。<a href="https://arxiv.org/abs/2306.08543">MiniLLM</a>正是从这个角度论证 Reverse KL 更适合生成式大模型蒸馏，并报告了更低的 exposure bias、更好的长文本生成与校准表现。</p>
+<p>但 mode-seeking 不是免费的午餐。若学生初始化太弱，正确推理路径在学生分布中的概率几乎为零，纯 Reverse KL 很难凭空发现它。这也是为什么实践中经常先做一段 SFT 或 off-policy distillation，再切换到 OPD。</p>
+<h2 id="opdsft-与-rl-到底有什么不同">OPD、SFT 与 RL 到底有什么不同</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>轨迹由谁生成</th>
+<th>监督密度</th>
+<th>主要优势</th>
+<th>典型短板</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SFT / 离线蒸馏</td>
+<td>教师或固定数据集</td>
+<td>token 级、稠密</td>
+<td>简单稳定，可离线缓存</td>
+<td>训练与推理分布错位</td>
+</tr>
+<tr>
+<td>在线强化学习</td>
+<td>当前学生</td>
+<td>通常是序列级、稀疏</td>
+<td>直接优化任务奖励，可探索新策略</td>
+<td>奖励设计难，方差与成本高</td>
+</tr>
+<tr>
+<td>OPD</td>
+<td>当前学生</td>
+<td>token 级、稠密</td>
+<td>在学生状态上获得教师细粒度反馈</td>
+<td>需要白盒 logits，教师前向成本高</td>
+</tr>
+</tbody>
+</table>
+<p>Thinking Machines Lab 的<a href="https://thinkingmachines.ai/blog/on-policy-distillation/">技术文章</a>用一句很直观的话总结了这种组合：SFT 是 off-policy + dense，RL 是 on-policy + sparse，而 OPD 是 on-policy + dense。</p>
+<p>这不意味着 OPD 可以替代 RL。RL 的价值在于搜索教师尚未直接给出的新策略；OPD 更擅长把已经存在于教师分布中的能力快速迁移给学生。一个常见的组合是：先用 RL 得到强教师或专家策略，再用 OPD 把最终策略压缩进更小的模型。</p>
+<h2 id="一个最小训练流程">一个最小训练流程</h2>
+<p>下面的伪代码省略了分布式推理、padding mask 和重要性采样细节，但保留了 OPD 的核心数据流：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>teacher<span style="color:#f92672">.</span>eval()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> prompts <span style="color:#f92672">in</span> dataloader:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 1. 必须由当前学生生成，构造 on-policy 轨迹</span>
+</span></span><span style="display:flex;"><span>    student<span style="color:#f92672">.</span>eval()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>        responses <span style="color:#f92672">=</span> student<span style="color:#f92672">.</span>generate(
+</span></span><span style="display:flex;"><span>            prompts,
+</span></span><span style="display:flex;"><span>            temperature<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>,
+</span></span><span style="display:flex;"><span>            top_p<span style="color:#f92672">=</span><span style="color:#ae81ff">0.95</span>,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    sequences <span style="color:#f92672">=</span> concat(prompts, responses)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 2. 教师和学生在完全相同的前缀上计算分布</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>        teacher_logits <span style="color:#f92672">=</span> teacher(sequences)<span style="color:#f92672">.</span>logits
+</span></span><span style="display:flex;"><span>    student<span style="color:#f92672">.</span>train()
+</span></span><span style="display:flex;"><span>    student_logits <span style="color:#f92672">=</span> student(sequences)<span style="color:#f92672">.</span>logits
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 3. 只在 response token 上计算蒸馏损失</span>
+</span></span><span style="display:flex;"><span>    loss <span style="color:#f92672">=</span> reverse_kl(
+</span></span><span style="display:flex;"><span>        student_logits,
+</span></span><span style="display:flex;"><span>        teacher_logits,
+</span></span><span style="display:flex;"><span>        mask<span style="color:#f92672">=</span>response_mask,
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><p>真正的大规模实现通常会把 rollout、教师 log-prob 计算和学生训练拆成不同 worker。若保存完整词表 logits 太贵，可以只传输 top-k logits，或者只查询学生实际采样 token 的教师 log-prob。后者最省通信，但信号方差更大，也更容易在长序列上失真。</p>
+<h2 id="工程实现中最值得盯住的细节">工程实现中最值得盯住的细节</h2>
+<h3 id="1-教师与学生必须看到同一个前缀">1. 教师与学生必须看到同一个前缀</h3>
+<p>教师不是重新生成一条答案，而是对学生已经生成的轨迹做 teacher forcing 评分。prompt 模板、system prompt、特殊 token 和 response mask 只要有一处没有对齐，log-prob 就失去可比性。</p>
+<h3 id="2-同词表最简单跨-tokenizer-更麻烦">2. 同词表最简单，跨 tokenizer 更麻烦</h3>
+<p>标准 logit distillation 默认师生共享 tokenizer，因为两个分布必须定义在同一组 token 上。Hugging Face 的 <a href="https://huggingface.co/spaces/HuggingFaceH4/on-policy-distillation">GOLD 技术文章与实现</a>专门讨论了跨 tokenizer 的序列与词表对齐；如果是第一次实现，优先选择同一模型家族的教师和学生。</p>
+<h3 id="3-不要一开始就追求-100-on-policy">3. 不要一开始就追求 100% on-policy</h3>
+<p>如果学生还不会产生基本正确的解题结构，教师只能在大量糟糕前缀上打分，训练信号会非常嘈杂。更稳妥的路线是先用教师轨迹做冷启动，再逐步增大 <span class="math-inline">(\lambda)</span>。这与 DAgger 中逐步把状态分布交给学生的思路一致。</p>
+<h3 id="4-记录分布是否真的重叠">4. 记录“分布是否真的重叠”</h3>
+<p>只看训练 KL 下降并不够。2026 年的 <a href="https://arxiv.org/abs/2604.13016">Rethinking OPD</a>进一步指出，OPD 成功通常要求师生思考模式相容，同时教师确实提供学生尚未掌握的新能力。该工作观察到，有效学习主要集中在学生访问状态上的一小组高概率 token，并建议监控 top-k overlap 与相应 token advantage。</p>
+<p>这篇工作是很有价值的近期机制分析，但它晚于 GKD 和 MiniLLM，结论仍需要更多模型家族和长程任务验证。工程上可以把它当作诊断工具，而不是已经封闭的理论答案。</p>
+<h3 id="5-长序列会放大脆弱性">5. 长序列会放大脆弱性</h3>
+<p>只对采样 token 计算 <span class="math-inline">(\log p_T-\log p_\theta)</span> 很便宜，但每个位置只有一个 Monte Carlo 样本。序列越长，学生越可能漂移到教师很少访问的前缀，单 token 估计也越不稳定。可尝试的改进包括：</p>
+<ul>
+<li>缩短 rollout，先学习局部行为；</li>
+<li>使用 top-k 分布而非单个采样 token；</li>
+<li>增加同一 prompt 的 rollout 数量；</li>
+<li>混入 off-policy 冷启动数据；</li>
+<li>对异常大的 token reward、KL 或 importance ratio 做裁剪；</li>
+<li>单独评估不同长度区间，避免平均指标掩盖长答案退化。</li>
+</ul>
+<h2 id="一套更稳妥的实践配方">一套更稳妥的实践配方</h2>
+<p>如果要从零搭一条 OPD 流水线，我更推荐下面的顺序：</p>
+<ol>
+<li>选择同 tokenizer、能力差距适中的师生模型，先排除词表对齐问题。</li>
+<li>用少量高质量教师轨迹做 SFT 或 off-policy distillation，让学生进入正确行为的支持集。</li>
+<li>从混合 GKD 开始，例如保留一部分教师轨迹，再逐渐提高学生轨迹比例。</li>
+<li>先在短 response 上验证完整词表或 top-k KL，再扩大上下文长度。</li>
+<li>同时记录任务准确率、response 长度、师生 KL、top-k overlap 和训练前后通用能力。</li>
+<li>用固定 prompt 集定期离线评估，不能只相信在线 batch 上持续下降的蒸馏损失。</li>
+</ol>
+<p>目前可直接参考的工程入口包括 <a href="https://huggingface.co/docs/trl/distillation_trainer">Hugging Face TRL 的 DistillationTrainer</a>、<a href="https://tinker-docs.thinkingmachines.ai/cookbook/recipes/distillation/">Thinking Machines 的 Tinker recipe</a>以及 <a href="https://github.com/thunlp/OPD">THUNLP 的 OPD/verl 实现</a>。三者的抽象层次不同，适合先用 Trainer 验证算法，再转向 verl 一类系统做大规模训练。</p>
+<h2 id="如何理解-qwen3-的结果">如何理解 Qwen3 的结果</h2>
+<p><a href="https://arxiv.org/abs/2505.09388">Qwen3 Technical Report</a>让 OPD 在大模型推理训练中获得了更多关注。报告对 Qwen3-8B 的对比显示，on-policy distillation 在 AIME'24 和 GPQA-Diamond 上优于其 RL 对照，并使用约十分之一的 GPU 小时。</p>
+<p>这个结果说明 OPD 在“强教师已经具备目标推理能力”的场景中非常有竞争力，但不能简单外推为 OPD 总是比 RL 强。实验起点、教师质量、训练栈和任务可验证性都会影响结论，而且技术报告没有公开所有稳定训练细节。</p>
+<p>Thinking Machines 后续给出的复现实验和成本分析很有参考价值，但同样应把具体倍数视为特定模型、数据与基础设施下的经验结果，而不是算法常数。</p>
+<h2 id="总结">总结</h2>
+<p>OPD 真正重要的地方，不只是把教师 logits 换成了逐 token reward，而是把监督搬到了学生自己的状态分布上。</p>
+<p>它解决的是一个非常现实的问题：学生最终必须接着自己的输出继续生成，因此最有价值的老师，不只是展示完美答案，而是能够指出学生在自己走过的路径上究竟从哪里开始偏离。</p>
+<p>从方法谱系看，OPD 连接了知识蒸馏、模仿学习和在线强化学习；从工程角度看，它用教师前向计算换取稠密、低方差得多的监督。它最适合做已有能力的高效迁移、压缩与恢复，而不擅长凭空教会一个支持集中完全不存在的新策略。</p>
+<p>如果只记住一条实践原则，那就是：<strong>先让学生有机会走到正确答案附近，再用 OPD 精细纠正它在真实生成路径上的每一步。</strong></p>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li><a href="https://arxiv.org/abs/1503.02531">Distilling the Knowledge in a Neural Network</a>, Hinton et al., 2015.</li>
+<li><a href="https://proceedings.mlr.press/v15/ross11a.html">A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning</a>, Ross et al., 2011.</li>
+<li><a href="https://proceedings.neurips.cc/paper/2015/hash/e995f98d56967d946471af29d7bf99f1-Abstract.html">Scheduled Sampling for Sequence Prediction with Recurrent Neural Networks</a>, Bengio et al., 2015.</li>
+<li><a href="https://arxiv.org/abs/2306.13649">On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes / GKD</a>, Agarwal et al., ICLR 2024.</li>
+<li><a href="https://arxiv.org/abs/2306.08543">MiniLLM: Knowledge Distillation of Large Language Models</a>, Gu et al., ICLR 2024.</li>
+<li><a href="https://arxiv.org/abs/2505.09388">Qwen3 Technical Report</a>, Qwen Team, 2025.</li>
+<li><a href="https://thinkingmachines.ai/blog/on-policy-distillation/">On-Policy Distillation</a>, Thinking Machines Lab, 2025.</li>
+<li><a href="https://huggingface.co/spaces/HuggingFaceH4/on-policy-distillation">General On-Policy Logit Distillation（GOLD）</a>, Hugging Face, 2025.</li>
+<li><a href="https://arxiv.org/abs/2604.13016">Rethinking On-Policy Distillation of Large Language Models</a>, Li et al., 2026；<a href="https://github.com/thunlp/OPD">配套代码</a>。</li>
+</ol>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/statistical-learning-practical-map/index.html">
+                        <span>上一篇</span>
+                        <strong>统计学习方法读书笔记：方法对照与复习地图</strong>
+                    </a>
+                    
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>
