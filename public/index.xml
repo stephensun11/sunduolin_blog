@@ -23,6 +23,34 @@
       <description>从分布偏移、Reverse KL 和在线采样出发，系统梳理 On-Policy Distillation 的原理、训练流程、论文脉络、工程实现与常见失败模式。</description>
     </item>
     <item>
+      <title>推测解码方法谱系：从 Medusa、EAGLE 到 DFlash 与 DSpark</title>
+      <link>https://example.com/aitech/speculative-decoding-method-family/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/speculative-decoding-method-family/</guid>
+      <description>按草稿来源、依赖结构和验证策略梳理推测解码方法家族，重点解释 Medusa/Hydra、EAGLE 1-3、并行草稿 DFlash，以及面向高并发调度的 DSpark。</description>
+    </item>
+    <item>
+      <title>推测解码基础：从拒绝采样到无损并行验证</title>
+      <link>https://example.com/aitech/speculative-decoding-foundations/</link>
+      <pubDate>Fri, 10 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/speculative-decoding-foundations/</guid>
+      <description>完整推导 draft-then-verify、接受概率和残差分布，解释为什么推测采样能保持目标模型分布，并分析接受长度、草稿成本、批处理和系统吞吐之间的真实关系。</description>
+    </item>
+    <item>
+      <title>FlashAttention 详解：Online Softmax、I/O 优化与 v1-v4 演进</title>
+      <link>https://example.com/aitech/flashattention-io-aware-evolution/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/flashattention-io-aware-evolution/</guid>
+      <description>从 GPU 存储层次和 online softmax 推导 FlashAttention 的精确分块算法，梳理 FlashAttention 1、2、3、4 与 Flash-Decoding 的目标、硬件适配和版本边界。</description>
+    </item>
+    <item>
+      <title>vLLM 详解：PagedAttention、连续批处理与 V0/V1 架构演进</title>
+      <link>https://example.com/aitech/vllm-pagedattention-engine-evolution/</link>
+      <pubDate>Fri, 10 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/vllm-pagedattention-engine-evolution/</guid>
+      <description>从自回归服务的 KV Cache 碎片问题出发，讲清 PagedAttention、块表、连续批处理、前缀缓存、分块预填充，以及 vLLM 从 V0 到 V1 的核心架构变化与工程取舍。</description>
+    </item>
+    <item>
       <title>信息论：互信息、表示学习与信息瓶颈</title>
       <link>https://example.com/math/information-theory-mutual-information-representation/</link>
       <pubDate>Fri, 10 Jul 2026 08:45:00 +0800</pubDate>

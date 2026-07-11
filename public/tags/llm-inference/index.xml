@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LLM Inference on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/llm-inference/</link>
+    <description>Recent content in LLM Inference on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 09:20:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/llm-inference/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>推测解码基础：从拒绝采样到无损并行验证</title>
+      <link>https://example.com/aitech/speculative-decoding-foundations/</link>
+      <pubDate>Fri, 10 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/speculative-decoding-foundations/</guid>
+      <description>完整推导 draft-then-verify、接受概率和残差分布，解释为什么推测采样能保持目标模型分布，并分析接受长度、草稿成本、批处理和系统吞吐之间的真实关系。</description>
+    </item>
+  </channel>
+</rss>

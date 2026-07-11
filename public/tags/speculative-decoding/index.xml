@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Speculative Decoding on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/speculative-decoding/</link>
+    <description>Recent content in Speculative Decoding on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 09:30:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/speculative-decoding/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>推测解码方法谱系：从 Medusa、EAGLE 到 DFlash 与 DSpark</title>
+      <link>https://example.com/aitech/speculative-decoding-method-family/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/speculative-decoding-method-family/</guid>
+      <description>按草稿来源、依赖结构和验证策略梳理推测解码方法家族，重点解释 Medusa/Hydra、EAGLE 1-3、并行草稿 DFlash，以及面向高并发调度的 DSpark。</description>
+    </item>
+    <item>
+      <title>推测解码基础：从拒绝采样到无损并行验证</title>
+      <link>https://example.com/aitech/speculative-decoding-foundations/</link>
+      <pubDate>Fri, 10 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/speculative-decoding-foundations/</guid>
+      <description>完整推导 draft-then-verify、接受概率和残差分布，解释为什么推测采样能保持目标模型分布，并分析接受长度、草稿成本、批处理和系统吞吐之间的真实关系。</description>
+    </item>
+  </channel>
+</rss>

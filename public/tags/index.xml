@@ -86,6 +86,160 @@
       <description></description>
     </item>
     <item>
+      <title>DFlash</title>
+      <link>https://example.com/tags/dflash/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/dflash/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DSpark</title>
+      <link>https://example.com/tags/dspark/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/dspark/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>EAGLE</title>
+      <link>https://example.com/tags/eagle/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/eagle/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>EAGLE-3</title>
+      <link>https://example.com/tags/eagle-3/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/eagle-3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Medusa</title>
+      <link>https://example.com/tags/medusa/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/medusa/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MTP</title>
+      <link>https://example.com/tags/mtp/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/mtp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Speculative Decoding</title>
+      <link>https://example.com/tags/speculative-decoding/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/tags/speculative-decoding/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Draft Model</title>
+      <link>https://example.com/tags/draft-model/</link>
+      <pubDate>Fri, 10 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/draft-model/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM Inference</title>
+      <link>https://example.com/tags/llm-inference/</link>
+      <pubDate>Fri, 10 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/llm-inference/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Rejection Sampling</title>
+      <link>https://example.com/tags/rejection-sampling/</link>
+      <pubDate>Fri, 10 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/rejection-sampling/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Speculative Sampling</title>
+      <link>https://example.com/tags/speculative-sampling/</link>
+      <pubDate>Fri, 10 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/speculative-sampling/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Blackwell</title>
+      <link>https://example.com/tags/blackwell/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/blackwell/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CUDA</title>
+      <link>https://example.com/tags/cuda/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/cuda/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Flash-Decoding</title>
+      <link>https://example.com/tags/flash-decoding/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/flash-decoding/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>FlashAttention</title>
+      <link>https://example.com/tags/flashattention/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/flashattention/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hopper</title>
+      <link>https://example.com/tags/hopper/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/hopper/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Online Softmax</title>
+      <link>https://example.com/tags/online-softmax/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/online-softmax/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Continuous Batching</title>
+      <link>https://example.com/tags/continuous-batching/</link>
+      <pubDate>Fri, 10 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/continuous-batching/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>KV Cache</title>
+      <link>https://example.com/tags/kv-cache/</link>
+      <pubDate>Fri, 10 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/kv-cache/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM Serving</title>
+      <link>https://example.com/tags/llm-serving/</link>
+      <pubDate>Fri, 10 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/llm-serving/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>PagedAttention</title>
+      <link>https://example.com/tags/pagedattention/</link>
+      <pubDate>Fri, 10 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/pagedattention/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>vLLM</title>
+      <link>https://example.com/tags/vllm/</link>
+      <pubDate>Fri, 10 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/vllm/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>互信息</title>
       <link>https://example.com/tags/%E4%BA%92%E4%BF%A1%E6%81%AF/</link>
       <pubDate>Fri, 10 Jul 2026 08:45:00 +0800</pubDate>
@@ -552,13 +706,6 @@
       <link>https://example.com/tags/gqa/</link>
       <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
       <guid>https://example.com/tags/gqa/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>KV Cache</title>
-      <link>https://example.com/tags/kv-cache/</link>
-      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>https://example.com/tags/kv-cache/</guid>
       <description></description>
     </item>
     <item>

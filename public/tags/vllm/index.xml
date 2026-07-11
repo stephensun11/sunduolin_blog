@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>vLLM on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/vllm/</link>
+    <description>Recent content in vLLM on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 09:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/vllm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>vLLM 详解：PagedAttention、连续批处理与 V0/V1 架构演进</title>
+      <link>https://example.com/aitech/vllm-pagedattention-engine-evolution/</link>
+      <pubDate>Fri, 10 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/vllm-pagedattention-engine-evolution/</guid>
+      <description>从自回归服务的 KV Cache 碎片问题出发，讲清 PagedAttention、块表、连续批处理、前缀缓存、分块预填充，以及 vLLM 从 V0 到 V1 的核心架构变化与工程取舍。</description>
+    </item>
+  </channel>
+</rss>

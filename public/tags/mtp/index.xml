@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MTP on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/mtp/</link>
+    <description>Recent content in MTP on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 09:30:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/mtp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>推测解码方法谱系：从 Medusa、EAGLE 到 DFlash 与 DSpark</title>
+      <link>https://example.com/aitech/speculative-decoding-method-family/</link>
+      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/speculative-decoding-method-family/</guid>
+      <description>按草稿来源、依赖结构和验证策略梳理推测解码方法家族，重点解释 Medusa/Hydra、EAGLE 1-3、并行草稿 DFlash，以及面向高并发调度的 DSpark。</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hopper on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/hopper/</link>
+    <description>Recent content in Hopper on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 10 Jul 2026 09:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/hopper/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FlashAttention 详解：Online Softmax、I/O 优化与 v1-v4 演进</title>
+      <link>https://example.com/aitech/flashattention-io-aware-evolution/</link>
+      <pubDate>Fri, 10 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/flashattention-io-aware-evolution/</guid>
+      <description>从 GPU 存储层次和 online softmax 推导 FlashAttention 的精确分块算法，梳理 FlashAttention 1、2、3、4 与 Flash-Decoding 的目标、硬件适配和版本边界。</description>
+    </item>
+  </channel>
+</rss>
