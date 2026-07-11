@@ -6,20 +6,55 @@
     <description>Recent content in Tags on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 11 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 11:00:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>GKD</title>
-      <link>https://example.com/tags/gkd/</link>
-      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>https://example.com/tags/gkd/</guid>
+      <title>Attention</title>
+      <link>https://example.com/tags/attention/</link>
+      <pubDate>Sat, 11 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/attention/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DeltaNet</title>
+      <link>https://example.com/tags/deltanet/</link>
+      <pubDate>Sat, 11 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/deltanet/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linear Attention</title>
+      <link>https://example.com/tags/linear-attention/</link>
+      <pubDate>Sat, 11 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/linear-attention/</guid>
       <description></description>
     </item>
     <item>
       <title>LLM</title>
       <link>https://example.com/tags/llm/</link>
-      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <pubDate>Sat, 11 Jul 2026 11:00:00 +0800</pubDate>
       <guid>https://example.com/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Performer</title>
+      <link>https://example.com/tags/performer/</link>
+      <pubDate>Sat, 11 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/performer/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>长上下文</title>
+      <link>https://example.com/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</link>
+      <pubDate>Sat, 11 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GKD</title>
+      <link>https://example.com/tags/gkd/</link>
+      <pubDate>Sat, 11 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/gkd/</guid>
       <description></description>
     </item>
     <item>
@@ -510,13 +545,6 @@
       <link>https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/</link>
       <pubDate>Thu, 09 Jul 2026 11:00:00 +0800</pubDate>
       <guid>https://example.com/tags/%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Attention</title>
-      <link>https://example.com/tags/attention/</link>
-      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>https://example.com/tags/attention/</guid>
       <description></description>
     </item>
     <item>

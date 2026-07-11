@@ -6,8 +6,15 @@
     <description>Recent content in Attention on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 09 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 11:00:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/attention/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性注意力详解：从核技巧、递推状态到现代架构</title>
+      <link>https://example.com/aitech/linear-attention-guide/</link>
+      <pubDate>Sat, 11 Jul 2026 11:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/linear-attention-guide/</guid>
+      <description>从标准 softmax 注意力出发，完整推导核化线性注意力的并行与递推形式，解释复杂度、数值稳定性、固定状态容量和硬件效率，并梳理 Performer、GLA、DeltaNet、Based、Mamba-2 与 Kimi Linear 的关系。</description>
+    </item>
     <item>
       <title>从 MHA 到 GQA：LLM 注意力机制的 KV 头复用</title>
       <link>https://example.com/aitech/attention-mha-mqa-gqa/</link>

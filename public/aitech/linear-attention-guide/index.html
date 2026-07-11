@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>线性注意力详解：从核技巧、递推状态到现代架构 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#先给出核心结论">先给出核心结论</a></li>
+    <li><a href="#从标准-softmax-注意力开始">从标准 softmax 注意力开始</a>
+      <ul>
+        <li><a href="#训练prefill-与-decode-的瓶颈并不相同">训练、prefill 与 decode 的瓶颈并不相同</a></li>
+        <li><a href="#flashattention-解决的是-io不是平方-flops">FlashAttention 解决的是 I/O，不是平方 FLOPs</a></li>
+      </ul>
+    </li>
+    <li><a href="#核技巧如何把平方复杂度变成线性复杂度">核技巧如何把平方复杂度变成线性复杂度</a>
+      <ul>
+        <li><a href="#用矩阵形状做一次校验">用矩阵形状做一次校验</a></li>
+      </ul>
+    </li>
+    <li><a href="#两条不同路线更换核与近似-softmax">两条不同路线：更换核与近似 softmax</a>
+      <ul>
+        <li><a href="#路线一选择一个有限维特征映射">路线一：选择一个有限维特征映射</a></li>
+        <li><a href="#路线二用随机特征近似-softmax-核">路线二：用随机特征近似 softmax 核</a></li>
+      </ul>
+    </li>
+    <li><a href="#因果线性注意力为什么等价于一个-rnn">因果线性注意力为什么等价于一个 RNN</a>
+      <ul>
+        <li><a href="#一个两维小例子">一个两维小例子</a></li>
+      </ul>
+    </li>
+    <li><a href="#并行递推与分块同一个算子的三种计算形态">并行、递推与分块：同一个算子的三种计算形态</a>
+      <ul>
+        <li><a href="#并行形式">并行形式</a></li>
+        <li><a href="#递推形式">递推形式</a></li>
+        <li><a href="#分块并行形式">分块并行形式</a></li>
+      </ul>
+    </li>
+    <li><a href="#一份可校验的-pytorch-教学实现">一份可校验的 PyTorch 教学实现</a></li>
+    <li><a href="#复杂度不能只写一个-on">复杂度不能只写一个 O(N)</a>
+      <ul>
+        <li><a href="#固定状态不一定比短-kv-cache-小">固定状态不一定比短 KV cache 小</a></li>
+      </ul>
+    </li>
+    <li><a href="#为什么理论上线性实践中未必更快">为什么理论上线性，实践中未必更快</a>
+      <ul>
+        <li><a href="#1-gpu-喜欢大矩阵乘法不喜欢细碎递推">1. GPU 喜欢大矩阵乘法，不喜欢细碎递推</a></li>
+        <li><a href="#2-性能存在序列长度交叉点">2. 性能存在序列长度交叉点</a></li>
+        <li><a href="#3-特征维度决定常数">3. 特征维度决定常数</a></li>
+        <li><a href="#4-attention-不是模型的全部成本">4. attention 不是模型的全部成本</a></li>
+        <li><a href="#5-数值稳定性会改变实现">5. 数值稳定性会改变实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#固定状态的代价历史被压缩而不是被完整保存">固定状态的代价：历史被压缩，而不是被完整保存</a></li>
+    <li><a href="#从加法写入到-delta-rule">从加法写入到 Delta Rule</a></li>
+    <li><a href="#门控衰减与现代线性注意力">门控、衰减与现代线性注意力</a>
+      <ul>
+        <li><a href="#gla数据依赖的遗忘">GLA：数据依赖的遗忘</a></li>
+        <li><a href="#retnet-与-rwkv平行训练递推推理">RetNet 与 RWKV：平行训练、递推推理</a></li>
+        <li><a href="#kimi-linear细粒度门控与混合架构">Kimi Linear：细粒度门控与混合架构</a></li>
+        <li><a href="#mamba-2关系很近但不应直接画等号">Mamba-2：关系很近，但不应直接画等号</a></li>
+      </ul>
+    </li>
+    <li><a href="#位置信息为什么仍然重要">位置信息为什么仍然重要</a></li>
+    <li><a href="#线性注意力方法的演进脉络">线性注意力方法的演进脉络</a></li>
+    <li><a href="#什么时候应该考虑线性注意力">什么时候应该考虑线性注意力</a>
+      <ul>
+        <li><a href="#更适合的场景">更适合的场景</a></li>
+        <li><a href="#full-attention-往往更稳妥的场景">full attention 往往更稳妥的场景</a></li>
+        <li><a href="#很多时候混合架构是更现实的答案">很多时候，混合架构是更现实的答案</a></li>
+      </ul>
+    </li>
+    <li><a href="#评估线性注意力时应该测什么">评估线性注意力时应该测什么</a></li>
+    <li><a href="#常见误解">常见误解</a>
+      <ul>
+        <li><a href="#线性注意力就是没有-softmax-的-qkt-v-吗">线性注意力就是没有 softmax 的 <code>Q(K^T V)</code> 吗</a></li>
+        <li><a href="#linear-attention-与-linformer-是一回事吗">Linear Attention 与 Linformer 是一回事吗</a></li>
+        <li><a href="#alibi-名字里有-linear所以是线性注意力吗">ALiBi 名字里有 Linear，所以是线性注意力吗</a></li>
+        <li><a href="#使用-flashattention-后还需要研究线性注意力吗">使用 FlashAttention 后还需要研究线性注意力吗</a></li>
+        <li><a href="#线性注意力完全不需要-kv-cache-吗">线性注意力完全不需要 KV cache 吗</a></li>
+        <li><a href="#o1-decode-是否意味着生成任意长度都一样快">O(1) decode 是否意味着生成任意长度都一样快</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考论文与技术文章">参考论文与技术文章</a>
+      <ul>
+        <li><a href="#论文">论文</a></li>
+        <li><a href="#技术文章">技术文章</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+    <span aria-hidden="true">/</span>
+    <span>线性注意力详解：从核技巧、递推状态到现代架构</span>
+</nav>
+
+                <h1>线性注意力详解：从核技巧、递推状态到现代架构</h1>
+                <div class="meta">
+                    <span class="date">2026-07-11</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/attention/index.html">Attention</a></span>
+                    
+                    <span class="tag"><a href="../../tags/linear-attention/index.html">Linear Attention</a></span>
+                    
+                    <span class="tag"><a href="../../tags/performer/index.html">Performer</a></span>
+                    
+                    <span class="tag"><a href="../../tags/deltanet/index.html">DeltaNet</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/index.html">长上下文</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>线性注意力最吸引人的承诺，是把随序列长度平方增长的注意力计算改成线性增长，并在自回归解码时用一个固定大小的状态替代不断变长的 KV cache。</p>
+<p>但“把 <span class="math-inline">\(O(N^2)\)</span> 变成 <span class="math-inline">\(O(N)\)</span>”只是故事的开头。真正理解线性注意力，还需要回答几个更重要的问题：它是否仍然等价于 softmax 注意力？为什么矩阵乘法换个顺序就能降复杂度？因果掩码怎么处理？固定大小的状态会丢掉什么？为什么理论 FLOPs 更少，实际运行却不一定更快？</p>
+<p>本文从公式和张量形状开始推导，再把理论放回 LLM 的训练、推理与硬件环境中。这里的“线性注意力”主要指<strong>利用可分解核函数，把历史压缩为矩阵状态的狭义线性注意力</strong>，而不是所有具有线性复杂度的稀疏、低秩或状态空间方法。</p>
+<h2 id="先给出核心结论">先给出核心结论</h2>
+<p>读完整篇文章之前，可以先记住下面六点：</p>
+<ol>
+<li>“线性”指 attention 的计算量对序列长度 <span class="math-inline">\(N\)</span> 线性增长，不是说模型只能表达线性函数。</li>
+<li>线性注意力的关键不是删除 softmax，而是把相似度写成 <span class="math-inline">\(\phi(q)^\top\phi(k)\)</span>，再利用矩阵乘法结合律改变计算顺序。</li>
+<li>使用 <code>ELU + 1</code>、ReLU 或恒等映射时，通常是<strong>换了一个注意力核</strong>；Performer 的 FAVOR+ 则尝试用随机特征<strong>近似原始 softmax 核</strong>。两者不能混为一谈。</li>
+<li>因果线性注意力可以维护固定大小的矩阵状态，因此单步解码成本不再随历史长度增加；但它把整个前缀压缩进有限状态，精确召回能力通常弱于保存全部 KV 的 softmax 注意力。</li>
+<li><span class="math-inline">\(O(N)\)</span> 不自动等于墙钟时间更快。GPU 是否能使用大矩阵乘法、状态是否频繁读写 HBM、特征维度多大，以及序列长度是否超过性能交叉点，都很重要。</li>
+<li>现代方案很少只使用最朴素的线性注意力。门控、衰减、delta rule、局部窗口和少量全局注意力层，都是在弥补有限状态记忆的不足。</li>
+</ol>
+<h2 id="从标准-softmax-注意力开始">从标准 softmax 注意力开始</h2>
+<p>先看单个注意力头。设序列长度为 <span class="math-inline">\(N\)</span>，Query 和 Key 的维度为 <span class="math-inline">\(d_k\)</span>，Value 的维度为 <span class="math-inline">\(d_v\)</span>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Q: [N, d_k]
+</span></span><span style="display:flex;"><span>K: [N, d_k]
+</span></span><span style="display:flex;"><span>V: [N, d_v]
+</span></span></code></pre></div><p>位置 <span class="math-inline">\(i\)</span> 对位置 <span class="math-inline">\(j\)</span> 的未归一化相似度为：</p>
+<div class="math-display">\[
+s(q_i,k_j)
+=\exp\left(\frac{q_i^\top k_j}{\sqrt{d_k}}\right).
+\]</div>
+<p>输出是所有 Value 的加权平均：</p>
+<div class="math-display">\[
+o_i
+=\frac{\sum_{j=1}^{N}s(q_i,k_j)v_j}
+{\sum_{j=1}^{N}s(q_i,k_j)}.
+\]</div>
+<p>把所有位置写成矩阵形式，就是熟悉的 scaled dot-product attention：</p>
+<div class="math-display">\[
+O=\operatorname{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V.
+\]</div>
+<p>这里最昂贵的中间量是 <span class="math-inline">\(QK^\top\in\mathbb R^{N\times N}\)</span>。每个 Query 都要和每个 Key 比较，核心计算量约为 <span class="math-inline">\(O(N^2d_k+N^2d_v)\)</span>，通常简写为 <span class="math-inline">\(O(N^2d)\)</span>。</p>
+<h3 id="训练prefill-与-decode-的瓶颈并不相同">训练、prefill 与 decode 的瓶颈并不相同</h3>
+<p>在训练或 prompt prefill 阶段，模型一次拿到整段序列，平方项来自所有 token 两两交互。自回归 decode 则通常保存 KV cache：生成第 <span class="math-inline">\(t\)</span> 个 token 时，只计算新 Query，但仍要读取并匹配前面 <span class="math-inline">\(t\)</span> 个 Key 和 Value，所以单步 attention 成本为 <span class="math-inline">\(O(td)\)</span>，KV cache 也随 <span class="math-inline">\(t\)</span> 线性增长。</p>
+<p>如果连续生成 <span class="math-inline">\(N\)</span> 个 token，attention 部分的累计工作量仍然包含：</p>
+<div class="math-display">\[
+\sum_{t=1}^{N}O(td)=O(N^2d).
+\]</div>
+<p>MQA 和 GQA 会减少 KV 头数，从而降低缓存和带宽的常数，但不会改变它们关于序列长度的阶数。</p>
+<h3 id="flashattention-解决的是-io不是平方-flops">FlashAttention 解决的是 I/O，不是平方 FLOPs</h3>
+<p><a href="https://arxiv.org/abs/2205.14135">FlashAttention</a> 通过分块和 online softmax 避免把完整的 <span class="math-inline">\(N\times N\)</span> 注意力矩阵写回显存，显著减少 HBM 与片上 SRAM 之间的数据搬运。它计算的仍然是<strong>精确 softmax 注意力</strong>，核心算术复杂度仍是平方级。</p>
+<p>因此，FlashAttention 和线性注意力不是同一条路线：前者保留算法，优化数据流；后者改变或近似注意力核，减少需要完成的计算。</p>
+<h2 id="核技巧如何把平方复杂度变成线性复杂度">核技巧如何把平方复杂度变成线性复杂度</h2>
+<p>先暂时忘掉 softmax，把注意力写成任意非负相似度函数 <span class="math-inline">\(s(q,k)\)</span>：</p>
+<div class="math-display">\[
+o_i
+=\frac{\sum_{j=1}^{N}s(q_i,k_j)v_j}
+{\sum_{j=1}^{N}s(q_i,k_j)}.
+\]</div>
+<p>假设这个相似度可以用某个 <span class="math-inline">\(m\)</span> 维特征映射分解：</p>
+<div class="math-display">\[
+s(q,k)=\phi(q)^\top\phi(k),
+\qquad \phi:\mathbb R^{d_k}\rightarrow\mathbb R^m.
+\]</div>
+<p>代回注意力公式：</p>
+<div class="math-display">\[
+o_i
+=\frac{\sum_{j=1}^{N}\phi(q_i)^\top\phi(k_j)v_j}
+{\sum_{j=1}^{N}\phi(q_i)^\top\phi(k_j)}.
+\]</div>
+<p>因为 <span class="math-inline">\(\phi(q_i)\)</span> 与求和下标 <span class="math-inline">\(j\)</span> 无关，可以移到求和外面：</p>
+<div class="math-display">\[
+o_i
+=\frac{
+\phi(q_i)^\top
+\left(\sum_{j=1}^{N}\phi(k_j)v_j^\top\right)
+}{
+\phi(q_i)^\top
+\left(\sum_{j=1}^{N}\phi(k_j)\right)
+}.
+\]</div>
+<p>定义两个与 Query 无关的汇总量：</p>
+<div class="math-display">\[
+S=\sum_{j=1}^{N}\phi(k_j)v_j^\top
+\in\mathbb R^{m\times d_v},
+\qquad
+z=\sum_{j=1}^{N}\phi(k_j)
+\in\mathbb R^m.
+\]</div>
+<p>那么每个位置的输出只需计算：</p>
+<div class="math-display">\[
+o_i=\frac{\phi(q_i)^\top S}{\phi(q_i)^\top z}.
+\]</div>
+<p>这就是线性注意力最核心的推导。标准注意力先计算：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(Q K^T) V
+</span></span><span style="display:flex;"><span> ^^^^^^^
+</span></span><span style="display:flex;"><span>  N x N
+</span></span></code></pre></div><p>线性注意力改变括号位置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>Q (K^T V)
+</span></span><span style="display:flex;"><span>   ^^^^^^^
+</span></span><span style="display:flex;"><span>   m x d_v
+</span></span></code></pre></div><p>它没有显式构造 token 与 token 的完整注意力矩阵，而是先把全部 Key-Value 对压缩为 <span class="math-inline">\(S\)</span> 和 <span class="math-inline">\(z\)</span>，再让每个 Query 读取这份汇总状态。</p>
+<h3 id="用矩阵形状做一次校验">用矩阵形状做一次校验</h3>
+<p>令 <span class="math-inline">\(\Phi_Q=\phi(Q)\in\mathbb R^{N\times m}\)</span>，<span class="math-inline">\(\Phi_K=\phi(K)\in\mathbb R^{N\times m}\)</span>，则：</p>
+<table>
+<thead>
+<tr>
+<th>中间量</th>
+<th>计算</th>
+<th>形状</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key-Value 状态</td>
+<td><span class="math-inline">\(S=\Phi_K^\top V\)</span></td>
+<td><span class="math-inline">\(m\times d_v\)</span></td>
+</tr>
+<tr>
+<td>归一化状态</td>
+<td><span class="math-inline">\(z=\Phi_K^\top\mathbf 1\)</span></td>
+<td><span class="math-inline">\(m\)</span></td>
+</tr>
+<tr>
+<td>分子</td>
+<td><span class="math-inline">\(\Phi_QS\)</span></td>
+<td><span class="math-inline">\(N\times d_v\)</span></td>
+</tr>
+<tr>
+<td>分母</td>
+<td><span class="math-inline">\(\Phi_Qz\)</span></td>
+<td><span class="math-inline">\(N\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>计算 <span class="math-inline">\(S\)</span> 和输出大约需要 <span class="math-inline">\(O(Nmd_v)\)</span>，归一化部分需要 <span class="math-inline">\(O(Nm)\)</span>。当 <span class="math-inline">\(m\)</span> 和 <span class="math-inline">\(d_v\)</span> 不随 <span class="math-inline">\(N\)</span> 增长时，对序列长度就是线性的。</p>
+<p>这里不能把维度藏起来后就忘掉它。若特征映射为了提高精度而让 <span class="math-inline">\(m\)</span> 很大，线性注意力仍可能在实际长度范围内比优化后的 softmax 注意力更慢。</p>
+<h2 id="两条不同路线更换核与近似-softmax">两条不同路线：更换核与近似 softmax</h2>
+<p>“把 softmax 去掉”是一种过于粗糙的说法。核化之后至少有两条不同路线，它们优化的目标并不相同。</p>
+<h3 id="路线一选择一个有限维特征映射">路线一：选择一个有限维特征映射</h3>
+<p><a href="https://arxiv.org/abs/2006.16236">Transformers are RNNs</a> 使用了简单的正值特征映射：</p>
+<div class="math-display">\[
+\phi(x)=\operatorname{ELU}(x)+1.
+\]</div>
+<p>它容易计算，结果严格为正，能让注意力权重和归一化分母保持非负。ReLU、恒等映射以及多项式特征也出现在后续工作中。</p>
+<p>关键是：<code>ELU + 1</code> 并不与 softmax 核等价。此时模型学习的是一个新的相似度：</p>
+<div class="math-display">\[
+s(q,k)=\bigl(\operatorname{ELU}(q)+1\bigr)^\top
+\bigl(\operatorname{ELU}(k)+1\bigr).
+\]</div>
+<p>它保留了“基于内容匹配后加权聚合”的结构，却改变了 softmax 指数核的几何性质。模型通常需要围绕这个新算子重新训练，不能指望把已训练好的 softmax attention 直接替换后性能完全不变。</p>
+<h3 id="路线二用随机特征近似-softmax-核">路线二：用随机特征近似 softmax 核</h3>
+<p>softmax 注意力对应的指数点积核可以写成：</p>
+<div class="math-display">\[
+k(q,k)=\exp\left(\frac{q^\top k}{\sqrt{d_k}}\right).
+\]</div>
+<p>它存在特征空间表示，但精确表示通常是无限维的，无法直接得到有限成本的 exact linear attention。<a href="https://arxiv.org/abs/2009.14794">Performer</a> 提出的 FAVOR+ 使用正交随机特征，把它近似为：</p>
+<div class="math-display">\[
+\exp\left(\frac{q^\top k}{\sqrt{d_k}}\right)
+\approx \phi(q)^\top\phi(k).
+\]</div>
+<p>于是仍可使用前面的结合律。特征数 <span class="math-inline">\(m\)</span> 越大，随机近似通常越准确，但计算量、状态大小和显存占用也越高。FAVOR+ 强调正值、低方差的随机特征，因为普通随机特征在长序列上可能出现高方差或不稳定的归一化。</p>
+<p>可以这样区分二者：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>是否保留 softmax 核</th>
+<th>主要误差来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ELU + 1</code>、ReLU、identity</td>
+<td>否，定义了新核</td>
+<td>模型表达偏置发生变化</td>
+</tr>
+<tr>
+<td>Performer / FAVOR+</td>
+<td>近似保留</td>
+<td>有限随机特征的近似误差与方差</td>
+</tr>
+</tbody>
+</table>
+<h2 id="因果线性注意力为什么等价于一个-rnn">因果线性注意力为什么等价于一个 RNN</h2>
+<p>非因果 attention 可以一次汇总整段序列。自回归语言模型不能读取未来 token，因此位置 <span class="math-inline">\(t\)</span> 只能使用 <span class="math-inline">\(1\ldots t\)</span> 的 Key 和 Value。</p>
+<p>把全局状态改成前缀状态：</p>
+<div class="math-display">\[
+S_t=\sum_{i=1}^{t}\phi(k_i)v_i^\top,
+\qquad
+z_t=\sum_{i=1}^{t}\phi(k_i).
+\]</div>
+<p>它们可以递推更新：</p>
+<div class="math-display">\[
+S_t=S_{t-1}+\phi(k_t)v_t^\top,
+\qquad
+z_t=z_{t-1}+\phi(k_t).
+\]</div>
+<p>当前输出为：</p>
+<div class="math-display">\[
+o_t=\frac{\phi(q_t)^\top S_t}{\phi(q_t)^\top z_t+\varepsilon}.
+\]</div>
+<p>这已经是一个标准的循环状态更新：输入当前 token，更新内部状态，再读出当前输出。状态 <span class="math-inline">\(S_t\)</span> 的大小为 <span class="math-inline">\(m\times d_v\)</span>，不会随上下文长度增长。</p>
+<p>因此，在固定 <span class="math-inline">\(m\)</span> 和 <span class="math-inline">\(d_v\)</span> 下：</p>
+<ul>
+<li>单步解码 attention 成本为 <span class="math-inline">\(O(md_v)\)</span>，与已经生成多少 token 无关；</li>
+<li>整段长度 <span class="math-inline">\(N\)</span> 的 attention 成本为 <span class="math-inline">\(O(Nmd_v)\)</span>；</li>
+<li>推理状态大小为 <span class="math-inline">\(O(md_v+m)\)</span>，关于 <span class="math-inline">\(N\)</span> 是常数。</li>
+</ul>
+<p>这里的“常数”只表示不随上下文长度变化，并不表示状态很小。一层、多头、较大特征维度和大 batch 仍可能产生可观的矩阵状态。</p>
+<h3 id="一个两维小例子">一个两维小例子</h3>
+<p>假设特征空间只有两维，Value 是标量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>phi(k1) = [1, 0], v1 = 2
+</span></span><span style="display:flex;"><span>phi(k2) = [0, 1], v2 = 6
+</span></span></code></pre></div><p>读完两个 token 后：</p>
+<div class="math-display">\[
+S_2=
+\begin{bmatrix}2\\6\end{bmatrix},
+\qquad
+z_2=
+\begin{bmatrix}1\\1\end{bmatrix}.
+\]</div>
+<p>若 <span class="math-inline">\(\phi(q)=[1,1]\)</span>，两个槽位权重相同，输出为：</p>
+<div class="math-display">\[
+o=\frac{[1,1][2,6]^\top}{[1,1][1,1]^\top}=4.
+\]</div>
+<p>若 <span class="math-inline">\(\phi(q)=[3,1]\)</span>，第一个方向权重更高：</p>
+<div class="math-display">\[
+o=\frac{3\times2+1\times6}{3+1}=3.
+\]</div>
+<p>真实模型并没有两个互不干扰的硬槽位。不同 Key 的特征通常不正交，它们的外积会叠加在同一个矩阵状态里，这正是后面要讨论的记忆干扰来源。</p>
+<h2 id="并行递推与分块同一个算子的三种计算形态">并行、递推与分块：同一个算子的三种计算形态</h2>
+<p>线性注意力在论文公式里是线性的，不代表最直接的 <code>for</code> 循环就适合 GPU。现代实现通常在三种形态之间选择。</p>
+<h3 id="并行形式">并行形式</h3>
+<p>非因果 attention 可直接计算 <span class="math-inline">\(\Phi_K^\top V\)</span> 和 <span class="math-inline">\(\Phi_QS\)</span>。对于因果 attention，也可以显式计算带下三角 mask 的 pairwise 结果，或者使用并行 prefix scan。</p>
+<p>并行形式容易让 GPU 保持高占用，但显式 pairwise 形式会重新引入平方 FLOPs；prefix scan 若物化每个时间步的二维状态，也会带来很高的内存 I/O。</p>
+<h3 id="递推形式">递推形式</h3>
+<p>递推形式每一步只做状态读写，FLOPs 最少，也最适合 token-by-token 解码。但训练时各时间步存在依赖，简单循环难以利用 Tensor Core，大量小算子和状态访存可能让实际速度很差。</p>
+<h3 id="分块并行形式">分块并行形式</h3>
+<p>分块方法把长度 <span class="math-inline">\(N\)</span> 的序列切成长度 <span class="math-inline">\(C\)</span> 的块：</p>
+<ul>
+<li>块内使用并行矩阵乘法，计算局部因果交互；</li>
+<li>块间传递压缩状态，计算更早历史对当前块的贡献；</li>
+<li>调节 <span class="math-inline">\(C\)</span>，在并行度、FLOPs、片上存储和 HBM 流量之间折中。</li>
+</ul>
+<p><a href="https://proceedings.mlr.press/v235/yang24ab.html">GLA</a> 的分析中，在特征维度与隐状态维度相近的简化设置下，chunkwise 计算约为 <span class="math-inline">\(O(NCd+Nd^2)\)</span>。当 <span class="math-inline">\(C=1\)</span> 时接近递推形式，当 <span class="math-inline">\(C=N\)</span> 时退化到完整并行形式。</p>
+<p>这也是现代线性注意力论文越来越重视自定义 CUDA/Triton kernel 的原因：算法复杂度只决定上限，数据放在哪里、以多大 tile 计算，才决定 GPU 真正花多少时间。</p>
+<h2 id="一份可校验的-pytorch-教学实现">一份可校验的 PyTorch 教学实现</h2>
+<p>下面的代码实现了 <code>ELU + 1</code> 特征映射下的两种等价计算：</p>
+<ul>
+<li><code>causal_linear_attention_reference</code> 显式构造下三角 pairwise 权重，便于作为正确性基准；</li>
+<li><code>causal_linear_attention_recurrent</code> 只维护 <span class="math-inline">\(S_t\)</span> 和 <span class="math-inline">\(z_t\)</span>，展示真正的递推形式。</li>
+</ul>
+<p>输入形状统一为 <code>[batch, heads, seq_len, dim]</code>。为了降低长序列累加误差，半精度输入使用 FP32 状态累加，最后再转回 Value 的 dtype。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#66d9ef">as</span> F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">positive_feature_map</span>(x: torch<span style="color:#f92672">.</span>Tensor) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> F<span style="color:#f92672">.</span>elu(x) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1.0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_accumulation_dtype</span>(x: torch<span style="color:#f92672">.</span>Tensor) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>dtype:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> x<span style="color:#f92672">.</span>dtype <span style="color:#f92672">in</span> (torch<span style="color:#f92672">.</span>float16, torch<span style="color:#f92672">.</span>bfloat16):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> torch<span style="color:#f92672">.</span>float32
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> x<span style="color:#f92672">.</span>dtype
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">causal_linear_attention_reference</span>(
+</span></span><span style="display:flex;"><span>    q: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>    k: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>    v: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>    eps: float <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-6</span>,
+</span></span><span style="display:flex;"><span>) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;显式 O(N^2) 参考实现，只用于校验。&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    dtype <span style="color:#f92672">=</span> _accumulation_dtype(q)
+</span></span><span style="display:flex;"><span>    qf <span style="color:#f92672">=</span> positive_feature_map(q)<span style="color:#f92672">.</span>to(dtype)
+</span></span><span style="display:flex;"><span>    kf <span style="color:#f92672">=</span> positive_feature_map(k)<span style="color:#f92672">.</span>to(dtype)
+</span></span><span style="display:flex;"><span>    vf <span style="color:#f92672">=</span> v<span style="color:#f92672">.</span>to(dtype)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># scores: [batch, heads, query_pos, key_pos]</span>
+</span></span><span style="display:flex;"><span>    scores <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#34;bhnm,bhsm-&gt;bhns&#34;</span>, qf, kf)
+</span></span><span style="display:flex;"><span>    seq_len <span style="color:#f92672">=</span> q<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    mask <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>ones(
+</span></span><span style="display:flex;"><span>        seq_len, seq_len, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>bool, device<span style="color:#f92672">=</span>q<span style="color:#f92672">.</span>device
+</span></span><span style="display:flex;"><span>    )<span style="color:#f92672">.</span>tril()
+</span></span><span style="display:flex;"><span>    scores <span style="color:#f92672">=</span> scores<span style="color:#f92672">.</span>masked_fill(<span style="color:#f92672">~</span>mask, <span style="color:#ae81ff">0.0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    numerator <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#34;bhns,bhsd-&gt;bhnd&#34;</span>, scores, vf)
+</span></span><span style="display:flex;"><span>    denominator <span style="color:#f92672">=</span> scores<span style="color:#f92672">.</span>sum(dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, keepdim<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)<span style="color:#f92672">.</span>clamp_min(eps)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> (numerator <span style="color:#f92672">/</span> denominator)<span style="color:#f92672">.</span>to(v<span style="color:#f92672">.</span>dtype)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">causal_linear_attention_recurrent</span>(
+</span></span><span style="display:flex;"><span>    q: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>    k: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>    v: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>    eps: float <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-6</span>,
+</span></span><span style="display:flex;"><span>) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;O(N) 递推实现，状态大小与 seq_len 无关。&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    dtype <span style="color:#f92672">=</span> _accumulation_dtype(q)
+</span></span><span style="display:flex;"><span>    qf <span style="color:#f92672">=</span> positive_feature_map(q)<span style="color:#f92672">.</span>to(dtype)
+</span></span><span style="display:flex;"><span>    kf <span style="color:#f92672">=</span> positive_feature_map(k)<span style="color:#f92672">.</span>to(dtype)
+</span></span><span style="display:flex;"><span>    vf <span style="color:#f92672">=</span> v<span style="color:#f92672">.</span>to(dtype)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    batch, heads, seq_len, feature_dim <span style="color:#f92672">=</span> qf<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>    value_dim <span style="color:#f92672">=</span> vf<span style="color:#f92672">.</span>size(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    state <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(
+</span></span><span style="display:flex;"><span>        batch,
+</span></span><span style="display:flex;"><span>        heads,
+</span></span><span style="display:flex;"><span>        feature_dim,
+</span></span><span style="display:flex;"><span>        value_dim,
+</span></span><span style="display:flex;"><span>        dtype<span style="color:#f92672">=</span>dtype,
+</span></span><span style="display:flex;"><span>        device<span style="color:#f92672">=</span>q<span style="color:#f92672">.</span>device,
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>    normalizer <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(
+</span></span><span style="display:flex;"><span>        batch,
+</span></span><span style="display:flex;"><span>        heads,
+</span></span><span style="display:flex;"><span>        feature_dim,
+</span></span><span style="display:flex;"><span>        dtype<span style="color:#f92672">=</span>dtype,
+</span></span><span style="display:flex;"><span>        device<span style="color:#f92672">=</span>q<span style="color:#f92672">.</span>device,
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    outputs <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> t <span style="color:#f92672">in</span> range(seq_len):
+</span></span><span style="display:flex;"><span>        kt <span style="color:#f92672">=</span> kf[:, :, t]
+</span></span><span style="display:flex;"><span>        vt <span style="color:#f92672">=</span> vf[:, :, t]
+</span></span><span style="display:flex;"><span>        qt <span style="color:#f92672">=</span> qf[:, :, t]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># S_t = S_{t-1} + phi(k_t) v_t^T</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> state <span style="color:#f92672">+</span> torch<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#34;bhm,bhd-&gt;bhmd&#34;</span>, kt, vt)
+</span></span><span style="display:flex;"><span>        normalizer <span style="color:#f92672">=</span> normalizer <span style="color:#f92672">+</span> kt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        numerator <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>einsum(<span style="color:#e6db74">&#34;bhm,bhmd-&gt;bhd&#34;</span>, qt, state)
+</span></span><span style="display:flex;"><span>        denominator <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>einsum(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;bhm,bhm-&gt;bh&#34;</span>, qt, normalizer
+</span></span><span style="display:flex;"><span>        )<span style="color:#f92672">.</span>unsqueeze(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        outputs<span style="color:#f92672">.</span>append(numerator <span style="color:#f92672">/</span> denominator<span style="color:#f92672">.</span>clamp_min(eps))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> torch<span style="color:#f92672">.</span>stack(outputs, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>to(v<span style="color:#f92672">.</span>dtype)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    torch<span style="color:#f92672">.</span>manual_seed(<span style="color:#ae81ff">7</span>)
+</span></span><span style="display:flex;"><span>    q <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">8</span>, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32)
+</span></span><span style="display:flex;"><span>    k <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">8</span>, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32)
+</span></span><span style="display:flex;"><span>    v <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">12</span>, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    expected <span style="color:#f92672">=</span> causal_linear_attention_reference(q, k, v)
+</span></span><span style="display:flex;"><span>    actual <span style="color:#f92672">=</span> causal_linear_attention_recurrent(q, k, v)
+</span></span><span style="display:flex;"><span>    torch<span style="color:#f92672">.</span>testing<span style="color:#f92672">.</span>assert_close(actual, expected, rtol<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-5</span>, atol<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#34;reference and recurrent forms match&#34;</span>)
+</span></span></code></pre></div><p>这个实现强调公式正确性，不代表高性能实现。Python 循环会产生大量 kernel launch，训练时也会保存计算图中的逐步状态。生产实现应使用并行 scan 或 I/O-aware chunkwise kernel，并为反向传播设计重计算策略。</p>
+<p>还要注意一个边界：代码先写入当前 <span class="math-inline">\((k_t,v_t)\)</span> 再读取，因此对应包含对角线的下三角 attention，即位置 <span class="math-inline">\(t\)</span> 可以读取当前位置。若任务需要严格只看 <span class="math-inline">\(1\ldots t-1\)</span>，应先读状态再更新。</p>
+<h2 id="复杂度不能只写一个-on">复杂度不能只写一个 O(N)</h2>
+<p>设每头特征维度为 <span class="math-inline">\(m\)</span>，Value 维度为 <span class="math-inline">\(d_v\)</span>。下面只比较 attention 核心，不含 Q/K/V 投影、MLP、通信和优化器状态。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>整段核心计算</th>
+<th>单步 decode 随历史长度的变化</th>
+<th>推理时历史状态</th>
+<th>是否精确 softmax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>朴素 softmax attention</td>
+<td><span class="math-inline">\(O(N^2d)\)</span></td>
+<td><span class="math-inline">\(O(td)\)</span></td>
+<td>KV cache 为 <span class="math-inline">\(O(Nd)\)</span></td>
+<td>是</td>
+</tr>
+<tr>
+<td>FlashAttention</td>
+<td><span class="math-inline">\(O(N^2d)\)</span></td>
+<td><span class="math-inline">\(O(td)\)</span></td>
+<td>KV cache 为 <span class="math-inline">\(O(Nd)\)</span></td>
+<td>是</td>
+</tr>
+<tr>
+<td>核化线性注意力</td>
+<td><span class="math-inline">\(O(Nmd_v)\)</span></td>
+<td><span class="math-inline">\(O(md_v)\)</span></td>
+<td><span class="math-inline">\(O(md_v+m)\)</span></td>
+<td>通常不是</td>
+</tr>
+<tr>
+<td>Performer</td>
+<td><span class="math-inline">\(O(Nmd_v)\)</span></td>
+<td><span class="math-inline">\(O(md_v)\)</span></td>
+<td><span class="math-inline">\(O(md_v+m)\)</span></td>
+<td>随机近似</td>
+</tr>
+<tr>
+<td>chunkwise 线性注意力</td>
+<td>依具体门控和块长而定</td>
+<td>可递推为常数</td>
+<td>固定矩阵状态</td>
+<td>依核而定</td>
+</tr>
+</tbody>
+</table>
+<p>“单步为常数”是指对 <span class="math-inline">\(t\)</span> 为常数，仍要付出 <span class="math-inline">\(md_v\)</span> 的矩阵状态读写和计算。自回归生成也仍然必须逐 token 进行，所以它消除的是上下文增长带来的额外 attention 成本，不会让整个 decoder 突然变成并行生成器。</p>
+<h3 id="固定状态不一定比短-kv-cache-小">固定状态不一定比短 KV cache 小</h3>
+<p>做一个仅用于建立量级直觉的估算。若每头 <span class="math-inline">\(m=d_v=d\)</span>：</p>
+<ul>
+<li>标准 MHA 的每头 KV cache 约有 <span class="math-inline">\(2Nd\)</span> 个元素；</li>
+<li>基础线性注意力的矩阵状态和归一化向量约有 <span class="math-inline">\(d^2+d\)</span> 个元素。</li>
+</ul>
+<p>两者的存储量在 <span class="math-inline">\(N\approx(d+1)/2\)</span> 附近相等。若 head dimension 为 128，这个粗略交叉点只有约 64 个 token。</p>
+<p>但这不是速度结论。真实系统还要考虑 GQA 的 KV 头共享、线性注意力的多状态或扩展维度、数据类型、kernel 融合和 batch 调度。它只说明“固定大小”不等于“零成本”，并且状态设计会直接决定线性模型的效率与容量。</p>
+<h2 id="为什么理论上线性实践中未必更快">为什么理论上线性，实践中未必更快</h2>
+<h3 id="1-gpu-喜欢大矩阵乘法不喜欢细碎递推">1. GPU 喜欢大矩阵乘法，不喜欢细碎递推</h3>
+<p>softmax attention 虽然 FLOPs 多，但 FlashAttention 能把大量工作组织成规则的矩阵乘法，充分利用 Tensor Core。朴素线性递推每步更新一个矩阵状态，算术强度低、顺序依赖强，可能花更多时间搬数据和启动算子。</p>
+<h3 id="2-性能存在序列长度交叉点">2. 性能存在序列长度交叉点</h3>
+<p>当 <span class="math-inline">\(N\)</span> 较短时，平方 attention 的矩阵乘法非常高效，而线性 attention 仍要处理 <span class="math-inline">\(m\times d_v\)</span> 状态。只有上下文足够长、batch 和硬件条件合适时，渐近复杂度优势才会转化成墙钟时间优势。</p>
+<h3 id="3-特征维度决定常数">3. 特征维度决定常数</h3>
+<p>Performer 增大随机特征数可以降低近似误差，却会同步放大计算和状态。DeltaNet、GLA、KDA 等更强算子还会加入门控、卷积、归一化与额外投影。比较模型时不能只看到名字里有“linear”。</p>
+<h3 id="4-attention-不是模型的全部成本">4. attention 不是模型的全部成本</h3>
+<p>短上下文、大 MLP 或 MoE 模型中，前馈层、路由、通信和权重读取可能占主要时间。把 attention 的复杂度降下来，不等于端到端吞吐会按相同比例提升。</p>
+<h3 id="5-数值稳定性会改变实现">5. 数值稳定性会改变实现</h3>
+<p>状态是大量外积的累加。长序列下，FP16/BF16 容易积累舍入误差或溢出；归一化分母也可能过小。常见处理包括：</p>
+<ul>
+<li>让特征映射保持非负，并给分母加入 <span class="math-inline">\(\varepsilon\)</span>；</li>
+<li>使用 FP32 累加状态；</li>
+<li>对 Query、Key 做归一化或缩放；</li>
+<li>对状态做分块重标定，或使用具有稳定衰减的门控；</li>
+<li>在一些现代架构中删除显式分母，再通过 RMSNorm、门控和训练配方控制尺度。</li>
+</ul>
+<p>最后一种做法已经不再与归一化核 attention 完全等价，阅读论文时要检查它到底保留了哪一项公式。</p>
+<h2 id="固定状态的代价历史被压缩而不是被完整保存">固定状态的代价：历史被压缩，而不是被完整保存</h2>
+<p>softmax attention 的 KV cache 保存每个历史 token 的独立 Key 和 Value。Query 到来时，可以重新计算它与所有历史 Key 的匹配分数。这像一份会随上下文增长的显式内容寻址存储。</p>
+<p>基础线性注意力只保留：</p>
+<div class="math-display">\[
+S_t=\sum_{i=1}^{t}\phi(k_i)v_i^\top.
+\]</div>
+<p>所有键值关联以外积相加的方式叠在同一个固定矩阵中。若两个 Key 在特征空间接近，它们写入的方向也接近，读取时就会互相干扰。序列继续增长，状态大小不变，模型不可能无损保存任意多、任意精确的关联。</p>
+<p><a href="https://arxiv.org/abs/2402.18668">Based</a> 把这件事总结为 recall 与 state size 的权衡：状态更小、生成吞吐更高，但需要精确从长上下文取回某个 token 时通常更困难。Based 因此把线性注意力与滑动窗口 attention 结合：固定状态负责全局汇总，局部窗口负责精确的近邻比较和 token shift。</p>
+<p>这也解释了为什么“支持一百万 token”与“能准确利用一百万 token 中的任意细节”是两个不同问题。复杂度允许模型接收很长输入，只是第一步；状态容量、训练数据和检索机制决定它能保留什么。</p>
+<h2 id="从加法写入到-delta-rule">从加法写入到 Delta Rule</h2>
+<p><a href="https://arxiv.org/abs/2102.11174">Linear Transformers Are Secretly Fast Weight Programmers</a> 提供了一个很有帮助的视角：矩阵状态 <span class="math-inline">\(S_t\)</span> 是一组在序列内部动态更新的 fast weights，Key 是地址，Value 是希望写入的内容。</p>
+<p>基础线性注意力只会做加法写入：</p>
+<div class="math-display">\[
+S_t=S_{t-1}+k_tv_t^\top.
+\]</div>
+<p>若同一个或相近的 Key 后来对应了新 Value，旧关联仍留在状态中。Delta rule 先读取当前记忆对 Key 的预测：</p>
+<div class="math-display">\[
+\hat v_t=S_{t-1}^\top k_t,
+\]</div>
+<p>再只写入预测误差：</p>
+<div class="math-display">\[
+S_t=S_{t-1}+\beta_t k_t(v_t-\hat v_t)^\top,
+\qquad 0\le\beta_t\le1.
+\]</div>
+<p>若当前记忆已经能从 <span class="math-inline">\(k_t\)</span> 读出 <span class="math-inline">\(v_t\)</span>，更新接近零；若内容发生变化，模型会沿对应 Key 的方向纠正旧映射。严格推导通常还会约束或归一化 Key，确保这一步具有稳定的“擦除再写入”含义。</p>
+<p>Delta rule 没有凭空增加状态维度，但给了模型主动修正记忆的能力。2024 年的 <a href="https://arxiv.org/abs/2406.06484">DeltaNet 并行化工作</a> 又解决了这类更新难以沿序列并行训练的问题，使其能够扩展到更标准的语言建模规模。</p>
+<h2 id="门控衰减与现代线性注意力">门控、衰减与现代线性注意力</h2>
+<p>另一个自然改进是允许模型忘记旧状态。最一般的二维门控可以写成：</p>
+<div class="math-display">\[
+S_t=G_t\odot S_{t-1}+k_tv_t^\top,
+\qquad G_t\in(0,1)^{d_k\times d_v}.
+\]</div>
+<p>完整矩阵门控表达力强，却很难高效训练。现代方法会限制门控结构，例如使用标量、向量、对角矩阵或低秩参数化，在表达力与硬件效率之间折中。</p>
+<h3 id="gla数据依赖的遗忘">GLA：数据依赖的遗忘</h3>
+<p><a href="https://proceedings.mlr.press/v235/yang24ab.html">Gated Linear Attention</a> 使用数据依赖的向量门控，让不同 Key 通道具有不同衰减速度，并设计 I/O-aware 的 chunkwise 算法。其重要贡献不只是“加了一个 gate”，而是让更有表达力的递推状态仍能被组织为适合 Tensor Core 的训练计算。</p>
+<h3 id="retnet-与-rwkv平行训练递推推理">RetNet 与 RWKV：平行训练、递推推理</h3>
+<p><a href="https://arxiv.org/abs/2307.08621">RetNet</a> 的 retention 机制同时给出 parallel、recurrent 和 chunkwise recurrent 三种形式，并用衰减控制历史贡献。<a href="https://arxiv.org/abs/2305.13048">RWKV</a> 也把 time mixing 写成训练时可并行、推理时可递推的 WKV 运算。</p>
+<p>它们和核化线性注意力共享“训练采用并行表达、推理维护固定状态”的目标，但具体归一化、位置机制和状态更新不同。把它们统称为广义线性递推架构可以，认为它们都等于 <code>ELU + 1</code> linear attention 就不准确。</p>
+<h3 id="kimi-linear细粒度门控与混合架构">Kimi Linear：细粒度门控与混合架构</h3>
+<p>2025 年的 <a href="https://arxiv.org/abs/2510.26692">Kimi Linear</a> 在 Gated DeltaNet 上提出 Kimi Delta Attention（KDA）。其递推核心把 delta update 与细粒度对角衰减结合，使模型能更精细地控制不同状态通道的保留，并使用专门的 chunkwise 算法提高硬件效率。</p>
+<p>值得注意的是，Kimi Linear 不是“所有层都只用线性注意力”的纯架构。技术报告采用 3:1 的 KDA 与全局注意力层比例。这个设计本身传达了一个务实结论：固定状态适合承担大部分廉价的长程建模，少量 full attention 则补充精确检索和表达能力。</p>
+<h3 id="mamba-2关系很近但不应直接画等号">Mamba-2：关系很近，但不应直接画等号</h3>
+<p>Mamba 属于 selective state space model，而不是传统核技巧线性注意力。<a href="https://arxiv.org/abs/2405.21060">Mamba-2 / Structured State Space Duality</a> 证明了 SSM 与一类结构化 attention 矩阵之间存在深刻对应关系，并据此设计更高效的算法。</p>
+<p>所以“线性 attention、门控线性 RNN、SSM”正在形成统一的代数视角，但它们的状态转移约束、输入依赖方式和可表达的 attention 矩阵仍不完全相同。理解联系很有价值，抹平差异反而会妨碍正确选型。</p>
+<h2 id="位置信息为什么仍然重要">位置信息为什么仍然重要</h2>
+<p>基础状态更新是外积之和：</p>
+<div class="math-display">\[
+S_t=\sum_{i=1}^{t}k_iv_i^\top.
+\]</div>
+<p>加法满足交换律。若 Key 和 Value 本身不包含位置信息，把前缀中的键值对重新排序不会改变这个状态。因果边界只能告诉模型“哪些 token 已经出现”，不能自动完整表达它们的相对次序。</p>
+<p>常见解决路线包括：</p>
+<ul>
+<li>在 Query 和 Key 中加入可分解的位置编码；</li>
+<li>使用随相对距离衰减的状态转移；</li>
+<li>让数据依赖门控承担部分位置与遗忘功能；</li>
+<li>在局部窗口或少量 full-attention 层中保留更直接的位置交互；</li>
+<li>在进入 attention 前加入短卷积，增强局部顺序建模。</li>
+</ul>
+<p>RoPE 能否直接套用，取决于具体特征映射和递推公式。对 identity feature map，旋转后的 Q/K 仍可保留清晰的相对位置结构；对非线性随机特征或复杂门控，位置变换是否保持可分解性与数值稳定，需要按实现逐项检查，不能只看配置里是否出现 <code>rope_theta</code>。</p>
+<h2 id="线性注意力方法的演进脉络">线性注意力方法的演进脉络</h2>
+<p>下面这张表不是完整论文清单，而是理解技术路线最有用的几个节点。</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>工作</th>
+<th>关键贡献</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2018</td>
+<td>Efficient Attention</td>
+<td>用结合律避免显式构造大 attention map，较早系统讨论线性复杂度 attention</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>Transformers are RNNs</td>
+<td>核化注意力、因果前缀状态与 RNN 形式</td>
+</tr>
+<tr>
+<td>2020/2021</td>
+<td>Performer</td>
+<td>FAVOR+ 正交正随机特征，近似 softmax attention</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>Fast Weight Programmers</td>
+<td>把线性注意力解释为关联记忆，引入 delta rule 修正写入</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>RetNet、RWKV</td>
+<td>强化 parallel/recurrent/chunkwise 多形态与衰减记忆</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>GLA</td>
+<td>数据依赖门控与 I/O-aware chunkwise 训练</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>Based</td>
+<td>线性 attention + 局部窗口，明确 recall-state size 权衡</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>DeltaNet 并行化</td>
+<td>让 delta rule 更新可在现代硬件上高效训练</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>Mamba-2 / SSD</td>
+<td>建立 SSM 与结构化 attention 的统一视角</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>Kimi Linear</td>
+<td>KDA 细粒度门控、混合全局注意力与大规模验证</td>
+</tr>
+</tbody>
+</table>
+<p>从这条路线可以看出，研究重点已经从“能否推导出 <span class="math-inline">\(O(N)\)</span>”转向三个更难的问题：<strong>有限状态如何管理记忆、训练如何适配硬件、效果如何追上 full attention。</strong></p>
+<h2 id="什么时候应该考虑线性注意力">什么时候应该考虑线性注意力</h2>
+<h3 id="更适合的场景">更适合的场景</h3>
+<ul>
+<li>流式输入很长，系统必须让推理状态不随上下文继续增长；</li>
+<li>生成长度很长，decode 的 KV cache 容量或内存带宽成为主要瓶颈；</li>
+<li>任务依赖长期趋势、累计统计或模糊关联，多于逐字精确复制；</li>
+<li>可以从头训练或充分继续训练，让模型适应新的序列算子；</li>
+<li>团队有能力使用成熟 kernel，并针对真实硬件做端到端基准。</li>
+</ul>
+<h3 id="full-attention-往往更稳妥的场景">full attention 往往更稳妥的场景</h3>
+<ul>
+<li>上下文不长，FlashAttention 已经足够快；</li>
+<li>任务高度依赖精确检索、代码变量绑定、needle recall 或逐 token 拷贝；</li>
+<li>需要直接复用一个已经训练好的 softmax Transformer；</li>
+<li>推理框架只对标准 attention、GQA 和 paged KV cache 有成熟优化；</li>
+<li>主要瓶颈其实在 MLP、MoE、通信或模型权重带宽。</li>
+</ul>
+<h3 id="很多时候混合架构是更现实的答案">很多时候，混合架构是更现实的答案</h3>
+<p>纯线性状态追求固定内存，纯 full attention 追求显式检索。滑动窗口、少量全局 attention 层和线性状态可以分别承担局部精确交互、稀疏全局检索与长期压缩记忆。</p>
+<p>Based、DeltaNet 的混合实验和 Kimi Linear 都沿着这个方向发展。它们没有把选择题做成“linear 或 softmax 二选一”，而是把不同算子放到最擅长的位置。</p>
+<h2 id="评估线性注意力时应该测什么">评估线性注意力时应该测什么</h2>
+<p>只报告 perplexity 或理论复杂度远远不够。更完整的评估至少应包含：</p>
+<ol>
+<li><strong>质量</strong>：语言建模 loss、下游准确率、长上下文检索、长度外推和精确复制。</li>
+<li><strong>prefill</strong>：不同 prompt 长度下的 tokens/s、峰值显存与首 token 延迟。</li>
+<li><strong>decode</strong>：不同已缓存长度、batch size 和生成长度下的 tokens/s、每请求状态大小与吞吐。</li>
+<li><strong>硬件条件</strong>：GPU 型号、dtype、Tensor Core 使用情况、kernel 版本和 chunk size。</li>
+<li><strong>模型公平性</strong>：参数量、训练 token、数据配方、局部卷积、门控和 full-attention 层比例是否一致。</li>
+<li><strong>稳定性</strong>：状态范数、分母分布、长序列溢出、梯度尺度和不同随机特征种子的方差。</li>
+</ol>
+<p>尤其要把 prefill 和 decode 分开。某个方法可能在长 prompt 的 prefill 上不占优势，却因为固定状态在超长生成中表现很好；也可能 attention 层 benchmark 很快，但端到端模型被其他模块限制。</p>
+<h2 id="常见误解">常见误解</h2>
+<h3 id="线性注意力就是没有-softmax-的-qkt-v-吗">线性注意力就是没有 softmax 的 <code>Q(K^T V)</code> 吗</h3>
+<p>这是最简化、未归一化的一种形式。完整核化推导还包含特征映射和分母 <span class="math-inline">\(\phi(q)^\top z\)</span>。很多现代架构确实删除分母并使用 identity feature map，但随后会加入门控、归一化和新的训练配方，它们已经是新的序列算子。</p>
+<h3 id="linear-attention-与-linformer-是一回事吗">Linear Attention 与 Linformer 是一回事吗</h3>
+<p>不是。Linformer 沿序列维度对 Key 和 Value 做低秩投影，把长度 <span class="math-inline">\(N\)</span> 压到固定秩 <span class="math-inline">\(r\)</span>；本文主要讨论用核特征和结合律得到矩阵递推状态的方法。两者都可能具有关于 <span class="math-inline">\(N\)</span> 的线性复杂度，但归纳偏置和解码方式不同。</p>
+<h3 id="alibi-名字里有-linear所以是线性注意力吗">ALiBi 名字里有 Linear，所以是线性注意力吗</h3>
+<p>不是。ALiBi 的 Linear 指 attention bias 随相对距离线性变化。若它仍在完整 softmax attention 上计算所有 Query-Key 对，复杂度仍是平方级。</p>
+<h3 id="使用-flashattention-后还需要研究线性注意力吗">使用 FlashAttention 后还需要研究线性注意力吗</h3>
+<p>两者优化目标不同。FlashAttention 大幅改善精确 attention 的 I/O 和显存，通常是中短上下文的强基线；线性注意力试图改变随上下文增长的 FLOPs 与推理状态。正确比较应使用优化后的 FlashAttention，而不是朴素 PyTorch attention。</p>
+<h3 id="线性注意力完全不需要-kv-cache-吗">线性注意力完全不需要 KV cache 吗</h3>
+<p>纯递推线性层会把增长型 KV cache 换成固定矩阵状态。混合架构中的局部窗口或全局 attention 层仍然需要对应的 KV cache，所以应计算整个模型的加权缓存成本，不能只看某一层。</p>
+<h3 id="o1-decode-是否意味着生成任意长度都一样快">O(1) decode 是否意味着生成任意长度都一样快</h3>
+<p>它表示每个线性 attention 层的单步成本不随历史长度增长。模型仍需逐 token 生成，单步仍包含投影、状态更新、MLP、采样和通信；总生成时间仍随输出 token 数线性增长。</p>
+<h2 id="总结">总结</h2>
+<p>线性注意力最漂亮的地方，是一个非常朴素的代数变化：当相似度可以分解为 <span class="math-inline">\(\phi(q)^\top\phi(k)\)</span> 时，先算 <span class="math-inline">\(K^\top V\)</span>，就不必构造 <span class="math-inline">\(N\times N\)</span> 的注意力矩阵。加入因果约束后，这个汇总量自然变成可递推的矩阵状态，Transformer 也因此显露出 RNN 的一面。</p>
+<p>但复杂度下降的代价同样明确：历史 token 不再各自保存在 KV cache 中，而是被叠加进有限状态。模型获得固定内存和稳定的单步 decode 成本，同时承担核近似、记忆干扰、精确召回和硬件实现上的新问题。</p>
+<p>因此，判断线性注意力是否合适，不能只问“它是不是 <span class="math-inline">\(O(N)\)</span>”。更有用的问题是：状态有多大、如何写入和遗忘、训练 kernel 是否真正高效、任务需要怎样的召回，以及是否应该保留局部或少量全局 softmax attention。</p>
+<p>从 Performer 到 DeltaNet、GLA、Based 和 Kimi Linear，技术演进已经给出一个清晰方向：未来高效长上下文模型的竞争，不只是减少计算，更是在有限状态中更聪明地保存、更新和检索信息。</p>
+<h2 id="参考论文与技术文章">参考论文与技术文章</h2>
+<h3 id="论文">论文</h3>
+<ol>
+<li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>, Vaswani et al., 2017.</li>
+<li><a href="https://arxiv.org/abs/1812.01243">Efficient Attention: Attention with Linear Complexities</a>, Shen et al., 2018.</li>
+<li><a href="https://arxiv.org/abs/2006.16236">Transformers are RNNs: Fast Autoregressive Transformers with Linear Attention</a>, Katharopoulos et al., ICML 2020.</li>
+<li><a href="https://arxiv.org/abs/2009.14794">Rethinking Attention with Performers</a>, Choromanski et al., ICLR 2021.</li>
+<li><a href="https://arxiv.org/abs/2102.11174">Linear Transformers Are Secretly Fast Weight Programmers</a>, Schlag et al., ICML 2021.</li>
+<li><a href="https://arxiv.org/abs/2205.14135">FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness</a>, Dao et al., NeurIPS 2022.</li>
+<li><a href="https://arxiv.org/abs/2307.08621">Retentive Network: A Successor to Transformer for Large Language Models</a>, Sun et al., 2023.</li>
+<li><a href="https://arxiv.org/abs/2305.13048">RWKV: Reinventing RNNs for the Transformer Era</a>, Peng et al., EMNLP 2023 Findings.</li>
+<li><a href="https://proceedings.mlr.press/v235/yang24ab.html">Gated Linear Attention Transformers with Hardware-Efficient Training</a>, Yang et al., ICML 2024.</li>
+<li><a href="https://arxiv.org/abs/2402.18668">Simple Linear Attention Language Models Balance the Recall-Throughput Tradeoff</a>, Arora et al., ICML 2024.</li>
+<li><a href="https://arxiv.org/abs/2406.06484">Parallelizing Linear Transformers with the Delta Rule over Sequence Length</a>, Yang et al., NeurIPS 2024.</li>
+<li><a href="https://arxiv.org/abs/2405.21060">Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality</a>, Dao and Gu, ICML 2024.</li>
+<li><a href="https://arxiv.org/abs/2510.26692">Kimi Linear: An Expressive, Efficient Attention Architecture</a>, Kimi Team, 2025.</li>
+</ol>
+<h3 id="技术文章">技术文章</h3>
+<ol>
+<li><a href="https://research.google/blog/rethinking-attention-with-performers/">Rethinking Attention with Performers</a>, Google Research, 2020.</li>
+<li><a href="https://haileyschoelkopf.github.io/blog/2024/linear-attn/">Linear Attention Fundamentals</a>, Hailey Schoelkopf, 2024.</li>
+<li><a href="https://hazyresearch.stanford.edu/blog/2024-03-03-based">Based: Simple Linear Attention Language Models Balance the Recall-Throughput Tradeoff</a>, Hazy Research, 2024.</li>
+</ol>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/on-policy-distillation-opd/index.html">
+                        <span>上一篇</span>
+                        <strong>OPD 蒸馏详解：让学生模型从自己的错误中学习</strong>
+                    </a>
+                    
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

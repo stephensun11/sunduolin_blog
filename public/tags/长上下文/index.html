@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attention - Duolin Sun&#39; Blog</title>
+<title>长上下文 - Duolin Sun&#39; Blog</title>
 <link rel="stylesheet" href="../../css/site.css">
 
 </head>
@@ -92,23 +92,15 @@
                     <a href="../../tags/index.html">标签</a>
                         
                     <span aria-hidden="true">/</span>
-                    <span>Attention</span>
+                    <span>长上下文</span>
                     
                 </nav>
                 <p class="eyebrow">标签</p>
-                <h1>Attention</h1>
+                <h1>长上下文</h1>
             </section>
 
             
             
-            
-                
-            
-                
-            
-                
-                    
-                
             
                 
             
@@ -127,57 +119,6 @@
                     </div>
                     <p>从标准 softmax 注意力出发，完整推导核化线性注意力的并行与递推形式，解释复杂度、数值稳定性、固定状态容量和硬件效率，并梳理 Performer、GLA、DeltaNet、Based、Mamba-2 与 Kimi Linear 的关系。</p>
                     <a class="read-more" href="../../aitech/linear-attention-guide/index.html">阅读全文</a>
-                </article>
-                
-                <article class="post-item">
-                    <h2><a href="../../aitech/attention-mha-mqa-gqa/index.html">从 MHA 到 GQA：LLM 注意力机制的 KV 头复用</a></h2>
-                    <div class="meta">
-                        <span class="date">2026-07-09</span>
-                        <span class="category">AiTech</span>
-                        <span class="subcategory">LLM 基础技术</span>
-                        <span class="tag">LLM</span><span class="tag">Attention</span><span class="tag">MHA</span><span class="tag">MQA</span><span class="tag">GQA</span><span class="tag">KV Cache</span>
-                    </div>
-                    <p>整理 MHA、MQA、GQA 的区别与联系，解释为什么减少 KV 头可以降低推理显存，并给出一份干净的 PyTorch 实现思路。</p>
-                    <a class="read-more" href="../../aitech/attention-mha-mqa-gqa/index.html">阅读全文</a>
-                </article>
-                
-                <article class="post-item">
-                    <h2><a href="../../aitech/self-attention-basics/index.html">Self-Attention 入门：模型如何决定该看哪里</a></h2>
-                    <div class="meta">
-                        <span class="date">2026-07-06</span>
-                        <span class="category">AiTech</span>
-                        <span class="subcategory">LLM基本原理</span>
-                        <span class="tag">Attention</span><span class="tag">Self-Attention</span><span class="tag">Transformer</span><span class="tag">LLM</span>
-                    </div>
-                    <p>Self-Attention 是 Transformer 最核心的计算。
-它回答的问题很直接：当模型处理某个 token 时，应该从上下文里的哪些 token 获取信息？注意力分数越高，说明当前位置越需要关注那个位置。
-一个直觉例子 看这个句子：
-小明把书放进书包，因为它很重。 这里的“它”更可能指“书”，不是“书包”。人类可以根据语义判断引用关系，模型也需要类似能力。
-Self-Attention 做的事情，就是让“它”这个位置可以和前面的“小明”“书”“书包”等位置建立联系，并根据上下文分配不同权重。
-Q、K、V 是什么 注意力机制里经常看到三个符号：
-Q = Query K = Key V = Value 可以用检索来类比。
-Query 表示“我现在想找什么信息”。Key 表示“我这里有什么特征可以被匹配”。Value 表示“如果你关注我，真正取走的信息是什么”。
-每个 token 都会生成自己的 Q、K、V。然后用 Q 和所有 K 做相似度计算，得到注意力权重，再用这些权重对 V 加权求和。
-计算流程 简化公式如下：
-Attention(Q, K, V) = softmax(QK^T / sqrt(d)) V 拆开看：
-QK^T 计算当前位置和其他位置的匹配程度。 除以 sqrt(d) 是为了稳定数值。 softmax 把分数变成概率分布。 最后乘以 V，得到融合上下文后的表示。 这就是模型“看哪里”的核心。
-为什么需要 Multi-Head Attention 单个注意力头只能从一种角度看上下文。多头注意力允许模型同时关注不同关系。
-有的头可能关注语法结构，有的头可能关注实体引用，有的头可能关注局部搭配。虽然我们不应该把每个头都解释得太死，但多头机制确实给了模型更丰富的表达空间。
-Head 1: 关注主谓关系 Head 2: 关注指代关系 Head 3: 关注局部短语 多个 head 的结果会拼接起来，再经过线性层融合。</p>
-                    <a class="read-more" href="../../aitech/self-attention-basics/index.html">阅读全文</a>
-                </article>
-                
-                <article class="post-item">
-                    <h2><a href="../../paperreading/attention-is-all-you-need/index.html">Attention Is All You Need 论文解读</a></h2>
-                    <div class="meta">
-                        <span class="date">2026-07-05</span>
-                        <span class="category">PaperReading</span>
-                        <span class="subcategory">NLP</span>
-                        <span class="tag">Transformer</span><span class="tag">Attention</span><span class="tag">NLP</span>
-                    </div>
-                    <p>论文简介 《Attention Is All You Need》是由Google团队在2017年提出的开创性论文，提出了Transformer架构。
-核心贡献 自注意力机制: 无需RNN即可处理序列数据 多头注意力: 同时关注不同位置的信息 位置编码: 注入序列位置信息 代码示例 import torch import torch.nn as nn class MultiHeadAttention(nn.Module): def __init__(self, d_model, num_heads): super().__init__() self.d_model = d_model self.num_heads = num_heads def forward(self, q, k, v): # 实现细节... pass 总结 Transformer已成为现代NLP和AI的基石。</p>
-                    <a class="read-more" href="../../paperreading/attention-is-all-you-need/index.html">阅读全文</a>
                 </article>
                 
             </div>
