@@ -6,8 +6,15 @@
     <description>Recent content in LLM 基础技术 on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 11 Jul 2026 11:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 09:30:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MoE 大模型详解：稀疏路由、负载均衡与工程代价</title>
+      <link>https://example.com/aitech/mixture-of-experts/</link>
+      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/mixture-of-experts/</guid>
+      <description>从稀疏路由公式出发，讲清 MoE 的专家容量、负载均衡、专家并行、显存账本与推理代价。</description>
+    </item>
     <item>
       <title>线性注意力详解：从核技巧、递推状态到现代架构</title>
       <link>https://example.com/aitech/linear-attention-guide/</link>

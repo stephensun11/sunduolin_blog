@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>混合精度 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6/</link>
+    <description>Recent content in 混合精度 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 12 Jul 2026 09:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM 训练优化与稳定性：从交叉熵到故障诊断</title>
+      <link>https://example.com/aitech/llm-training-optimization/</link>
+      <pubDate>Sun, 12 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-training-optimization/</guid>
+      <description>从交叉熵、AdamW 和学习率调度出发，系统说明混合精度、梯度控制、checkpoint 与训练故障诊断。</description>
+    </item>
+  </channel>
+</rss>

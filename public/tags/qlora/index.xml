@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>QLoRA on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/qlora/</link>
+    <description>Recent content in QLoRA on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 12 Jul 2026 09:20:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/qlora/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>参数高效微调详解：LoRA、QLoRA 与适配器工程</title>
+      <link>https://example.com/aitech/peft-lora-qlora/</link>
+      <pubDate>Sun, 12 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/peft-lora-qlora/</guid>
+      <description>推导 LoRA 的低秩更新，解释 QLoRA、DoRA、显存核算、目标模块选择、适配器合并与评测方法。</description>
+    </item>
+  </channel>
+</rss>

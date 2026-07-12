@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据污染 on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/%E6%95%B0%E6%8D%AE%E6%B1%A1%E6%9F%93/</link>
+    <description>Recent content in 数据污染 on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 12 Jul 2026 09:50:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/%E6%95%B0%E6%8D%AE%E6%B1%A1%E6%9F%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM 评测方法论：从离线基准到线上质量闭环</title>
+      <link>https://example.com/aitech/llm-evaluation-methodology/</link>
+      <pubDate>Sun, 12 Jul 2026 09:50:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-evaluation-methodology/</guid>
+      <description>建立覆盖能力、行为、安全与系统性能的 LLM 评测体系，并处理 Judge 偏差、数据污染和统计不确定性。</description>
+    </item>
+    <item>
+      <title>LLM 预训练数据工程：从原始语料到可复现的数据配方</title>
+      <link>https://example.com/aitech/pretraining-data-pipeline/</link>
+      <pubDate>Sun, 12 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/pretraining-data-pipeline/</guid>
+      <description>系统讲解 LLM 预训练数据从采集、清洗、去重、去污染到数据配比、Tokenize 和可复现版本管理的完整流程。</description>
+    </item>
+  </channel>
+</rss>

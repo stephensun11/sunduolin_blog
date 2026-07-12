@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RAG on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/rag/</link>
+    <description>Recent content in RAG on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 12 Jul 2026 10:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/rag/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RAG 系统设计：从切分、检索到引用与评测</title>
+      <link>https://example.com/aitech/rag-system-design/</link>
+      <pubDate>Sun, 12 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/rag-system-design/</guid>
+      <description>从文档解析、Chunk、混合检索和重排讲到引用校验、权限、版本管理与分层评测，构建可靠 RAG 证据链。</description>
+    </item>
+  </channel>
+</rss>

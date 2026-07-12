@@ -62,7 +62,7 @@
                     {{ if gt (len $topics) 0 }}
                     {{ range $topic := $topics }}
                     <div class="tertiary-nav-group">
-                        <a class="tertiary-nav-topic" href="#topic-{{ urlize $topic }}">{{ $topic }}</a>
+                        <a class="tertiary-nav-topic" href="{{ printf "#topic-%s" (urlize $topic) | safeURL }}">{{ $topic }}</a>
                         {{ range $pages }}
                         {{ if in .Params.topics $topic }}
                         <a class="tertiary-nav-article" href="#post-{{ .File.UniqueID }}">{{ .Title }}</a>

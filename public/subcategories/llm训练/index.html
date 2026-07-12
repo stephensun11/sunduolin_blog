@@ -33,8 +33,11 @@
                 <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
                 <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
                 <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/llm-%E5%AF%B9%E9%BD%90/index.html">LLM 对齐</a>
                 <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
                 <a href="../../subcategories/llm-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/index.html">LLM 推理优化</a>
+                <a href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
             </div>
         </div>
         <div class="nav-item">
@@ -111,6 +114,18 @@
             
             
                 
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
             
                 
             
@@ -128,83 +143,185 @@
                     <h2>三级目录</h2>
                     
                     
-                    <a class="tertiary-nav-article direct" href="#post-9969bdeec0d41c5191895220f658a427">OPD 蒸馏详解：让学生模型从自己的错误中学习</a>
+                    <div class="tertiary-nav-group">
+                        <a class="tertiary-nav-topic" href="#topic-%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83">参数高效微调</a>
+                        
+                        
+                        <a class="tertiary-nav-article" href="#post-3b3c272596f665660907d0379f734f95">参数高效微调详解：LoRA、QLoRA 与适配器工程</a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
                     
-                    <a class="tertiary-nav-article direct" href="#post-9d15351e8fd4b01bd260f2120d5a89d8">Megatron-LM：张量并行、流水线并行与 3D 并行</a>
+                    <div class="tertiary-nav-group">
+                        <a class="tertiary-nav-topic" href="#topic-%E8%AE%AD%E7%BB%83%E4%BC%98%E5%8C%96">训练优化</a>
+                        
+                        
+                        
+                        
+                        <a class="tertiary-nav-article" href="#post-32ad103644837a94074aebb63a0af5a7">LLM 训练优化与稳定性：从交叉熵到故障诊断</a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
                     
-                    <a class="tertiary-nav-article direct" href="#post-9b6bf8185f087879be7f6d1b84ac4ccc">显存不够怎么办：FSDP、ZeRO 与 DeepSpeed</a>
-                    
-                    <a class="tertiary-nav-article direct" href="#post-8ba614d8b49d170d315453619baa16a4">数据并行入门：从 DP 到 DDP</a>
-                    
-                    <a class="tertiary-nav-article direct" href="#post-6f80cf7f5cb2dfbd22f79e9ef1f8352e">分布式训练总览：DP、DDP、FSDP、ZeRO 怎么选</a>
+                    <div class="tertiary-nav-group">
+                        <a class="tertiary-nav-topic" href="#topic-%E9%A2%84%E8%AE%AD%E7%BB%83%E5%B7%A5%E7%A8%8B">预训练工程</a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a class="tertiary-nav-article" href="#post-56d9383c58401700b792909fcdc7f34f">LLM 预训练数据工程：从原始语料到可复现的数据配方</a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
                     
                     
                 </aside>
                 <div class="topic-list">
                     
-                    <div class="post-list">
-                        
-                        <article class="post-item" id="post-9969bdeec0d41c5191895220f658a427">
-                            <h2><a href="../../aitech/on-policy-distillation-opd/index.html">OPD 蒸馏详解：让学生模型从自己的错误中学习</a></h2>
-                            <div class="meta">
-                                <span class="date">2026-07-11</span>
-                                <span class="category">AiTech</span>
-                                <span class="subcategory">LLM训练</span>
-                                <span class="tag">LLM</span><span class="tag">知识蒸馏</span><span class="tag">OPD</span><span class="tag">On-Policy Distillation</span><span class="tag">GKD</span><span class="tag">Reverse KL</span>
-                            </div>
-                            <p>从分布偏移、Reverse KL 和在线采样出发，系统梳理 On-Policy Distillation 的原理、训练流程、论文脉络、工程实现与常见失败模式。</p>
-                            <a class="read-more" href="../../aitech/on-policy-distillation-opd/index.html">阅读全文</a>
-                        </article>
-                        
-                        <article class="post-item" id="post-9d15351e8fd4b01bd260f2120d5a89d8">
-                            <h2><a href="../../aitech/distributed-training-megatron-parallelism/index.html">Megatron-LM：张量并行、流水线并行与 3D 并行</a></h2>
-                            <div class="meta">
-                                <span class="date">2026-07-09</span>
-                                <span class="category">AiTech</span>
-                                <span class="subcategory">LLM训练</span>
-                                <span class="tag">LLM</span><span class="tag">Megatron-LM</span><span class="tag">张量并行</span><span class="tag">流水线并行</span><span class="tag">3D并行</span>
-                            </div>
-                            <p>用 Megatron-LM 的视角理解超大模型训练中的 TP、PP、DP，以及它们如何组合成多维并行。</p>
-                            <a class="read-more" href="../../aitech/distributed-training-megatron-parallelism/index.html">阅读全文</a>
-                        </article>
-                        
-                        <article class="post-item" id="post-9b6bf8185f087879be7f6d1b84ac4ccc">
-                            <h2><a href="../../aitech/distributed-training-fsdp-zero-deepspeed/index.html">显存不够怎么办：FSDP、ZeRO 与 DeepSpeed</a></h2>
-                            <div class="meta">
-                                <span class="date">2026-07-09</span>
-                                <span class="category">AiTech</span>
-                                <span class="subcategory">LLM训练</span>
-                                <span class="tag">LLM</span><span class="tag">FSDP</span><span class="tag">ZeRO</span><span class="tag">DeepSpeed</span><span class="tag">显存优化</span>
-                            </div>
-                            <p>解释全分片数据并行的核心思想，梳理 FSDP、ZeRO 和 DeepSpeed 的关系，以及它们适合解决的问题。</p>
-                            <a class="read-more" href="../../aitech/distributed-training-fsdp-zero-deepspeed/index.html">阅读全文</a>
-                        </article>
-                        
-                        <article class="post-item" id="post-8ba614d8b49d170d315453619baa16a4">
-                            <h2><a href="../../aitech/distributed-training-dp-ddp/index.html">数据并行入门：从 DP 到 DDP</a></h2>
-                            <div class="meta">
-                                <span class="date">2026-07-09</span>
-                                <span class="category">AiTech</span>
-                                <span class="subcategory">LLM训练</span>
-                                <span class="tag">LLM</span><span class="tag">分布式训练</span><span class="tag">DP</span><span class="tag">DDP</span><span class="tag">PyTorch</span>
-                            </div>
-                            <p>理解数据并行的基本工作方式，以及为什么 PyTorch 多 GPU 训练通常优先选择 DistributedDataParallel。</p>
-                            <a class="read-more" href="../../aitech/distributed-training-dp-ddp/index.html">阅读全文</a>
-                        </article>
-                        
-                        <article class="post-item" id="post-6f80cf7f5cb2dfbd22f79e9ef1f8352e">
-                            <h2><a href="../../aitech/distributed-training-overview/index.html">分布式训练总览：DP、DDP、FSDP、ZeRO 怎么选</a></h2>
-                            <div class="meta">
-                                <span class="date">2026-07-09</span>
-                                <span class="category">AiTech</span>
-                                <span class="subcategory">LLM训练</span>
-                                <span class="tag">LLM</span><span class="tag">分布式训练</span><span class="tag">DDP</span><span class="tag">FSDP</span><span class="tag">ZeRO</span><span class="tag">DeepSpeed</span>
-                            </div>
-                            <p>从显存、通信和工程复杂度三个角度，快速建立 DP、DDP、FSDP、ZeRO 与 DeepSpeed 的整体认识。</p>
-                            <a class="read-more" href="../../aitech/distributed-training-overview/index.html">阅读全文</a>
-                        </article>
-                        
-                    </div>
+                    
+                    <section class="topic-section" id="topic-%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83">
+                        <h2 class="section-title">参数高效微调</h2>
+                        <div class="post-list">
+                            
+                            
+                            <article class="post-item" id="post-3b3c272596f665660907d0379f734f95">
+                                <h2><a href="../../aitech/peft-lora-qlora/index.html">参数高效微调详解：LoRA、QLoRA 与适配器工程</a></h2>
+                                <div class="meta">
+                                    <span class="date">2026-07-12</span>
+                                    <span class="category">AiTech</span>
+                                    <span class="subcategory">LLM训练</span>
+                                    <span class="tag">LLM</span><span class="tag">PEFT</span><span class="tag">LoRA</span><span class="tag">QLoRA</span><span class="tag">DoRA</span><span class="tag">微调</span>
+                                </div>
+                                <p>推导 LoRA 的低秩更新，解释 QLoRA、DoRA、显存核算、目标模块选择、适配器合并与评测方法。</p>
+                                <a class="read-more" href="../../aitech/peft-lora-qlora/index.html">阅读全文</a>
+                            </article>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </div>
+                    </section>
+                    
+                    <section class="topic-section" id="topic-%E8%AE%AD%E7%BB%83%E4%BC%98%E5%8C%96">
+                        <h2 class="section-title">训练优化</h2>
+                        <div class="post-list">
+                            
+                            
+                            
+                            
+                            <article class="post-item" id="post-32ad103644837a94074aebb63a0af5a7">
+                                <h2><a href="../../aitech/llm-training-optimization/index.html">LLM 训练优化与稳定性：从交叉熵到故障诊断</a></h2>
+                                <div class="meta">
+                                    <span class="date">2026-07-12</span>
+                                    <span class="category">AiTech</span>
+                                    <span class="subcategory">LLM训练</span>
+                                    <span class="tag">LLM</span><span class="tag">AdamW</span><span class="tag">学习率</span><span class="tag">混合精度</span><span class="tag">梯度裁剪</span><span class="tag">训练稳定性</span>
+                                </div>
+                                <p>从交叉熵、AdamW 和学习率调度出发，系统说明混合精度、梯度控制、checkpoint 与训练故障诊断。</p>
+                                <a class="read-more" href="../../aitech/llm-training-optimization/index.html">阅读全文</a>
+                            </article>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </div>
+                    </section>
+                    
+                    <section class="topic-section" id="topic-%E9%A2%84%E8%AE%AD%E7%BB%83%E5%B7%A5%E7%A8%8B">
+                        <h2 class="section-title">预训练工程</h2>
+                        <div class="post-list">
+                            
+                            
+                            
+                            
+                            
+                            
+                            <article class="post-item" id="post-56d9383c58401700b792909fcdc7f34f">
+                                <h2><a href="../../aitech/pretraining-data-pipeline/index.html">LLM 预训练数据工程：从原始语料到可复现的数据配方</a></h2>
+                                <div class="meta">
+                                    <span class="date">2026-07-12</span>
+                                    <span class="category">AiTech</span>
+                                    <span class="subcategory">LLM训练</span>
+                                    <span class="tag">LLM</span><span class="tag">预训练数据</span><span class="tag">数据清洗</span><span class="tag">数据去重</span><span class="tag">数据配比</span><span class="tag">数据污染</span>
+                                </div>
+                                <p>系统讲解 LLM 预训练数据从采集、清洗、去重、去污染到数据配比、Tokenize 和可复现版本管理的完整流程。</p>
+                                <a class="read-more" href="../../aitech/pretraining-data-pipeline/index.html">阅读全文</a>
+                            </article>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </div>
+                    </section>
+                    
                     
                 </div>
             </div>

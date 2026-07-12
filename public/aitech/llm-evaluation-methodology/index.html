@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM 评测方法论：从离线基准到线上质量闭环 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css?v=20260711b">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/llm-%E5%AF%B9%E9%BD%90/index.html">LLM 对齐</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                <a href="../../subcategories/llm-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/index.html">LLM 推理优化</a>
+                <a href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#先写评测契约">先写评测契约</a></li>
+    <li><a href="#评测矩阵不要只测能力">评测矩阵：不要只测能力</a></li>
+    <li><a href="#静态-benchmark-能告诉你什么">静态 benchmark 能告诉你什么</a></li>
+    <li><a href="#可复现协议包含什么">可复现协议包含什么</a></li>
+    <li><a href="#生成设置必须与任务一致">生成设置必须与任务一致</a>
+      <ul>
+        <li><a href="#确定性知识评测">确定性知识评测</a></li>
+        <li><a href="#创意或多解任务">创意或多解任务</a></li>
+        <li><a href="#推理任务">推理任务</a></li>
+      </ul>
+    </li>
+    <li><a href="#评分器必须匹配输出空间">评分器必须匹配输出空间</a>
+      <ul>
+        <li><a href="#exact-match">Exact Match</a></li>
+        <li><a href="#f1rougebleu">F1、ROUGE、BLEU</a></li>
+        <li><a href="#可执行评分">可执行评分</a></li>
+        <li><a href="#passk">pass@k</a></li>
+      </ul>
+    </li>
+    <li><a href="#llm-as-a-judge-怎样使用">LLM-as-a-Judge 怎样使用</a></li>
+    <li><a href="#pairwise-比绝对打分更可靠吗">Pairwise 比绝对打分更可靠吗</a></li>
+    <li><a href="#统计不确定性不能省略">统计不确定性不能省略</a></li>
+    <li><a href="#数据污染怎样检查">数据污染怎样检查</a></li>
+    <li><a href="#领域评测应该怎样构造">领域评测应该怎样构造</a></li>
+    <li><a href="#rag-与-agent-要做组件级评测">RAG 与 Agent 要做组件级评测</a>
+      <ul>
+        <li><a href="#rag">RAG</a></li>
+        <li><a href="#agent">Agent</a></li>
+      </ul>
+    </li>
+    <li><a href="#系统性能怎样测">系统性能怎样测</a></li>
+    <li><a href="#线上评测真实分布与因果问题">线上评测：真实分布与因果问题</a></li>
+    <li><a href="#回归门禁怎样设计">回归门禁怎样设计</a></li>
+    <li><a href="#评测报告应包含什么">评测报告应包含什么</a></li>
+    <li><a href="#常见误区">常见误区</a>
+      <ul>
+        <li><a href="#只报告最高的一次结果">只报告最高的一次结果</a></li>
+        <li><a href="#prompt-为每个模型单独调到最好再直接比较">prompt 为每个模型单独调到最好再直接比较</a></li>
+        <li><a href="#用公开榜单替代产品验收">用公开榜单替代产品验收</a></li>
+        <li><a href="#judge-与被测模型来自同一版本族就一定可靠">judge 与被测模型来自同一版本族就一定可靠</a></li>
+        <li><a href="#没有显著下降就算通过">没有显著下降就算通过</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
+    <span aria-hidden="true">/</span>
+    <span>LLM 评测方法论：从离线基准到线上质量闭环</span>
+</nav>
+
+                <h1>LLM 评测方法论：从离线基准到线上质量闭环</h1>
+                <div class="meta">
+                    <span class="date">2026-07-12</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/evaluation/index.html">Evaluation</a></span>
+                    
+                    <span class="tag"><a href="../../tags/benchmark/index.html">Benchmark</a></span>
+                    
+                    <span class="tag"><a href="../../tags/llm-judge/index.html">LLM Judge</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E6%95%B0%E6%8D%AE%E6%B1%A1%E6%9F%93/index.html">数据污染</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E7%BA%BF%E4%B8%8A%E8%AF%84%E6%B5%8B/index.html">线上评测</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>大模型评测最危险的状态不是“没有分数”，而是拥有一个看起来精确、实际上回答了错误问题的分数。</p>
+<p>模型版本、提示模板、采样参数、解析器、数据污染、评审模型和服务配置都能改变结果。严谨评测的目标不是寻找唯一排行榜，而是建立一套能支持决策、能复现、能解释失败的证据链。</p>
+<h2 id="先写评测契约">先写评测契约</h2>
+<p>在运行任何 benchmark 前，先回答：</p>
+<ol>
+<li>要支持什么决策：选底座、验收微调、发布回归还是容量规划？</li>
+<li>目标用户和请求分布是什么？</li>
+<li>哪些错误代价最高？</li>
+<li>模型、系统和数据各由什么指标负责？</li>
+<li>多大的变化才算具有实际意义？</li>
+</ol>
+<p>如果目标是客服机器人，MMLU 提升不一定抵消错误退款的风险；如果目标是代码代理，单轮代码补全分数也不能代替仓库级任务成功率。</p>
+<h2 id="评测矩阵不要只测能力">评测矩阵：不要只测能力</h2>
+<p><a href="https://arxiv.org/abs/2211.09110">HELM</a> 强调多场景、多指标评估。一个完整矩阵至少有四个轴：</p>
+<table>
+<thead>
+<tr>
+<th>轴</th>
+<th>典型内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>场景</td>
+<td>问答、代码、数学、检索、多轮、工具调用</td>
+</tr>
+<tr>
+<td>质量</td>
+<td>正确性、相关性、完整性、事实性、校准</td>
+</tr>
+<tr>
+<td>风险</td>
+<td>安全、偏见、隐私、鲁棒性、过度拒绝</td>
+</tr>
+<tr>
+<td>系统</td>
+<td>TTFT、TPOT、吞吐、可用性、成本</td>
+</tr>
+</tbody>
+</table>
+<p>最终可以有总览，但原始分域结果必须保留。把所有指标压成单个加权分数会隐藏取舍，权重本身也是产品决策。</p>
+<h2 id="静态-benchmark-能告诉你什么">静态 benchmark 能告诉你什么</h2>
+<p><a href="https://arxiv.org/abs/2009.03300">MMLU</a> 覆盖 57 个学科，用多选题衡量知识与问题求解；<a href="https://arxiv.org/abs/2406.01574">MMLU-Pro</a> 增加难度、扩展选项并提高对提示变化的稳定性；<a href="https://arxiv.org/abs/2406.19314">LiveBench</a> 通过持续更新题目降低污染并保持挑战性。</p>
+<p>它们适合标准化比较，但结论有边界：</p>
+<ul>
+<li>多选准确率不等于开放式回答质量；</li>
+<li>学科覆盖不等于真实用户分布；</li>
+<li>benchmark 可能饱和或被训练数据污染；</li>
+<li>prompt 和 few-shot 示例会改变分数；</li>
+<li>排行榜差异可能小于统计不确定性。</li>
+</ul>
+<p>正确的表述是“模型在该版本、该提示和该评分协议上的结果”，而不是“模型智力为 82 分”。</p>
+<h2 id="可复现协议包含什么">可复现协议包含什么</h2>
+<p>每次运行应冻结：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">model_revision</span>: <span style="color:#ae81ff">exact-commit-or-checksum</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">tokenizer_revision</span>: <span style="color:#ae81ff">exact-commit-or-checksum</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">chat_template</span>: <span style="color:#ae81ff">versioned-template</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">benchmark_revision</span>: <span style="color:#ae81ff">dataset-commit</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">evaluation_code</span>: <span style="color:#ae81ff">git-commit</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">fewshot</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">seed</span>: <span style="color:#ae81ff">20260712</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">temperature</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">top_p</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">max_tokens</span>: <span style="color:#ae81ff">2048</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">stop</span>: [<span style="color:#ae81ff">...]</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">dtype</span>: <span style="color:#ae81ff">bf16</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">engine</span>: <span style="color:#ae81ff">vllm-x.y.z</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">hardware</span>: <span style="color:#ae81ff">8xH100-80GB</span>
+</span></span></code></pre></div><p>对闭源 API，还要记录模型快照名、运行日期、区域、重试和速率限制。供应方可能更新同名模型，时间是复现信息的一部分。</p>
+<p><a href="https://github.com/EleutherAI/lm-evaluation-harness">lm-evaluation-harness</a> 等框架可以统一任务和请求格式，但使用框架不自动保证公平。仍需检查 task 版本、模板、答案解析和模型后端实现。</p>
+<h2 id="生成设置必须与任务一致">生成设置必须与任务一致</h2>
+<h3 id="确定性知识评测">确定性知识评测</h3>
+<p>常使用 greedy 或 <code>temperature=0</code>，减少采样方差。但某些 API 的并行 kernel 仍可能产生微小非确定性。</p>
+<h3 id="创意或多解任务">创意或多解任务</h3>
+<p>只采样一次不足以描述分布。应固定 temperature/top-p，使用多个 seed，并报告均值、方差或成功率。</p>
+<h3 id="推理任务">推理任务</h3>
+<p>需要明确是否允许 Chain-of-Thought、最大输出长度、工具和自洽采样。允许更多推理 token 通常会增加成本，比较质量时也要报告计算预算。</p>
+<h2 id="评分器必须匹配输出空间">评分器必须匹配输出空间</h2>
+<h3 id="exact-match">Exact Match</h3>
+<p>适合唯一短答案，但应先定义规范化：大小写、空格、标点、单位、分数和等价表达。规范化规则必须固定，不能看到模型输出后临时修改。</p>
+<h3 id="f1rougebleu">F1、ROUGE、BLEU</h3>
+<p>它们衡量词或 n-gram 重合，在抽取和特定文本生成中有用，但可能低估语义等价答案，也可能奖励复制而非事实正确。</p>
+<h3 id="可执行评分">可执行评分</h3>
+<p>代码单元测试、SQL 执行、数学符号验证通常比字符串重合更可靠，但测试覆盖决定可信度。执行环境必须沙箱化并限制网络、文件和资源。</p>
+<h3 id="passk">pass@k</h3>
+<p>代码生成常从 <span class="math-inline">(n)</span> 个样本中观察到 <span class="math-inline">(c)</span> 个正确样本，pass@k 的无偏估计常写为：</p>
+<div class="math-display">\[
+\operatorname{pass@k}=1-\frac{\binom{n-c}{k}}{\binom{n}{k}}
+\]</div>
+<p>它衡量 k 次尝试至少一次成功的概率，不等同于单次准确率。比较时必须对齐 n、k 和采样参数。</p>
+<h2 id="llm-as-a-judge-怎样使用">LLM-as-a-Judge 怎样使用</h2>
+<p>开放式写作、对话和摘要难以用规则评分，常让强模型做评审。它扩展快，但不是客观真值。</p>
+<p>常见偏差包括：</p>
+<ul>
+<li>位置偏差：偏爱 A 或第一项；</li>
+<li>长度偏差：更长看起来更完整；</li>
+<li>自家模型偏差：偏爱相似风格；</li>
+<li>verbosity 与格式捷径；</li>
+<li>对错误引用或复杂推理缺乏核验；</li>
+<li>prompt injection：候选回答试图操纵评审。</li>
+</ul>
+<p>降低风险的方法：</p>
+<ol>
+<li>采用明确 rubric，逐维打分；</li>
+<li>交换 A/B 顺序并检查一致性；</li>
+<li>隐藏模型身份；</li>
+<li>对评审输出使用结构化 schema；</li>
+<li>用人工标注集校准 judge 与人类的一致率；</li>
+<li>对高风险事实调用检索、执行器或专家复核；</li>
+<li>保存 judge 模型版本、prompt 和原始理由。</li>
+</ol>
+<p>judge 分数应被视为一个测量工具的输出，而不是事实本身。</p>
+<h2 id="pairwise-比绝对打分更可靠吗">Pairwise 比绝对打分更可靠吗</h2>
+<p>对于难以校准的开放回答，比较 A 与 B 往往比独立打 1-10 分稳定。可统计胜、负、平，并用 Bradley-Terry 等模型估计相对强度。</p>
+<p>但 pairwise 也有局限：</p>
+<ul>
+<li>只提供相对结论，不说明二者是否都不可用；</li>
+<li>顺序和长度偏差仍存在；</li>
+<li>多模型全量两两比较成本高；</li>
+<li>不同任务上的偏好可能不可传递。</li>
+</ul>
+<p>因此 pairwise 最好与绝对质量阈值和失败标签结合。</p>
+<h2 id="统计不确定性不能省略">统计不确定性不能省略</h2>
+<p>测试集是任务分布的有限样本。准确率 <span class="math-inline">(\hat p)</span> 不是无误差真值。</p>
+<p>对于复杂指标，bootstrap 是实用方法：重复从题目中有放回采样，计算指标分布，再报告置信区间。比较同一批题上的两个模型时，应做 paired bootstrap，保留题目配对，比独立抽样更有统计效率。</p>
+<p>同时区分：</p>
+<ul>
+<li><strong>统计显著</strong>：差异不太可能由有限样本随机性造成；</li>
+<li><strong>实际显著</strong>：差异足以改变产品决策。</li>
+</ul>
+<p>十万题上的 0.1% 可能统计显著，却没有业务价值；一项高风险能力的 2% 回退即使样本少，也可能阻止发布。</p>
+<h2 id="数据污染怎样检查">数据污染怎样检查</h2>
+<p>污染包括训练集直接包含题目、答案、题解、翻译或派生版本。它会让分数高估泛化。</p>
+<p>检查方法包括：</p>
+<ul>
+<li>精确和规范化字符串匹配；</li>
+<li>n-gram 或 MinHash 近似匹配；</li>
+<li>检索题目在网页、代码仓库和数据快照中的副本；</li>
+<li>检查模型对随机扰动题目的敏感性；</li>
+<li>使用持续更新或私有评测集；</li>
+<li>报告 cutoff 与 benchmark 发布时间。</li>
+</ul>
+<p>不存在一个仅靠模型输出就能完全证明“未污染”的测试。最强证据来自可审计训练数据和 benchmark 去污染流程。</p>
+<h2 id="领域评测应该怎样构造">领域评测应该怎样构造</h2>
+<p>真实产品集通常比公开 benchmark 更重要。构建步骤：</p>
+<ol>
+<li>从真实请求中分层采样并脱敏；</li>
+<li>建立任务 taxonomy 与风险等级；</li>
+<li>由领域专家编写理想答案或评分 rubric；</li>
+<li>保留简单、典型、长尾和对抗样本；</li>
+<li>划分开发集、回归集和严格保密测试集；</li>
+<li>定期新增时间敏感案例，但不要覆盖历史版本；</li>
+<li>对标注分歧进行复审并记录一致率。</li>
+</ol>
+<p>测试集不应只包含历史失败，否则会夸大极端案例并失去分布代表性。应同时有代表性集和 challenge set。</p>
+<h2 id="rag-与-agent-要做组件级评测">RAG 与 Agent 要做组件级评测</h2>
+<p>端到端失败可能来自多个环节。</p>
+<h3 id="rag">RAG</h3>
+<ul>
+<li>检索 recall@k：支持答案的文档是否被召回；</li>
+<li>排序指标：相关文档是否靠前；</li>
+<li>context precision：送入模型的内容有多少相关；</li>
+<li>faithfulness：回答是否由上下文支持；</li>
+<li>answer correctness：最终答案是否正确；</li>
+<li>citation correctness：引用是否准确指向证据。</li>
+</ul>
+<h3 id="agent">Agent</h3>
+<ul>
+<li>任务成功率；</li>
+<li>工具选择与参数正确率；</li>
+<li>每任务步数、token、延迟和成本；</li>
+<li>恢复率与不可逆错误率；</li>
+<li>权限越界和提示注入防护；</li>
+<li>在环境变化下的鲁棒性。</li>
+</ul>
+<p>只有端到端分数，无法指导修复；只有组件分数，又无法保证用户任务真正完成。两层都要保留。</p>
+<h2 id="系统性能怎样测">系统性能怎样测</h2>
+<p>质量相同的模型，服务体验仍可能不同。常用指标：</p>
+<ul>
+<li><strong>TTFT</strong>（Time to First Token）：请求到首 token；</li>
+<li><strong>TPOT</strong>（Time per Output Token）：首 token 后每个输出 token 的平均时间；</li>
+<li><strong>ITL</strong>（Inter-token Latency）：相邻 token 间延迟分布；</li>
+<li>请求吞吐与 token 吞吐；</li>
+<li>P50/P95/P99 延迟；</li>
+<li>峰值显存、GPU 利用率和功耗；</li>
+<li>错误率、超时率和队列时间。</li>
+</ul>
+<p>性能结果必须附带输入长度、输出长度、并发、batch 策略、硬件和精度。只报告“tokens/s”而不说明是单请求还是全服务器吞吐，几乎没有可比性。</p>
+<h2 id="线上评测真实分布与因果问题">线上评测：真实分布与因果问题</h2>
+<p>A/B 测试可以观察任务完成率、用户修正率、会话中断、延迟和成本。但用户反馈不是纯质量标签：界面、等待时间、用户群和曝光策略都会影响行为。</p>
+<p>上线实验应：</p>
+<ul>
+<li>随机分流并固定用户归组；</li>
+<li>预先定义主指标和护栏指标；</li>
+<li>控制模型外的产品变化；</li>
+<li>监控样本比例不匹配；</li>
+<li>为高风险任务设置人工审核或渐进放量；</li>
+<li>保留回滚条件；</li>
+<li>避免反复偷看结果后提前停止造成假阳性。</li>
+</ul>
+<p>线上胜出也不能替代安全评测，因为低频高损事件很难在短期 A/B 中充分出现。</p>
+<h2 id="回归门禁怎样设计">回归门禁怎样设计</h2>
+<p>一个发布门禁可以分层：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>L0: 构建、加载、确定性 smoke test
+</span></span><span style="display:flex;"><span>L1: 快速核心能力和格式回归
+</span></span><span style="display:flex;"><span>L2: 完整离线能力/安全/领域评测
+</span></span><span style="display:flex;"><span>L3: 性能与容量压测
+</span></span><span style="display:flex;"><span>L4: 小流量 shadow 或 canary
+</span></span><span style="display:flex;"><span>L5: A/B 与持续监控
+</span></span></code></pre></div><p>每层设置硬门槛和允许波动。平均提升不能自动抵消关键安全项下降。失败样本应进入带版本的错误库，而不是直接回流训练集。</p>
+<h2 id="评测报告应包含什么">评测报告应包含什么</h2>
+<ul>
+<li>目的、目标人群和决策阈值；</li>
+<li>模型、数据、代码、模板和推理配置版本；</li>
+<li>数据集来源、规模、时间范围和污染检查；</li>
+<li>分域结果、宏/微平均与置信区间；</li>
+<li>与基线的 paired 差异；</li>
+<li>质量、风险、性能与成本；</li>
+<li>judge 校准与人工一致率；</li>
+<li>失败案例 taxonomy；</li>
+<li>已知盲区和不可比较项；</li>
+<li>可重放的原始输出与运行清单。</li>
+</ul>
+<h2 id="常见误区">常见误区</h2>
+<h3 id="只报告最高的一次结果">只报告最高的一次结果</h3>
+<p>这会隐藏 seed、采样和提示方差。应预先固定协议并报告重复运行。</p>
+<h3 id="prompt-为每个模型单独调到最好再直接比较">prompt 为每个模型单独调到最好再直接比较</h3>
+<p>这回答的是“每个模型在各自最佳系统中的上限”，不是“同一接口下谁更好”。两种比较都可以，但必须明确。</p>
+<h3 id="用公开榜单替代产品验收">用公开榜单替代产品验收</h3>
+<p>公开 benchmark 提供公共坐标，不包含你的用户、工具、知识库和风险分布。</p>
+<h3 id="judge-与被测模型来自同一版本族就一定可靠">judge 与被测模型来自同一版本族就一定可靠</h3>
+<p>相似训练数据和风格可能造成系统性偏好，需要人工校准与多评审交叉检查。</p>
+<h3 id="没有显著下降就算通过">没有显著下降就算通过</h3>
+<p>样本太少时，“未发现差异”不等于“证明等价”。要报告检测能力和置信区间。</p>
+<h2 id="总结">总结</h2>
+<p>LLM 评测是一套测量系统，不是一张排行榜。它要把问题定义、样本、推理配置、评分器、统计方法和发布决策连接起来。</p>
+<p>最可信的结论通常不是“新模型全面更强”，而是更具体的陈述：它在哪些用户场景、以多少成本、在怎样的不确定性和风险边界下改善了什么。只有这种结论，才足以指导训练和上线。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2211.09110">Holistic Evaluation of Language Models</a></li>
+<li><a href="https://arxiv.org/abs/2009.03300">Measuring Massive Multitask Language Understanding</a></li>
+<li><a href="https://arxiv.org/abs/2406.01574">MMLU-Pro</a></li>
+<li><a href="https://arxiv.org/abs/2406.19314">LiveBench</a></li>
+<li><a href="https://github.com/EleutherAI/lm-evaluation-harness">EleutherAI LM Evaluation Harness</a></li>
+</ul>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/post-training-alignment/index.html">
+                        <span>上一篇</span>
+                        <strong>LLM 后训练与对齐：SFT、DPO、RLHF 的目标和边界</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/llm-quantization-deployment/index.html">
+                        <span>下一篇</span>
+                        <strong>LLM 量化部署详解：精度、显存与真实加速之间</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

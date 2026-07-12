@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mixtral on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/mixtral/</link>
+    <description>Recent content in Mixtral on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 12 Jul 2026 09:30:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/mixtral/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MoE 大模型详解：稀疏路由、负载均衡与工程代价</title>
+      <link>https://example.com/aitech/mixture-of-experts/</link>
+      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/mixture-of-experts/</guid>
+      <description>从稀疏路由公式出发，讲清 MoE 的专家容量、负载均衡、专家并行、显存账本与推理代价。</description>
+    </item>
+  </channel>
+</rss>

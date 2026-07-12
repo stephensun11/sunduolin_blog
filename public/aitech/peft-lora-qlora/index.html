@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>参数高效微调详解：LoRA、QLoRA 与适配器工程 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css?v=20260711b">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/llm-%E5%AF%B9%E9%BD%90/index.html">LLM 对齐</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                <a href="../../subcategories/llm-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/index.html">LLM 推理优化</a>
+                <a href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#全量微调为什么贵">全量微调为什么贵</a></li>
+    <li><a href="#lora-的低秩假设">LoRA 的低秩假设</a></li>
+    <li><a href="#初始化为什么要让增量从零开始">初始化为什么要让增量从零开始</a></li>
+    <li><a href="#应该把-lora-加在哪里">应该把 LoRA 加在哪里</a></li>
+    <li><a href="#rankalpha-与容量">rank、alpha 与容量</a></li>
+    <li><a href="#lora-的显存账本">LoRA 的显存账本</a></li>
+    <li><a href="#qlora量化底座训练-lora">QLoRA：量化底座，训练 LoRA</a>
+      <ul>
+        <li><a href="#nf4">NF4</a></li>
+        <li><a href="#double-quantization">Double quantization</a></li>
+        <li><a href="#paged-optimizer">Paged optimizer</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-bit-是怎样存下来的">4 bit 是怎样存下来的</a></li>
+    <li><a href="#qlora-与量化推理不是一回事">QLoRA 与量化推理不是一回事</a></li>
+    <li><a href="#dora-在改什么">DoRA 在改什么</a></li>
+    <li><a href="#sft-时怎样构造-loss">SFT 时怎样构造 loss</a></li>
+    <li><a href="#数据质量比-adapter-参数量更先决定上限">数据质量比 adapter 参数量更先决定上限</a></li>
+    <li><a href="#合并与多适配器服务">合并与多适配器服务</a></li>
+    <li><a href="#如何评估一个适配器">如何评估一个适配器</a></li>
+    <li><a href="#常见失败模式">常见失败模式</a>
+      <ul>
+        <li><a href="#target-module-匹配错误">target module 匹配错误</a></li>
+        <li><a href="#学习率照搬全量微调">学习率照搬全量微调</a></li>
+        <li><a href="#忘记保存-tokenizer-和-chat-template">忘记保存 tokenizer 和 chat template</a></li>
+        <li><a href="#在测试集上挑-checkpoint">在测试集上挑 checkpoint</a></li>
+        <li><a href="#合并后没有做数值回归">合并后没有做数值回归</a></li>
+      </ul>
+    </li>
+    <li><a href="#选择方法的决策表">选择方法的决策表</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+    <span aria-hidden="true">/</span>
+    <span>参数高效微调详解：LoRA、QLoRA 与适配器工程</span>
+</nav>
+
+                <h1>参数高效微调详解：LoRA、QLoRA 与适配器工程</h1>
+                <div class="meta">
+                    <span class="date">2026-07-12</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/peft/index.html">PEFT</a></span>
+                    
+                    <span class="tag"><a href="../../tags/lora/index.html">LoRA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/qlora/index.html">QLoRA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/dora/index.html">DoRA</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%BE%AE%E8%B0%83/index.html">微调</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>微调大模型时，真正昂贵的往往不是一次前向计算，而是为全部参数保存梯度和优化器状态。参数高效微调（PEFT）保留预训练权重，只训练一小组新增参数，从而降低训练显存和多任务存储成本。</p>
+<p>LoRA 是其中最常用的方法，但“给模型加一个 LoRA”仍然包含很多决定：加在哪些线性层、rank 多大、是否量化底座、是否训练 embedding、怎样保存和合并，以及怎样判断效果下降来自容量不足还是数据问题。</p>
+<h2 id="全量微调为什么贵">全量微调为什么贵</h2>
+<p>设模型有 <span class="math-inline">(P)</span> 个参数。以混合精度 AdamW 为例，训练通常要保存：</p>
+<ul>
+<li>模型权重；</li>
+<li>梯度；</li>
+<li>一阶矩；</li>
+<li>二阶矩；</li>
+<li>某些实现中的 FP32 master weight；</li>
+<li>与 batch 和序列长度相关的激活。</li>
+</ul>
+<p>因此不能用“参数量乘以权重字节数”估算训练显存。一个 7B 模型的 BF16 权重约 14 GB，但全量训练的模型状态远大于 14 GB，尚未包括激活与通信缓冲区。</p>
+<p>PEFT 主要减少的是可训练参数对应的梯度和优化器状态；底座权重仍需参与前向与反向计算，因此它不会按相同比例减少计算量或激活显存。</p>
+<h2 id="lora-的低秩假设">LoRA 的低秩假设</h2>
+<p>对预训练线性层：</p>
+<div class="math-display">\[
+y=Wx,\qquad W\in\mathbb{R}^{d_{\text{out}}\times d_{\text{in}}}
+\]</div>
+<p>全量微调会学习同尺寸更新 <span class="math-inline">(\Delta W)</span>。LoRA 冻结 <span class="math-inline">(W)</span>，用两个小矩阵表示更新：</p>
+<div class="math-display">\[
+\Delta W=BA,
+\quad A\in\mathbb{R}^{r\times d_{\text{in}}},
+\quad B\in\mathbb{R}^{d_{\text{out}}\times r}
+\]</div>
+<p>于是前向变成：</p>
+<div class="math-display">\[
+y=Wx+\frac{\alpha}{r}BAx
+\]</div>
+<p>其中 <span class="math-inline">(r)</span> 是 rank，<span class="math-inline">(\alpha)</span> 是缩放系数。新增参数量从 <span class="math-inline">(d_{\text{out}}d_{\text{in}})</span> 变为：</p>
+<div class="math-display">\[
+r(d_{\text{in}}+d_{\text{out}})
+\]</div>
+<p>当 <span class="math-inline">(r)</span> 远小于层宽时，节省显著。<a href="https://arxiv.org/abs/2106.09685">LoRA 原论文</a> 的核心假设是，下游适配所需的权重更新具有较低的内在秩；它不是说原始权重矩阵本身低秩。</p>
+<h2 id="初始化为什么要让增量从零开始">初始化为什么要让增量从零开始</h2>
+<p>常见实现随机初始化 <span class="math-inline">(A)</span>，把 <span class="math-inline">(B)</span> 初始化为零。这样初始时 <span class="math-inline">(BA=0)</span>，模型输出与原底座一致，同时梯度可以先更新 <span class="math-inline">(B)</span>。</p>
+<p>如果两个矩阵都初始化为零，早期梯度可能无法打破对称；如果增量一开始很大，则会在第一个 step 就扰动预训练表示。</p>
+<p>LoRA dropout 只作用于适配分支，通常用于正则化。它的最佳值依赖数据规模和噪声，不应机械设置。</p>
+<h2 id="应该把-lora-加在哪里">应该把 LoRA 加在哪里</h2>
+<p>Transformer 中常见候选包括：</p>
+<ul>
+<li>attention 的 <code>q_proj</code>、<code>k_proj</code>、<code>v_proj</code>、<code>o_proj</code>；</li>
+<li>MLP 的 gate/up/down projection；</li>
+<li>embedding 或 LM head；</li>
+<li>MoE 的专家线性层与 router。</li>
+</ul>
+<p>只适配 Q、V 的成本低，是早期常见配置；覆盖所有主要线性层通常容量更强，但参数与通信更多。目标模块名称依赖模型实现，必须在启动时打印实际匹配结果。最危险的情况不是报错，而是模式一个模块都没匹配却继续训练。</p>
+<p>embedding 和 LM head 是否训练要看任务。新增词表 token 时，至少新 token 对应的 embedding 需要学习；若冻结整个词表，又没有其他可训练路径，新 token 很难获得合理表示。</p>
+<h2 id="rankalpha-与容量">rank、alpha 与容量</h2>
+<p>rank 决定更新子空间的最大维度。增大 rank 会增加容量，但并不保证效果单调提升：</p>
+<ul>
+<li>小数据上可能更容易过拟合；</li>
+<li>不同层需要的 rank 可能不同；</li>
+<li>数据质量和学习率可能先成为瓶颈；</li>
+<li>适配更多模块有时比单层加大 rank 更有效。</li>
+</ul>
+<p>缩放 <span class="math-inline">(\alpha/r)</span> 使更新幅度不至于随 rank 线性增加。有些变体采用 <span class="math-inline">(\alpha/\sqrt r)</span> 等尺度；比较实验时必须记录具体实现，而不能只写 rank。</p>
+<p>建议以小网格做消融：固定数据、总 token、seed 和评测协议，比较 rank、target modules 与学习率。只比较最终 checkpoint 容易错过过拟合，应保留验证曲线。</p>
+<h2 id="lora-的显存账本">LoRA 的显存账本</h2>
+<p>LoRA 节省了可训练状态，但以下部分仍存在：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>是否显著减少</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冻结底座权重</td>
+<td>否</td>
+</tr>
+<tr>
+<td>底座权重的梯度</td>
+<td>是，不保存</td>
+</tr>
+<tr>
+<td>底座 optimizer state</td>
+<td>是，不保存</td>
+</tr>
+<tr>
+<td>LoRA 参数及 optimizer state</td>
+<td>新增，但规模较小</td>
+</tr>
+<tr>
+<td>激活</td>
+<td>通常不会按参数比例减少</td>
+</tr>
+<tr>
+<td>attention 中间量</td>
+<td>取决于 kernel 和 checkpointing</td>
+</tr>
+</tbody>
+</table>
+<p>因此长上下文微调仍可能由激活显存主导。此时需要配合 FlashAttention、activation checkpointing、packing 和较小 micro-batch。</p>
+<h2 id="qlora量化底座训练-lora">QLoRA：量化底座，训练 LoRA</h2>
+<p><a href="https://arxiv.org/abs/2305.14314">QLoRA</a> 将冻结的预训练权重量化为 4 bit，在反向传播时让梯度穿过反量化计算流向 LoRA 参数。关键点是：</p>
+<ol>
+<li>底座权重是冻结的 4-bit 表示；</li>
+<li>矩阵计算通常在 BF16/FP16 等更高精度中执行；</li>
+<li>LoRA 参数与 optimizer state 保持可训练精度；</li>
+<li>这不是对 4-bit 整数权重直接做普通梯度更新。</li>
+</ol>
+<p>论文提出 NF4、double quantization 和 paged optimizer。</p>
+<h3 id="nf4">NF4</h3>
+<p>NF4 为近似正态分布的权重设计非均匀量化点。它利用权重分布而不是简单均匀切分数轴。所谓“信息论最优”依赖论文的分布假设，不应推广成所有张量上都绝对最优。</p>
+<h3 id="double-quantization">Double quantization</h3>
+<p>分组量化需要为每组保存 scale。double quantization 进一步量化这些量化常数，降低元数据开销。</p>
+<h3 id="paged-optimizer">Paged optimizer</h3>
+<p>它借助统一内存处理偶发显存尖峰，目标是降低 OOM 风险；频繁发生主机与设备迁移仍可能损害性能，不能把它当作无限显存。</p>
+<h2 id="4-bit-是怎样存下来的">4 bit 是怎样存下来的</h2>
+<p>对称均匀量化可用一个简化公式理解：</p>
+<div class="math-display">\[
+q=\operatorname{clip}\left(\operatorname{round}\left(\frac{w}{s}\right),q_{\min},q_{\max}\right),
+\qquad \hat w=sq
+\]</div>
+<p>实际 QLoRA 的 NF4 更复杂，并按 block 保存量化信息。显存估算要包括量化值、scale、量化状态、未量化模块、LoRA、激活和临时 workspace，不能只做 <span class="math-inline">(P\times 0.5)</span> 字节的理想计算。</p>
+<h2 id="qlora-与量化推理不是一回事">QLoRA 与量化推理不是一回事</h2>
+<p>QLoRA 的 4-bit 底座用于低显存微调。训练完成后的部署格式取决于推理引擎：</p>
+<ul>
+<li>可以保留适配器，运行时加载；</li>
+<li>可以先反量化并合并，再用目标引擎重新量化；</li>
+<li>某些框架支持量化底座加动态适配器；</li>
+<li>不同量化格式的 kernel、group size 和硬件支持不同。</li>
+</ul>
+<p>“训练时能加载”不代表“生产推理会更快”。速度必须在实际引擎、GPU 和 batch/序列分布上测量。</p>
+<h2 id="dora-在改什么">DoRA 在改什么</h2>
+<p><a href="https://arxiv.org/abs/2402.09353">DoRA</a> 把权重分解为方向和幅度，LoRA 主要更新方向，同时单独学习幅度。其动机是让低秩适配的更新模式更接近全量微调。</p>
+<p>它可能提高特定任务的学习能力，但会增加实现和状态复杂度。是否优于 LoRA 取决于模型、数据和预算，不能把新变体默认当成替代品。</p>
+<h2 id="sft-时怎样构造-loss">SFT 时怎样构造 loss</h2>
+<p>对话模板通常包含 system、user、assistant 和特殊边界 token。两种常见目标是：</p>
+<ul>
+<li><strong>全序列 loss</strong>：所有非 padding token 都参与预测；</li>
+<li><strong>response-only loss</strong>：prompt token 的 label 设为 ignore，只训练 assistant 回复。</li>
+</ul>
+<p>response-only loss 更直接优化回答，但模型仍通过 prompt 的前向表示条件化输出。哪种更好取决于模板、数据和是否希望模型学习用户文本分布。</p>
+<p>必须做一个手工样本测试：打印 token、角色边界、attention mask 和 label，确认 assistant 起始 token、EOS 与多轮对话都被正确处理。</p>
+<h2 id="数据质量比-adapter-参数量更先决定上限">数据质量比 adapter 参数量更先决定上限</h2>
+<p>LoRA 只能改变模型行为，不能把错误标签变成正确知识。微调数据应控制：</p>
+<ul>
+<li>指令是否明确，回答是否真正完成任务；</li>
+<li>风格和安全边界是否一致；</li>
+<li>多轮上下文是否存在错误角色拼接；</li>
+<li>长度分布是否与生产请求接近；</li>
+<li>是否包含验证集或 benchmark 答案；</li>
+<li>是否过度重复同一种模板。</li>
+</ul>
+<p>在小而高质量的数据上，低 rank 可能已足够；在复杂领域适配中，容量不足、覆盖不足与底座能力不足需要分别诊断。</p>
+<h2 id="合并与多适配器服务">合并与多适配器服务</h2>
+<p>LoRA 可在部署前合并：</p>
+<div class="math-display">\[
+W_{\text{merged}}=W+\frac{\alpha}{r}BA
+\]</div>
+<p>合并后不再有额外 LoRA 分支，适合单任务静态部署。但要注意：</p>
+<ul>
+<li>合并应在足够高精度中完成；</li>
+<li>量化底座通常应先反量化或使用框架支持的正确流程；</li>
+<li>合并后要重新保存配置与 tokenizer；</li>
+<li>多个 adapter 直接相加不保证互不干扰。</li>
+</ul>
+<p>动态多适配器适合共享底座服务多个任务，但会增加缓存、批处理和路由复杂度。需要压测 adapter 切换、并发和显存碎片。</p>
+<h2 id="如何评估一个适配器">如何评估一个适配器</h2>
+<p>至少分四层：</p>
+<ol>
+<li><strong>训练正确性</strong>：单样本过拟合、mask、梯度和保存/加载一致；</li>
+<li><strong>任务能力</strong>：独立测试集上的准确率、通过率或人工偏好；</li>
+<li><strong>通用能力回归</strong>：基础知识、指令遵循和原任务是否退化；</li>
+<li><strong>系统指标</strong>：吞吐、首 token 延迟、峰值显存和 adapter 切换成本。</li>
+</ol>
+<p>对生成任务不要只看训练 loss。较低的 token loss 可能来自风格模仿，却未提高事实性或任务成功率。</p>
+<h2 id="常见失败模式">常见失败模式</h2>
+<h3 id="target-module-匹配错误">target module 匹配错误</h3>
+<p>训练参数量为零或远低于预期。启动时应列出可训练参数名、数量和占比。</p>
+<h3 id="学习率照搬全量微调">学习率照搬全量微调</h3>
+<p>LoRA 可训练参数少且初始化不同，常用学习率范围与全量微调不同。应单独扫描，而不是默认越大越好。</p>
+<h3 id="忘记保存-tokenizer-和-chat-template">忘记保存 tokenizer 和 chat template</h3>
+<p>同一权重配不同模板会产生完全不同的提示 token，模型表现可能显著下降。</p>
+<h3 id="在测试集上挑-checkpoint">在测试集上挑 checkpoint</h3>
+<p>这会把测试集变成验证集。应使用验证集选 checkpoint，测试集只做最终报告。</p>
+<h3 id="合并后没有做数值回归">合并后没有做数值回归</h3>
+<p>合并前后的 logits 在允许误差内应一致。若重新量化，还要单独评估量化误差。</p>
+<h2 id="选择方法的决策表">选择方法的决策表</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>优先考虑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有足够集群、追求最大适配容量</td>
+<td>全量微调或分阶段比较</td>
+</tr>
+<tr>
+<td>单卡/少卡、底座能加载为 BF16</td>
+<td>LoRA</td>
+</tr>
+<tr>
+<td>显存连 BF16 底座都放不下</td>
+<td>QLoRA</td>
+</tr>
+<tr>
+<td>多租户共享一个底座</td>
+<td>动态多 LoRA</td>
+</tr>
+<tr>
+<td>只需少量新词或分类头</td>
+<td>selective tuning / head tuning</td>
+</tr>
+<tr>
+<td>LoRA 容量不足且有验证证据</td>
+<td>更高 rank、更多模块或 DoRA 等变体</td>
+</tr>
+</tbody>
+</table>
+<h2 id="总结">总结</h2>
+<p>LoRA 的价值不是“低成本获得全量微调的一切”，而是把适配问题限制到一个可控的低维更新空间。QLoRA 又进一步压缩了冻结底座的存储，让有限显存也能参与微调。</p>
+<p>正确使用它们需要同时管理数学、数据与系统：明确低秩更新发生在哪里，正确核算显存，验证模板和 loss，区分训练量化与部署量化，并用独立评测判断是否真的学会了目标任务。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2106.09685">LoRA: Low-Rank Adaptation of Large Language Models</a></li>
+<li><a href="https://arxiv.org/abs/2305.14314">QLoRA: Efficient Finetuning of Quantized LLMs</a></li>
+<li><a href="https://arxiv.org/abs/2402.09353">DoRA: Weight-Decomposed Low-Rank Adaptation</a></li>
+</ul>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/llm-training-optimization/index.html">
+                        <span>上一篇</span>
+                        <strong>LLM 训练优化与稳定性：从交叉熵到故障诊断</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/mixture-of-experts/index.html">
+                        <span>下一篇</span>
+                        <strong>MoE 大模型详解：稀疏路由、负载均衡与工程代价</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

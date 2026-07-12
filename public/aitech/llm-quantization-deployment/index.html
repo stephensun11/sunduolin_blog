@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM 量化部署详解：精度、显存与真实加速之间 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css?v=20260711b">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/llm-%E5%AF%B9%E9%BD%90/index.html">LLM 对齐</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                <a href="../../subcategories/llm-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/index.html">LLM 推理优化</a>
+                <a href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#先读懂-w4a16w8a8-与-kv8">先读懂 W4A16、W8A8 与 KV8</a></li>
+    <li><a href="#线性量化的基本公式">线性量化的基本公式</a></li>
+    <li><a href="#粒度决定-scale-的共享范围">粒度决定 scale 的共享范围</a></li>
+    <li><a href="#为什么-outlier-是核心难题">为什么 outlier 是核心难题</a></li>
+    <li><a href="#ptq-与-qat">PTQ 与 QAT</a>
+      <ul>
+        <li><a href="#post-training-quantizationptq">Post-Training Quantization（PTQ）</a></li>
+        <li><a href="#quantization-aware-trainingqat">Quantization-Aware Training（QAT）</a></li>
+      </ul>
+    </li>
+    <li><a href="#gptq用二阶信息补偿权重误差">GPTQ：用二阶信息补偿权重误差</a></li>
+    <li><a href="#awq保护重要权重通道">AWQ：保护重要权重通道</a></li>
+    <li><a href="#smoothquant把激活难度迁移到权重">SmoothQuant：把激活难度迁移到权重</a></li>
+    <li><a href="#weight-only-为什么常适合-decode">Weight-only 为什么常适合 decode</a></li>
+    <li><a href="#kv-cache-量化为什么越来越重要">KV cache 量化为什么越来越重要</a></li>
+    <li><a href="#量化对象不只是一组权重">量化对象不只是一组权重</a></li>
+    <li><a href="#校准集怎样选择">校准集怎样选择</a></li>
+    <li><a href="#量化误差怎样验证">量化误差怎样验证</a>
+      <ul>
+        <li><a href="#层级数值检查">层级数值检查</a></li>
+        <li><a href="#语言建模指标">语言建模指标</a></li>
+        <li><a href="#下游能力">下游能力</a></li>
+        <li><a href="#生成行为">生成行为</a></li>
+        <li><a href="#系统性能">系统性能</a></li>
+      </ul>
+    </li>
+    <li><a href="#显存估算为什么总比文件大">显存估算为什么总比文件大</a></li>
+    <li><a href="#格式与-kernel-才是部署接口">格式与 kernel 才是部署接口</a></li>
+    <li><a href="#常见失败模式">常见失败模式</a>
+      <ul>
+        <li><a href="#只测-perplexity">只测 perplexity</a></li>
+        <li><a href="#用随机文本校准领域模型">用随机文本校准领域模型</a></li>
+        <li><a href="#位数越低越划算">位数越低越划算</a></li>
+        <li><a href="#gpu-支持-int4-就一定加速">GPU 支持 INT4 就一定加速</a></li>
+        <li><a href="#把量化误差当成随机噪声">把量化误差当成随机噪声</a></li>
+      </ul>
+    </li>
+    <li><a href="#一条稳妥的选型流程">一条稳妥的选型流程</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+    <span aria-hidden="true">/</span>
+    <span>LLM 量化部署详解：精度、显存与真实加速之间</span>
+</nav>
+
+                <h1>LLM 量化部署详解：精度、显存与真实加速之间</h1>
+                <div class="meta">
+                    <span class="date">2026-07-12</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/quantization/index.html">Quantization</a></span>
+                    
+                    <span class="tag"><a href="../../tags/gptq/index.html">GPTQ</a></span>
+                    
+                    <span class="tag"><a href="../../tags/awq/index.html">AWQ</a></span>
+                    
+                    <span class="tag"><a href="../../tags/smoothquant/index.html">SmoothQuant</a></span>
+                    
+                    <span class="tag"><a href="../../tags/kv-cache/index.html">KV Cache</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>量化把浮点权重或激活映射到更低精度表示。它可以减少模型文件、显存占用和内存带宽，并在硬件有对应 kernel 时提高吞吐。</p>
+<p>但三个结果不能混为一谈：文件变小、显存降低和推理变快。一个 4-bit 模型可能显著节省存储，却因为反量化开销、kernel 不匹配或 batch 形状太小而没有加速。严谨部署必须同时验证数值质量和真实系统性能。</p>
+<h2 id="先读懂-w4a16w8a8-与-kv8">先读懂 W4A16、W8A8 与 KV8</h2>
+<p>常见记法：</p>
+<ul>
+<li><strong>W4A16</strong>：权重 4 bit，激活用 FP16/BF16；</li>
+<li><strong>W8A8</strong>：权重和激活都 8 bit；</li>
+<li><strong>W4A8</strong>：权重 4 bit、激活 8 bit；</li>
+<li><strong>FP8</strong>：使用具体 FP8 格式表示权重/激活，通常需要缩放；</li>
+<li><strong>KV8/KV4</strong>：KV cache 使用 8/4 bit 等低精度。</li>
+</ul>
+<p>记法只描述目标精度，不描述 group size、scale 精度、对称性、零点、异常值处理和 kernel。两个都叫 W4A16 的文件可能不兼容，也可能有不同精度和速度。</p>
+<h2 id="线性量化的基本公式">线性量化的基本公式</h2>
+<p>对浮点值 <span class="math-inline">(x)</span>，仿射量化可写成：</p>
+<div class="math-display">\[
+q=\operatorname{clip}\left(\operatorname{round}\left(\frac{x}{s}\right)+z,
+q_{\min},q_{\max}\right)
+\]</div>
+<p>反量化为：</p>
+<div class="math-display">\[
+\hat x=s(q-z)
+\]</div>
+<p>其中 <span class="math-inline">(s)</span> 是 scale，<span class="math-inline">(z)</span> 是 zero-point。对称量化通常令 <span class="math-inline">(z=0)</span>，实现简单；非对称量化能更好利用偏移分布的数值范围，但元数据和 kernel 更复杂。</p>
+<p>量化误差为 <span class="math-inline">(e=x-\hat x)</span>。目标不是单独最小化每个权重的误差，而是让模型输出和任务质量尽量保持。</p>
+<h2 id="粒度决定-scale-的共享范围">粒度决定 scale 的共享范围</h2>
+<table>
+<thead>
+<tr>
+<th>粒度</th>
+<th>scale 数量</th>
+<th>精度与成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>per-tensor</td>
+<td>整个张量一个</td>
+<td>元数据少，对 outlier 敏感</td>
+</tr>
+<tr>
+<td>per-channel</td>
+<td>每个输出/输入通道一个</td>
+<td>精度更好，依赖 kernel 支持</td>
+</tr>
+<tr>
+<td>per-group</td>
+<td>每若干连续权重一个</td>
+<td>W4 常见折中</td>
+</tr>
+<tr>
+<td>per-token activation</td>
+<td>每个 token 动态 scale</td>
+<td>适应激活变化，但有运行时开销</td>
+</tr>
+</tbody>
+</table>
+<p>group 越小通常越能适应局部分布，但 scale 元数据、访存和 kernel 复杂度越高。比较模型大小时要把 scale 和 zero-point 也算进去。</p>
+<h2 id="为什么-outlier-是核心难题">为什么 outlier 是核心难题</h2>
+<p>如果一个分组大多数值接近零，少数值很大，统一 scale 为了覆盖大值会让小值落到很少的离散格点；若缩小范围，又会裁剪大值。</p>
+<p>Transformer 激活中某些通道会出现系统性大值。<a href="https://arxiv.org/abs/2208.07339">LLM.int8()</a> 将异常特征维度用较高精度计算，其余部分使用 INT8，从而兼顾精度与内存。</p>
+<p>异常值不是“删除掉就好”。它们可能承载重要特征，正确策略是隔离、平滑或使用更细粒度表示。</p>
+<h2 id="ptq-与-qat">PTQ 与 QAT</h2>
+<h3 id="post-training-quantizationptq">Post-Training Quantization（PTQ）</h3>
+<p>在模型训练完成后量化，通常只需要少量校准数据，不更新或只局部调整权重。优点是便宜、快速；低 bit 下精度更依赖算法和校准集。</p>
+<h3 id="quantization-aware-trainingqat">Quantization-Aware Training（QAT）</h3>
+<p>训练时模拟量化和反量化，让模型适应误差。离散 round 不可导，常用 straight-through estimator 近似反向。QAT 成本更高，但在极低 bit 或敏感模型上可能更稳。</p>
+<p>QLoRA 属于“量化冻结底座上训练适配器”，不等同于为最终整数推理做完整 QAT。</p>
+<h2 id="gptq用二阶信息补偿权重误差">GPTQ：用二阶信息补偿权重误差</h2>
+<p><a href="https://arxiv.org/abs/2210.17323">GPTQ</a> 是一次性权重量化方法，基于近似二阶信息逐列量化并更新未量化权重，以补偿当前量化误差。</p>
+<p>直觉上，若层输出为 <span class="math-inline">(Y=WX)</span>，不应只最小化 <span class="math-inline">(|W-\hat W|)</span>，而应关注校准输入上的输出误差：</p>
+<div class="math-display">\[
+\min_{\hat W}\|WX-\hat W X\|_2^2
+\]</div>
+<p>输入相关的 Hessian 近似告诉算法哪些方向更敏感。GPTQ 常用于 W4A16 权重量化，适合降低解码阶段的权重带宽。</p>
+<p>校准数据若与目标域完全不匹配，误差补偿也会偏向错误分布。</p>
+<h2 id="awq保护重要权重通道">AWQ：保护重要权重通道</h2>
+<p><a href="https://arxiv.org/abs/2306.00978">AWQ</a> 的观察是，并非所有权重同等重要；激活幅度可以帮助识别少量显著权重通道。它通过基于激活统计的缩放保护这些权重，再进行低 bit 权重量化。</p>
+<p>AWQ 不把所有 activation 存成量化值，它是 activation-aware 的 weight quantization。名字里的 activation-aware 描述校准依据，不代表最终一定是 W4A8。</p>
+<h2 id="smoothquant把激活难度迁移到权重">SmoothQuant：把激活难度迁移到权重</h2>
+<p><a href="https://arxiv.org/abs/2211.10438">SmoothQuant</a> 面向 W8A8。对线性层 <span class="math-inline">(Y=XW)</span>，引入按通道尺度矩阵 <span class="math-inline">(S)</span>：</p>
+<div class="math-display">\[
+Y=(XS^{-1})(SW)
+\]</div>
+<p>这个变换在浮点数学上等价，却能把激活通道的异常尺度迁移到相对容易量化的权重。平滑强度控制迁移程度：过少不能处理激活 outlier，过多会让权重更难量化。</p>
+<p>SmoothQuant 主要帮助 activation quantization；与 GPTQ/AWQ 的目标和典型部署路径不同。</p>
+<h2 id="weight-only-为什么常适合-decode">Weight-only 为什么常适合 decode</h2>
+<p>LLM 推理有两个阶段：</p>
+<ul>
+<li><strong>prefill</strong>：一次处理全部输入 token，大矩阵乘通常更 compute-bound；</li>
+<li><strong>decode</strong>：每步只生成少量 token，反复读取权重，常更 memory-bandwidth-bound。</li>
+</ul>
+<p>W4A16 减少权重读取，可能显著帮助 decode。但计算前往往要反量化，能否加速取决于 fused kernel 和 batch 形状。</p>
+<p>W8A8/FP8 同时降低权重与激活精度，更有机会利用低精度 Tensor Core 加速大 GEMM，因此可能更适合高吞吐 prefill。这里的“可能”必须通过目标硬件实测。</p>
+<h2 id="kv-cache-量化为什么越来越重要">KV cache 量化为什么越来越重要</h2>
+<p>每层保存 key 和 value。粗略忽略分组元数据，batch 为 <span class="math-inline">(B)</span>、序列长度 <span class="math-inline">(L)</span>、层数 <span class="math-inline">(N)</span>、KV 头数 <span class="math-inline">(H_{kv})</span>、头维 <span class="math-inline">(D)</span>、每元素字节数 <span class="math-inline">(b)</span> 时：</p>
+<div class="math-display">\[
+M_{KV}\approx 2BNLH_{kv}Db
+\]</div>
+<p>前面的 2 对应 K 与 V。长上下文和高并发下，KV cache 可能超过权重显存。KV8 能近似减半 BF16 KV 的存储，KV4 更进一步。</p>
+<p>但 KV cache 是随 token 动态生成的，scale 计算和反量化位于热路径；量化误差还会在后续所有 attention step 中被重复使用。必须按上下文长度评测，而不能只测短回答 PPL。</p>
+<h2 id="量化对象不只是一组权重">量化对象不只是一组权重</h2>
+<p>常见敏感模块包括：</p>
+<ul>
+<li>embedding 与 LM head；</li>
+<li>第一层和最后一层；</li>
+<li>attention 输出投影；</li>
+<li>router 与小型控制模块；</li>
+<li>normalization 参数；</li>
+<li>logits 计算和 softmax；</li>
+<li>MoE 中很少被校准样本激活的专家。</li>
+</ul>
+<p>很多方案对部分模块保留更高精度。最终 bit-width 应按实际存储的混合配置报告，不应把整个模型笼统称为“纯 4 bit”。</p>
+<h2 id="校准集怎样选择">校准集怎样选择</h2>
+<p>校准集用于估计权重重要性、激活范围或误差补偿。它应覆盖：</p>
+<ul>
+<li>生产语言与领域；</li>
+<li>真实输入长度分布；</li>
+<li>代码、数学、表格等特殊格式；</li>
+<li>chat template 与 system prompt；</li>
+<li>MoE 的不同专家路由；</li>
+<li>极端但合法的长上下文。</li>
+</ul>
+<p>校准集不需要像训练集一样大，但要有代表性。还必须与最终测试集隔离，否则量化参数会间接适配测试数据。</p>
+<h2 id="量化误差怎样验证">量化误差怎样验证</h2>
+<h3 id="层级数值检查">层级数值检查</h3>
+<p>比较浮点与量化模型的层输出、logits 余弦相似度、最大误差和 KL divergence，用于定位敏感层。</p>
+<h3 id="语言建模指标">语言建模指标</h3>
+<p>在固定 tokenizer 和数据上比较 loss/PPL，适合快速回归，但不能代表所有任务。</p>
+<h3 id="下游能力">下游能力</h3>
+<p>覆盖知识、数学、代码、长上下文、工具格式、事实性和目标领域。低平均损失不保证 instruction following 不退化。</p>
+<h3 id="生成行为">生成行为</h3>
+<p>检查重复、乱码、EOS、拒答、JSON 合法性和输出长度。量化可能改变接近决策边界的 token 排序，从而放大到完全不同的长文本。</p>
+<h3 id="系统性能">系统性能</h3>
+<p>记录模型加载时间、静态与峰值显存、TTFT、TPOT、请求/token 吞吐、P95/P99 和功耗。必须对齐并发与长度分布。</p>
+<h2 id="显存估算为什么总比文件大">显存估算为什么总比文件大</h2>
+<p>权重理论大小约为：</p>
+<div class="math-display">\[
+M_{w,\text{ideal}}=P\times\frac{b_w}{8}
+\]</div>
+<p>实际还包括：</p>
+<ul>
+<li>scale 和 zero-point；</li>
+<li>未量化层；</li>
+<li>KV cache；</li>
+<li>临时反量化与 GEMM workspace；</li>
+<li>CUDA graph、通信 buffer 和 allocator 碎片；</li>
+<li>tokenizer、runtime 与多 adapter 状态。</li>
+</ul>
+<p>部署前应使用实际引擎测峰值，而不是用模型文件大小决定 GPU 容量。</p>
+<h2 id="格式与-kernel-才是部署接口">格式与 kernel 才是部署接口</h2>
+<p>GGUF、GPTQ、AWQ、bitsandbytes、FP8 checkpoint 等格式面向不同运行时。选择前要确认：</p>
+<ul>
+<li>引擎是否原生支持该格式和 group size；</li>
+<li>GPU 架构是否有高效 kernel；</li>
+<li>tensor/expert parallel 是否兼容；</li>
+<li>LoRA、prefix cache、speculative decoding 是否可组合；</li>
+<li>是否需要启动时转换或反量化；</li>
+<li>长上下文下 KV cache 格式是否匹配。</li>
+</ul>
+<p>若引擎启动时把 4-bit 权重展开为 FP16，文件虽小，运行显存和速度优势可能消失。</p>
+<h2 id="常见失败模式">常见失败模式</h2>
+<h3 id="只测-perplexity">只测 perplexity</h3>
+<p>量化可能在平均 PPL 上变化很小，却破坏少数关键任务、长上下文或结构化输出。</p>
+<h3 id="用随机文本校准领域模型">用随机文本校准领域模型</h3>
+<p>随机样本没有激活真实的敏感通道，量化参数对生产分布不可靠。</p>
+<h3 id="位数越低越划算">位数越低越划算</h3>
+<p>极低 bit 可能需要更复杂解码、更多 scale 和混合精度补丁，最终速度和质量未必更优。</p>
+<h3 id="gpu-支持-int4-就一定加速">GPU 支持 INT4 就一定加速</h3>
+<p>还需要形状、布局、kernel 和推理引擎匹配。硬件指令存在不等于完整路径使用它。</p>
+<h3 id="把量化误差当成随机噪声">把量化误差当成随机噪声</h3>
+<p>误差与层、通道、输入和任务相关，可能形成系统性偏差。</p>
+<h2 id="一条稳妥的选型流程">一条稳妥的选型流程</h2>
+<ol>
+<li>冻结浮点基线、评测集和服务负载；</li>
+<li>明确瓶颈是权重显存、KV cache、带宽还是计算；</li>
+<li>选择候选 W4A16、W8A8/FP8 或 KV 量化路径；</li>
+<li>用代表性校准集生成 checkpoint；</li>
+<li>做层级数值和完整能力回归；</li>
+<li>在目标引擎与硬件上压测；</li>
+<li>对质量、成本和延迟做 Pareto 比较；</li>
+<li>保存量化工具、配置、校准数据版本和校验和。</li>
+</ol>
+<h2 id="总结">总结</h2>
+<p>量化不是单一压缩按钮，而是数值表示、校准算法、kernel 和服务负载共同决定的部署方案。</p>
+<p>W4A16 常针对权重带宽，W8A8/FP8 更强调低精度计算，KV 量化解决长上下文状态显存。无论选择 GPTQ、AWQ、SmoothQuant 还是其他方法，最终问题都相同：在真实任务上损失多少质量，在真实硬件上节省多少资源。只有两本账同时成立，量化才算成功。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2208.07339">LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale</a></li>
+<li><a href="https://arxiv.org/abs/2210.17323">GPTQ</a></li>
+<li><a href="https://arxiv.org/abs/2306.00978">AWQ</a></li>
+<li><a href="https://arxiv.org/abs/2211.10438">SmoothQuant</a></li>
+</ul>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/llm-evaluation-methodology/index.html">
+                        <span>上一篇</span>
+                        <strong>LLM 评测方法论：从离线基准到线上质量闭环</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/rag-system-design/index.html">
+                        <span>下一篇</span>
+                        <strong>RAG 系统设计：从切分、检索到引用与评测</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

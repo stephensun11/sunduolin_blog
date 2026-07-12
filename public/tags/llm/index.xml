@@ -6,8 +6,64 @@
     <description>Recent content in LLM on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 11 Jul 2026 11:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 10:10:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RAG 系统设计：从切分、检索到引用与评测</title>
+      <link>https://example.com/aitech/rag-system-design/</link>
+      <pubDate>Sun, 12 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/rag-system-design/</guid>
+      <description>从文档解析、Chunk、混合检索和重排讲到引用校验、权限、版本管理与分层评测，构建可靠 RAG 证据链。</description>
+    </item>
+    <item>
+      <title>LLM 量化部署详解：精度、显存与真实加速之间</title>
+      <link>https://example.com/aitech/llm-quantization-deployment/</link>
+      <pubDate>Sun, 12 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-quantization-deployment/</guid>
+      <description>解释低比特量化的数学基础、GPTQ/AWQ/SmoothQuant、KV Cache 量化，以及显存降低与真实加速的区别。</description>
+    </item>
+    <item>
+      <title>LLM 评测方法论：从离线基准到线上质量闭环</title>
+      <link>https://example.com/aitech/llm-evaluation-methodology/</link>
+      <pubDate>Sun, 12 Jul 2026 09:50:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-evaluation-methodology/</guid>
+      <description>建立覆盖能力、行为、安全与系统性能的 LLM 评测体系，并处理 Judge 偏差、数据污染和统计不确定性。</description>
+    </item>
+    <item>
+      <title>LLM 后训练与对齐：SFT、DPO、RLHF 的目标和边界</title>
+      <link>https://example.com/aitech/post-training-alignment/</link>
+      <pubDate>Sun, 12 Jul 2026 09:40:00 +0800</pubDate>
+      <guid>https://example.com/aitech/post-training-alignment/</guid>
+      <description>串联 SFT、奖励模型、RLHF、DPO、KTO 与可验证奖励，厘清不同后训练方法的目标、数据和边界。</description>
+    </item>
+    <item>
+      <title>MoE 大模型详解：稀疏路由、负载均衡与工程代价</title>
+      <link>https://example.com/aitech/mixture-of-experts/</link>
+      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
+      <guid>https://example.com/aitech/mixture-of-experts/</guid>
+      <description>从稀疏路由公式出发，讲清 MoE 的专家容量、负载均衡、专家并行、显存账本与推理代价。</description>
+    </item>
+    <item>
+      <title>参数高效微调详解：LoRA、QLoRA 与适配器工程</title>
+      <link>https://example.com/aitech/peft-lora-qlora/</link>
+      <pubDate>Sun, 12 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/peft-lora-qlora/</guid>
+      <description>推导 LoRA 的低秩更新，解释 QLoRA、DoRA、显存核算、目标模块选择、适配器合并与评测方法。</description>
+    </item>
+    <item>
+      <title>LLM 训练优化与稳定性：从交叉熵到故障诊断</title>
+      <link>https://example.com/aitech/llm-training-optimization/</link>
+      <pubDate>Sun, 12 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llm-training-optimization/</guid>
+      <description>从交叉熵、AdamW 和学习率调度出发，系统说明混合精度、梯度控制、checkpoint 与训练故障诊断。</description>
+    </item>
+    <item>
+      <title>LLM 预训练数据工程：从原始语料到可复现的数据配方</title>
+      <link>https://example.com/aitech/pretraining-data-pipeline/</link>
+      <pubDate>Sun, 12 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/pretraining-data-pipeline/</guid>
+      <description>系统讲解 LLM 预训练数据从采集、清洗、去重、去污染到数据配比、Tokenize 和可复现版本管理的完整流程。</description>
+    </item>
     <item>
       <title>线性注意力详解：从核技巧、递推状态到现代架构</title>
       <link>https://example.com/aitech/linear-attention-guide/</link>
