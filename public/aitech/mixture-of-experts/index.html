@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MoE 大模型详解：稀疏路由、负载均衡与工程代价 - Duolin Sun&#39; Blog</title>
+<title>MoE 模型原理及应用：路由、负载均衡与专家并行 - Duolin Sun&#39; Blog</title>
 <link rel="stylesheet" href="../../css/site.css?v=20260711b">
 
     <script>
@@ -51,6 +51,7 @@
                 <a href="../../subcategories/llm-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/index.html">LLM 推理优化</a>
                 <a href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
                 <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
             </div>
         </div>
         <div class="nav-item">
@@ -107,6 +108,13 @@
         <li><a href="#top-1-与-top-2">Top-1 与 Top-2</a></li>
       </ul>
     </li>
+    <li><a href="#一个-top-2-路由的手算例子">一个 top-2 路由的手算例子</a>
+      <ul>
+        <li><a href="#router-学到的是什么">Router 学到的是什么</a></li>
+      </ul>
+    </li>
+    <li><a href="#一次-moe-前向的完整路径">一次 MoE 前向的完整路径</a></li>
+    <li><a href="#为什么只把-ffn-换成专家">为什么只把 FFN 换成专家</a></li>
     <li><a href="#capacity专家一次能收多少-token">Capacity：专家一次能收多少 token</a></li>
     <li><a href="#为什么会负载不均衡">为什么会负载不均衡</a></li>
     <li><a href="#token-choice-与-expert-choice">Token-choice 与 Expert-choice</a></li>
@@ -115,6 +123,25 @@
     <li><a href="#与其他并行方式怎样组合">与其他并行方式怎样组合</a></li>
     <li><a href="#为什么-moe-训练更容易出现数值问题">为什么 MoE 训练更容易出现数值问题</a></li>
     <li><a href="#moe-的推理不是天然更快">MoE 的推理不是天然更快</a></li>
+    <li><a href="#moe-模型的典型应用">MoE 模型的典型应用</a>
+      <ul>
+        <li><a href="#1-扩大预训练模型容量">1. 扩大预训练模型容量</a></li>
+        <li><a href="#2-多语言和多领域建模">2. 多语言和多领域建模</a></li>
+        <li><a href="#3-通用基础模型和聊天模型">3. 通用基础模型和聊天模型</a></li>
+        <li><a href="#4-多模态模型">4. 多模态模型</a></li>
+        <li><a href="#5-资源受限的在线推理">5. 资源受限的在线推理</a></li>
+      </ul>
+    </li>
+    <li><a href="#代表模型怎样使用-moe">代表模型怎样使用 MoE</a>
+      <ul>
+        <li><a href="#switch-transformertop-1-简化路由">Switch Transformer：Top-1 简化路由</a></li>
+        <li><a href="#mixtral-8x7b每层-8-个专家激活-2-个">Mixtral 8x7B：每层 8 个专家、激活 2 个</a></li>
+        <li><a href="#deepseekmoe细粒度专家与共享专家">DeepSeekMoE：细粒度专家与共享专家</a></li>
+        <li><a href="#deepseek-v3大规模-moe-系统案例">DeepSeek-V3：大规模 MoE 系统案例</a></li>
+      </ul>
+    </li>
+    <li><a href="#moe-与多模型集成有什么区别">MoE 与“多模型集成”有什么区别</a></li>
+    <li><a href="#什么时候应该选择-moe">什么时候应该选择 MoE</a></li>
     <li><a href="#参数量和显存怎样计算">参数量和显存怎样计算</a></li>
     <li><a href="#微调-moe-的特殊问题">微调 MoE 的特殊问题</a></li>
     <li><a href="#一个正确的性能比较">一个正确的性能比较</a></li>
@@ -127,6 +154,7 @@
       </ul>
     </li>
     <li><a href="#实施检查表">实施检查表</a></li>
+    <li><a href="#一个-moe-训练监控面板">一个 MoE 训练监控面板</a></li>
     <li><a href="#总结">总结</a></li>
     <li><a href="#参考资料">参考资料</a></li>
   </ul>
@@ -143,12 +171,12 @@
     <span aria-hidden="true">/</span>
     <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
     <span aria-hidden="true">/</span>
-    <span>MoE 大模型详解：稀疏路由、负载均衡与工程代价</span>
+    <span>MoE 模型原理及应用：路由、负载均衡与专家并行</span>
 </nav>
 
-                <h1>MoE 大模型详解：稀疏路由、负载均衡与工程代价</h1>
+                <h1>MoE 模型原理及应用：路由、负载均衡与专家并行</h1>
                 <div class="meta">
-                    <span class="date">2026-07-12</span>
+                    <span class="date">2026-07-13</span>
                     <span class="category">AiTech</span>
                     
                     <a class="subcategory" href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
@@ -200,6 +228,66 @@ y=\sum_{i\in S(x)}\tilde p_i(x)\,E_i(x)
 <p>Top-1 每 token 激活一个专家，计算和通信较低；Top-2 激活两个专家，通常提供更多容量和路由冗余，但成本更高。</p>
 <p><a href="https://arxiv.org/abs/2101.03961">Switch Transformer</a> 以简化的 top-1 routing 展示了大规模稀疏训练；<a href="https://arxiv.org/abs/2401.04088">Mixtral</a> 则在每层专家中为每个 token 选择两个。</p>
 <p>“总参数”与“每 token 激活参数”必须同时报告。MoE 模型的总参数量不能直接与 dense 模型参数量按相同 FLOPs 解释。</p>
+<h2 id="一个-top-2-路由的手算例子">一个 top-2 路由的手算例子</h2>
+<p>假设有 4 个专家，某个 token 的 router logits 是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>expert 0:  2.1
+</span></span><span style="display:flex;"><span>expert 1:  0.4
+</span></span><span style="display:flex;"><span>expert 2:  1.3
+</span></span><span style="display:flex;"><span>expert 3: -0.2
+</span></span></code></pre></div><p>对 4 个 logits 做 softmax，概率近似为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>[0.577, 0.105, 0.259, 0.058]
+</span></span></code></pre></div><p>Top-2 选择 expert 0 和 expert 2。若在选中专家之间重新归一化：</p>
+<div class="math-display">\[
+\tilde p_0=\frac{0.577}{0.577+0.259}\approx0.690
+\]</div>
+<div class="math-display">\[
+\tilde p_2=\frac{0.259}{0.577+0.259}\approx0.310
+\]</div>
+<p>最终输出为：</p>
+<div class="math-display">\[
+y\approx0.690E_0(x)+0.310E_2(x)
+\]</div>
+<p>下一个 token 会重新计算 router，可能选择完全不同的专家。MoE 的稀疏性是 token-level 的动态选择，不是整段文本永久绑定某个专家。</p>
+<h3 id="router-学到的是什么">Router 学到的是什么</h3>
+<p>router 与主模型一起通过最终语言模型 loss 训练。只要某个路由决定让输出更接近正确 token，梯度就会调整 router 和被选专家。</p>
+<p>Top-k 是离散选择，未选专家通常得不到该 token 的主任务梯度；选中专家和 gate 权重仍可对 loss 求导。不同实现还会加入噪声、辅助损失或无辅助损失的偏置更新来维持负载。</p>
+<h2 id="一次-moe-前向的完整路径">一次 MoE 前向的完整路径</h2>
+<p>设输入隐藏状态为 <code>[B,T,d]</code>，展平后有 <span class="math-inline">(M=B\times T)</span> 个 token：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>1. router:   [M, d] -&gt; [M, E]
+</span></span><span style="display:flex;"><span>2. top-k:    每个 token 得到 k 个 expert id 和 gate weight
+</span></span><span style="display:flex;"><span>3. dispatch: 按 expert id 对 token 排序、分桶
+</span></span><span style="display:flex;"><span>4. exchange: token 发往专家所在设备（expert parallel 时）
+</span></span><span style="display:flex;"><span>5. experts:  每个专家对自己的 token 做 FFN
+</span></span><span style="display:flex;"><span>6. exchange: 专家输出发回 token 原设备
+</span></span><span style="display:flex;"><span>7. combine:  按 gate weight 加权并恢复 [B,T,d]
+</span></span></code></pre></div><p>简化伪代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sparse_moe</span>(x, router, experts, top_k<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>):
+</span></span><span style="display:flex;"><span>    shape <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>    flat <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])             <span style="color:#75715e"># [M, D]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    router_logits <span style="color:#f92672">=</span> router(flat)                <span style="color:#75715e"># [M, E]</span>
+</span></span><span style="display:flex;"><span>    probs <span style="color:#f92672">=</span> router_logits<span style="color:#f92672">.</span>softmax(dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    weights, expert_ids <span style="color:#f92672">=</span> probs<span style="color:#f92672">.</span>topk(top_k, dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    weights <span style="color:#f92672">=</span> weights <span style="color:#f92672">/</span> weights<span style="color:#f92672">.</span>sum(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, keepdim<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    output <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros_like(flat)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> expert_id, expert <span style="color:#f92672">in</span> enumerate(experts):
+</span></span><span style="display:flex;"><span>        token_idx, slot_idx <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>where(expert_ids <span style="color:#f92672">==</span> expert_id)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> token_idx<span style="color:#f92672">.</span>numel() <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>        expert_out <span style="color:#f92672">=</span> expert(flat[token_idx])
+</span></span><span style="display:flex;"><span>        output<span style="color:#f92672">.</span>index_add_(
+</span></span><span style="display:flex;"><span>            <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>            token_idx,
+</span></span><span style="display:flex;"><span>            weights[token_idx, slot_idx, <span style="color:#66d9ef">None</span>] <span style="color:#f92672">*</span> expert_out,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> output<span style="color:#f92672">.</span>reshape(shape), router_logits
+</span></span></code></pre></div><p>这段代码便于理解，但真实 GPU 实现不会逐专家 Python 循环。它会使用 token permutation、grouped GEMM、fused kernel 和 all-to-all，以减少小 kernel 与随机访存。</p>
+<h2 id="为什么只把-ffn-换成专家">为什么只把 FFN 换成专家</h2>
+<p>Transformer 中 FFN 参数通常占很大比例，而且每个 token 的 FFN 计算彼此独立，适合先路由再批量矩阵乘。</p>
+<p>Attention 则负责 token 间交互，若每个 token 使用不同 attention 参数，KV cache、批处理和通信会复杂得多。因此主流 sparse MoE 多保留共享 attention，只把部分或全部 FFN 替换成专家。</p>
+<p>这不是硬性规则，而是参数容量、计算规则性与系统复杂度之间的实用折中。</p>
 <h2 id="capacity专家一次能收多少-token">Capacity：专家一次能收多少 token</h2>
 <p>一个 batch 有 <span class="math-inline">(T)</span> 个 token，<span class="math-inline">(E)</span> 个专家，top-k 为 <span class="math-inline">(k)</span>。平均每个专家接收约 <span class="math-inline">(kT/E)</span> 个 token。工程上会设置 capacity factor：</p>
 <div class="math-display">\[
@@ -271,6 +359,95 @@ C=\left\lceil \text{capacity\_factor}\times\frac{kT}{E}\right\rceil
 <li>多副本部署时的专家复制成本。</li>
 </ul>
 <p>因此 MoE 的优势通常是“在相近激活 FLOPs 下获得更大参数容量”，不是“任何硬件上延迟都更低”。小 batch、低延迟场景尤其需要实测。</p>
+<h2 id="moe-模型的典型应用">MoE 模型的典型应用</h2>
+<h3 id="1-扩大预训练模型容量">1. 扩大预训练模型容量</h3>
+<p>MoE 最直接的用途是在控制每 token 计算量的同时增加总参数。更多参数可以容纳更丰富的模式，而 router 只激活其中一小部分。</p>
+<p>这适合训练预算受每 token FLOPs 限制、但集群内存和高速互联足以容纳专家的场景。收益并非免费：总权重 checkpoint、更复杂的通信和训练稳定性都会增加成本。</p>
+<h3 id="2-多语言和多领域建模">2. 多语言和多领域建模</h3>
+<p>不同语言、代码、数学和自然语言可能形成不同路由偏好。<a href="https://arxiv.org/abs/2101.03961">Switch Transformer</a> 在其多语言实验中报告了相对 mT5 基线的改善。</p>
+<p>但 router 不接受“语言专家”标签监督。专家可能按语法、token 位置、抽象特征或训练阶段分工，不能看到路由热力图后就给专家随意命名。</p>
+<h3 id="3-通用基础模型和聊天模型">3. 通用基础模型和聊天模型</h3>
+<p>MoE 可用于 base model 的预训练，也可以继续做 SFT 和偏好对齐。对齐阶段仍然只有被路由到的专家接收特定 token 的主任务梯度，因此需要监控专家利用率和通用能力回归。</p>
+<h3 id="4-多模态模型">4. 多模态模型</h3>
+<p>在文本、图像、音频等 token 共同进入 Transformer 时，MoE 可以增加共享主干的条件计算容量。专家可能形成模态偏好，也可能学习跨模态特征。</p>
+<p>如果设计目标是硬性隔离模态，显式 modality router 或独立 tower 更可控；普通 learned router 不保证自动得到期望分工。</p>
+<h3 id="5-资源受限的在线推理">5. 资源受限的在线推理</h3>
+<p>MoE 有时能以较少激活参数达到较大 dense 模型的质量，但它不天然适合单 GPU 边缘设备。全部专家仍需存储，跨 GPU 专家还会产生通信。</p>
+<p>在线服务更适合具备以下条件的场景：</p>
+<ul>
+<li>多 GPU/多节点能常驻全部专家；</li>
+<li>batch 足够大，可形成有效 grouped GEMM；</li>
+<li>网络 all-to-all 性能好；</li>
+<li>推理引擎原生支持 expert parallel 和连续批处理。</li>
+</ul>
+<h2 id="代表模型怎样使用-moe">代表模型怎样使用 MoE</h2>
+<h3 id="switch-transformertop-1-简化路由">Switch Transformer：Top-1 简化路由</h3>
+<p>Switch Transformer 每个 token 只选择一个专家，减少计算和通信复杂度。论文展示了稀疏模型可扩展到万亿参数，并系统讨论了 capacity、辅助负载均衡和低精度稳定性。</p>
+<p>它的重要性不只是模型规模，而是把“如何让稀疏专家可训练”变成一套相对清晰的工程配方。</p>
+<h3 id="mixtral-8x7b每层-8-个专家激活-2-个">Mixtral 8x7B：每层 8 个专家、激活 2 个</h3>
+<p><a href="https://arxiv.org/abs/2401.04088">Mixtral</a> 在每个 MoE 层设置 8 个 FFN 专家，每个 token 选择 2 个。论文报告模型总共可访问约 47B 参数，推理时每 token 激活约 13B 参数。</p>
+<p>“8x7B”不是 8 个完整 7B Transformer：attention、embedding 和其他共享部分不会复制 8 份，因此不能直接算成 56B。</p>
+<h3 id="deepseekmoe细粒度专家与共享专家">DeepSeekMoE：细粒度专家与共享专家</h3>
+<p><a href="https://arxiv.org/abs/2401.06066">DeepSeekMoE</a> 把大专家拆成更细粒度的 routed experts，并加入 shared experts。共享专家承载常见模式，路由专家提供条件容量，目标是减少不同专家重复学习通用知识。</p>
+<h3 id="deepseek-v3大规模-moe-系统案例">DeepSeek-V3：大规模 MoE 系统案例</h3>
+<p><a href="https://arxiv.org/abs/2412.19437">DeepSeek-V3</a> 报告 671B 总参数、每 token 激活 37B 参数，采用 DeepSeekMoE 架构。它还使用辅助损失自由的负载均衡策略，避免过强 auxiliary loss 直接干扰主任务目标。</p>
+<p>“无辅助损失”不等于“不做负载均衡”，而是把平衡控制从加到语言模型目标上的辅助项，改成其他路由偏置机制。</p>
+<h2 id="moe-与多模型集成有什么区别">MoE 与“多模型集成”有什么区别</h2>
+<p>传统 ensemble 让多个完整模型都处理输入，再平均或投票；MoE 通常是一个端到端模型，专家只是层内组件。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>MoE</th>
+<th>Ensemble</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>路由粒度</td>
+<td>token / layer</td>
+<td>请求或完整样本</td>
+</tr>
+<tr>
+<td>共享部分</td>
+<td>attention、embedding 等大量共享</td>
+<td>多个完整模型通常独立</td>
+</tr>
+<tr>
+<td>训练</td>
+<td>常端到端联合训练</td>
+<td>可独立训练后组合</td>
+</tr>
+<tr>
+<td>计算</td>
+<td>只激活 top-k 专家</td>
+<td>常运行多个完整模型</td>
+</tr>
+<tr>
+<td>输出组合</td>
+<td>层内隐藏状态加权</td>
+<td>最终预测加权/投票</td>
+</tr>
+</tbody>
+</table>
+<p>MoE 也不同于产品层面的“模型路由”：后者可能按请求选择代码模型、视觉模型或便宜模型，不发生 token 级专家计算。</p>
+<h2 id="什么时候应该选择-moe">什么时候应该选择 MoE</h2>
+<p>适合优先评估：</p>
+<ul>
+<li>希望扩大模型容量，但不能按比例增加每 token FLOPs；</li>
+<li>有高速 GPU 互联和成熟分布式训练基础设施；</li>
+<li>训练 batch/token 数足够大，能摊薄路由与通信；</li>
+<li>推理侧能够常驻所有专家并支持 grouped GEMM；</li>
+<li>团队能长期监控路由、负载和专家退化。</li>
+</ul>
+<p>更适合 dense 模型：</p>
+<ul>
+<li>单机或边缘部署，显存首先受总权重限制；</li>
+<li>极低并发、延迟优先；</li>
+<li>网络 all-to-all 较弱；</li>
+<li>训练规模不大，稀疏路由统计不稳定；</li>
+<li>工程团队需要简单、可移植的模型格式。</li>
+</ul>
 <h2 id="参数量和显存怎样计算">参数量和显存怎样计算</h2>
 <p>设每层 dense attention 参数为 <span class="math-inline">(P_a)</span>，单个专家 FFN 参数为 <span class="math-inline">(P_e)</span>，有 <span class="math-inline">(E)</span> 个专家，top-k 为 <span class="math-inline">(k)</span>。</p>
 <p>总参数近似：</p>
@@ -323,6 +500,51 @@ P_{\text{active}}\approx P_a+kP_e+P_{\text{router}}
 <li>微调前后比较路由分布和通用能力；</li>
 <li>服务压测包含真实 batch、输入/输出长度和热点请求分布。</li>
 </ul>
+<h2 id="一个-moe-训练监控面板">一个 MoE 训练监控面板</h2>
+<p>除了普通 loss、梯度和吞吐，至少记录：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>异常意味着什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每专家 token 数</td>
+<td>热门专家、死亡专家或数据偏斜</td>
+</tr>
+<tr>
+<td>top-k 概率与熵</td>
+<td>router 过度自信或接近随机</td>
+</tr>
+<tr>
+<td>capacity overflow</td>
+<td>token 被丢弃/改路由的风险</td>
+</tr>
+<tr>
+<td>每专家梯度范数</td>
+<td>专家学习速度差异与数值异常</td>
+</tr>
+<tr>
+<td>router z-loss / balance loss</td>
+<td>路由稳定性与平衡代价</td>
+</tr>
+<tr>
+<td>all-to-all 时间</td>
+<td>网络拓扑或负载倾斜瓶颈</td>
+</tr>
+<tr>
+<td>grouped GEMM 利用率</td>
+<td>每专家 token 太少、kernel 过碎</td>
+</tr>
+<tr>
+<td>分域路由分布</td>
+<td>某语言或领域是否集中到少数专家</td>
+</tr>
+</tbody>
+</table>
+<p>路由图只能帮助诊断，不能直接证明专家具备某种语义能力。还要通过 expert ablation、替换或受控数据实验验证因果作用。</p>
 <h2 id="总结">总结</h2>
 <p>MoE 把模型扩展问题从“所有 token 经过所有参数”改成“router 为 token 选择少量参数”。它用稀疏激活换取更大的总容量，但也把难题转移到了路由、容量、负载和通信上。</p>
 <p>理解 MoE 时，始终把三本账分开：总参数决定存储规模，激活参数影响理论计算，实际 token 路由和网络拓扑决定系统性能。三者缺一，任何“更大但更省”的结论都不完整。</p>
@@ -332,21 +554,17 @@ P_{\text{active}}\approx P_a+kP_e+P_{\text{router}}
 <li><a href="https://arxiv.org/abs/2202.09368">Expert Choice Routing</a></li>
 <li><a href="https://arxiv.org/abs/2401.04088">Mixtral of Experts</a></li>
 <li><a href="https://arxiv.org/abs/2401.06066">DeepSeekMoE</a></li>
+<li><a href="https://arxiv.org/abs/2412.19437">DeepSeek-V3 Technical Report</a></li>
 </ul>
 
                 </div>
                 <nav class="article-pagination" aria-label="相邻文章">
                     
-                    <a class="article-page-link previous" href="../../aitech/peft-lora-qlora/index.html">
+                    <a class="article-page-link previous" href="../../aitech/attention-residuals-depth/index.html">
                         <span>上一篇</span>
-                        <strong>参数高效微调详解：LoRA、QLoRA 与适配器工程</strong>
+                        <strong>残差注意力详解：从标准残差到 AttnRes 与 MoDA</strong>
                     </a>
                     
-                    
-                    <a class="article-page-link next" href="../../aitech/post-training-alignment/index.html">
-                        <span>下一篇</span>
-                        <strong>LLM 后训练与对齐：SFT、DPO、RLHF 的目标和边界</strong>
-                    </a>
                     
                 </nav>
             </article>

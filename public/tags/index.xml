@@ -6,20 +6,125 @@
     <description>Recent content in Tags on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 12 Jul 2026 10:10:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 09:20:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Embedding</title>
-      <link>https://example.com/tags/embedding/</link>
-      <pubDate>Sun, 12 Jul 2026 10:10:00 +0800</pubDate>
-      <guid>https://example.com/tags/embedding/</guid>
+      <title>Expert Parallelism</title>
+      <link>https://example.com/tags/expert-parallelism/</link>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/expert-parallelism/</guid>
       <description></description>
     </item>
     <item>
       <title>LLM</title>
       <link>https://example.com/tags/llm/</link>
-      <pubDate>Sun, 12 Jul 2026 10:10:00 +0800</pubDate>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
       <guid>https://example.com/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mixtral</title>
+      <link>https://example.com/tags/mixtral/</link>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/mixtral/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MoE</title>
+      <link>https://example.com/tags/moe/</link>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/moe/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Router</title>
+      <link>https://example.com/tags/router/</link>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/router/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sparse Model</title>
+      <link>https://example.com/tags/sparse-model/</link>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/sparse-model/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Attention Residuals</title>
+      <link>https://example.com/tags/attention-residuals/</link>
+      <pubDate>Mon, 13 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/attention-residuals/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AttnRes</title>
+      <link>https://example.com/tags/attnres/</link>
+      <pubDate>Mon, 13 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/attnres/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MoDA</title>
+      <link>https://example.com/tags/moda/</link>
+      <pubDate>Mon, 13 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/moda/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>RealFormer</title>
+      <link>https://example.com/tags/realformer/</link>
+      <pubDate>Mon, 13 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/realformer/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Residual Connection</title>
+      <link>https://example.com/tags/residual-connection/</link>
+      <pubDate>Mon, 13 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/residual-connection/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AdamW</title>
+      <link>https://example.com/tags/adamw/</link>
+      <pubDate>Mon, 13 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/adamw/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>交叉熵</title>
+      <link>https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/</link>
+      <pubDate>Mon, 13 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>前向传播</title>
+      <link>https://example.com/tags/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD/</link>
+      <pubDate>Mon, 13 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>反向传播</title>
+      <link>https://example.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</link>
+      <pubDate>Mon, 13 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>预训练</title>
+      <link>https://example.com/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</link>
+      <pubDate>Mon, 13 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Embedding</title>
+      <link>https://example.com/tags/embedding/</link>
+      <pubDate>Sun, 12 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/embedding/</guid>
       <description></description>
     </item>
     <item>
@@ -156,41 +261,6 @@
       <description></description>
     </item>
     <item>
-      <title>Expert Parallelism</title>
-      <link>https://example.com/tags/expert-parallelism/</link>
-      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/tags/expert-parallelism/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Mixtral</title>
-      <link>https://example.com/tags/mixtral/</link>
-      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/tags/mixtral/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>MoE</title>
-      <link>https://example.com/tags/moe/</link>
-      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/tags/moe/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Router</title>
-      <link>https://example.com/tags/router/</link>
-      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/tags/router/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Sparse Model</title>
-      <link>https://example.com/tags/sparse-model/</link>
-      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/tags/sparse-model/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>DoRA</title>
       <link>https://example.com/tags/dora/</link>
       <pubDate>Sun, 12 Jul 2026 09:20:00 +0800</pubDate>
@@ -223,13 +293,6 @@
       <link>https://example.com/tags/%E5%BE%AE%E8%B0%83/</link>
       <pubDate>Sun, 12 Jul 2026 09:20:00 +0800</pubDate>
       <guid>https://example.com/tags/%E5%BE%AE%E8%B0%83/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>AdamW</title>
-      <link>https://example.com/tags/adamw/</link>
-      <pubDate>Sun, 12 Jul 2026 09:10:00 +0800</pubDate>
-      <guid>https://example.com/tags/adamw/</guid>
       <description></description>
     </item>
     <item>
@@ -702,13 +765,6 @@
       <description></description>
     </item>
     <item>
-      <title>交叉熵</title>
-      <link>https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/</link>
-      <pubDate>Fri, 10 Jul 2026 08:10:00 +0800</pubDate>
-      <guid>https://example.com/tags/%E4%BA%A4%E5%8F%89%E7%86%B5/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>最大似然</title>
       <link>https://example.com/tags/%E6%9C%80%E5%A4%A7%E4%BC%BC%E7%84%B6/</link>
       <pubDate>Fri, 10 Jul 2026 08:10:00 +0800</pubDate>
@@ -930,13 +986,6 @@
       <link>https://example.com/tags/%E7%86%B5/</link>
       <pubDate>Thu, 09 Jul 2026 11:30:00 +0800</pubDate>
       <guid>https://example.com/tags/%E7%86%B5/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>反向传播</title>
-      <link>https://example.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</link>
-      <pubDate>Thu, 09 Jul 2026 11:20:00 +0800</pubDate>
-      <guid>https://example.com/tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</guid>
       <description></description>
     </item>
     <item>
@@ -1175,13 +1224,6 @@
       <link>https://example.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/</link>
       <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
       <guid>https://example.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>预训练</title>
-      <link>https://example.com/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</link>
-      <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
-      <guid>https://example.com/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</guid>
       <description></description>
     </item>
     <item>

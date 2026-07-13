@@ -6,14 +6,14 @@
     <description>Recent content in Router on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 12 Jul 2026 09:30:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 09:20:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/router/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>MoE 大模型详解：稀疏路由、负载均衡与工程代价</title>
+      <title>MoE 模型原理及应用：路由、负载均衡与专家并行</title>
       <link>https://example.com/aitech/mixture-of-experts/</link>
-      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
       <guid>https://example.com/aitech/mixture-of-experts/</guid>
-      <description>从稀疏路由公式出发，讲清 MoE 的专家容量、负载均衡、专家并行、显存账本与推理代价。</description>
+      <description>从可手算的 top-k 路由出发，讲清 MoE 的专家计算、负载均衡、专家并行，并分析代表模型和实际应用。</description>
     </item>
   </channel>
 </rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Residual Connection on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/residual-connection/</link>
+    <description>Recent content in Residual Connection on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 13 Jul 2026 09:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/residual-connection/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>残差注意力详解：从标准残差到 AttnRes 与 MoDA</title>
+      <link>https://example.com/aitech/attention-residuals-depth/</link>
+      <pubDate>Mon, 13 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/attention-residuals-depth/</guid>
+      <description>解释深层 LLM 中的残差信息稀释，推导 Kimi Attention Residuals 与 Mixture-of-Depths Attention，并区分 RealFormer。</description>
+    </item>
+  </channel>
+</rss>

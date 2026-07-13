@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM 训练时到底发生了什么：从一段文本到一次参数更新 - Duolin Sun&#39; Blog</title>
+<link rel="stylesheet" href="../../css/site.css?v=20260711b">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+<header class="site-header">
+    <div class="page site-header-inner">
+        <a class="brand" href="../../index.html" aria-label="回到首页">
+            <span class="brand-mark" aria-hidden="true">D</span>
+            <span>Duolin Sun&#39; Blog</span>
+        </a>
+        <nav class="site-nav">
+    <div class="nav-inner">
+        <div class="nav-item">
+            <a class="nav-link" href="../../index.html">首页</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/ainews/index.html">AiNews ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E8%A1%8C%E4%B8%9A%E5%8A%A8%E6%80%81/index.html">行业动态</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/aitech/index.html">AiTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/llm%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">LLM基本原理</a>
+                <a href="../../subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/index.html">LLM 基础技术</a>
+                <a href="../../subcategories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">机器学习</a>
+                <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                <a href="../../subcategories/llm-%E5%AF%B9%E9%BD%90/index.html">LLM 对齐</a>
+                <a href="../../subcategories/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/index.html">强化学习</a>
+                <a href="../../subcategories/llm-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/index.html">LLM 推理优化</a>
+                <a href="../../subcategories/llm-%E8%AF%84%E6%B5%8B/index.html">LLM 评测</a>
+                <a href="../../subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/index.html">部署实践</a>
+                <a href="../../subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/index.html">LLM最新技术</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/cstech/index.html">CSTech ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/git/index.html">Git</a>
+                <a href="../../subcategories/python/index.html">Python</a>
+                <a href="../../subcategories/linux/index.html">Linux</a>
+                <a href="../../subcategories/tmux/index.html">tmux</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/paperreading/index.html">PaperReading ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/nlp/index.html">NLP</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E6%95%B0%E5%AD%A6/index.html">数学 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/%E6%A6%82%E7%8E%87%E8%AE%BA/index.html">概率论</a>
+                <a href="../../subcategories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/index.html">线性代数</a>
+                <a href="../../subcategories/%E5%BE%AE%E7%A7%AF%E5%88%86%E4%B8%8E%E4%BC%98%E5%8C%96/index.html">微积分与优化</a>
+                <a href="../../subcategories/%E4%BF%A1%E6%81%AF%E8%AE%BA/index.html">信息论</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../categories/%E5%91%A8%E8%AE%B0/index.html">周记 ▾</a>
+            <div class="dropdown">
+                <a href="../../subcategories/2026/index.html">2026</a>
+            </div>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" href="../../tags/index.html">标签</a>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</header>
+
+    
+    
+    <main class="main-layout has-toc" id="main-content" tabindex="-1">
+        
+        <aside class="article-toc" aria-label="文章目录">
+            <div class="article-toc-inner">
+                <h2>目录</h2>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#先区分三个时间尺度">先区分三个时间尺度</a>
+      <ul>
+        <li><a href="#项目尺度几周到几个月">项目尺度：几周到几个月</a></li>
+        <li><a href="#数据尺度一个-epoch-或若干万亿-token">数据尺度：一个 epoch 或若干万亿 token</a></li>
+        <li><a href="#更新尺度几十到几千毫秒">更新尺度：几十到几千毫秒</a></li>
+      </ul>
+    </li>
+    <li><a href="#第零步训练前先定义训练什么">第零步：训练前先定义“训练什么”</a></li>
+    <li><a href="#第一步原始文本变成训练语料">第一步：原始文本变成训练语料</a></li>
+    <li><a href="#第二步tokenizer-把文本映射为整数">第二步：Tokenizer 把文本映射为整数</a></li>
+    <li><a href="#第三步切分packing-与-batch">第三步：切分、packing 与 batch</a>
+      <ul>
+        <li><a href="#多条短文本怎样装进一个序列">多条短文本怎样装进一个序列</a></li>
+        <li><a href="#一个-batch-的形状">一个 batch 的形状</a></li>
+      </ul>
+    </li>
+    <li><a href="#第四步embedding-把-id-变成向量">第四步：Embedding 把 id 变成向量</a></li>
+    <li><a href="#第五步每个-transformer-block-做什么">第五步：每个 Transformer block 做什么</a>
+      <ul>
+        <li><a href="#1-causal-self-attention">1. Causal Self-Attention</a></li>
+        <li><a href="#2-mlp--ffn">2. MLP / FFN</a></li>
+      </ul>
+    </li>
+    <li><a href="#第六步隐藏状态变成词表-logits">第六步：隐藏状态变成词表 logits</a></li>
+    <li><a href="#第七步交叉熵怎样给模型打分">第七步：交叉熵怎样给模型打分</a>
+      <ul>
+        <li><a href="#logits-梯度的直觉">logits 梯度的直觉</a></li>
+      </ul>
+    </li>
+    <li><a href="#第八步反向传播把责任分到每个参数">第八步：反向传播把责任分到每个参数</a>
+      <ul>
+        <li><a href="#一个参数更新的简单直觉">一个参数更新的简单直觉</a></li>
+      </ul>
+    </li>
+    <li><a href="#第九步adamw-怎样更新参数">第九步：AdamW 怎样更新参数</a></li>
+    <li><a href="#第十步为什么要梯度累积">第十步：为什么要梯度累积</a></li>
+    <li><a href="#第十一步多张-gpu-怎样得到同一个梯度">第十一步：多张 GPU 怎样得到同一个梯度</a></li>
+    <li><a href="#混合精度期间发生了什么">混合精度期间发生了什么</a></li>
+    <li><a href="#activation-checkpointing-为什么能省显存">Activation checkpointing 为什么能省显存</a></li>
+    <li><a href="#一次更新的-pytorch-风格伪代码">一次更新的 PyTorch 风格伪代码</a></li>
+    <li><a href="#一个完整训练任务怎样反复执行这些-step">一个完整训练任务怎样反复执行这些 step</a></li>
+    <li><a href="#预训练之后为什么还要-sft">预训练之后为什么还要 SFT</a></li>
+    <li><a href="#训练中到底要观察什么">训练中到底要观察什么</a></li>
+    <li><a href="#loss-突然爆炸时怎样排查">loss 突然爆炸时怎样排查</a></li>
+    <li><a href="#checkpoint-不是只有模型权重">checkpoint 不是只有模型权重</a></li>
+    <li><a href="#三个常见误解">三个常见误解</a>
+      <ul>
+        <li><a href="#模型是在保存句子吗">模型是在保存句子吗</a></li>
+        <li><a href="#每个参数都对应一个知识点吗">每个参数都对应一个知识点吗</a></li>
+        <li><a href="#loss-下降就证明模型更聪明吗">loss 下降就证明模型更聪明吗</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
+</nav>
+            </div>
+        </aside>
+        
+        <div class="main-content">
+            <article class="post">
+                <nav class="breadcrumbs" aria-label="面包屑导航">
+    <a href="../../index.html">首页</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../categories/aitech/index.html">AiTech</a>
+    <span aria-hidden="true">/</span>
+    <a href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+    <span aria-hidden="true">/</span>
+    <span>LLM 训练时到底发生了什么：从一段文本到一次参数更新</span>
+</nav>
+
+                <h1>LLM 训练时到底发生了什么：从一段文本到一次参数更新</h1>
+                <div class="meta">
+                    <span class="date">2026-07-13</span>
+                    <span class="category">AiTech</span>
+                    
+                    <a class="subcategory" href="../../subcategories/llm%E8%AE%AD%E7%BB%83/index.html">LLM训练</a>
+                    
+                    
+                    <span class="tag"><a href="../../tags/llm/index.html">LLM</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E9%A2%84%E8%AE%AD%E7%BB%83/index.html">预训练</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD/index.html">前向传播</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/index.html">反向传播</a></span>
+                    
+                    <span class="tag"><a href="../../tags/%E4%BA%A4%E5%8F%89%E7%86%B5/index.html">交叉熵</a></span>
+                    
+                    <span class="tag"><a href="../../tags/adamw/index.html">AdamW</a></span>
+                    
+                </div>
+                <div class="post-content">
+                    <p>大模型训练最容易被一句话概括成：“输入很多文本，预测下一个 token，再反向传播。”</p>
+<p>这句话是对的，但它省略了几乎所有真正需要理解的细节：文本怎样变成张量，标签为什么向左错一位，Transformer 在每一层做什么，交叉熵怎样形成，梯度从哪里来，多张 GPU 怎样合成一次更新，以及 checkpoint 究竟保存了什么。</p>
+<p>本文不从某个训练框架的配置文件出发，而是沿着一批数据走完整条链路。读完后，你应该能回答两个问题：</p>
+<ol>
+<li>一次训练 step 内部发生了什么；</li>
+<li>数万亿 token 的训练任务怎样由这些 step 组成。</li>
+</ol>
+<h2 id="先区分三个时间尺度">先区分三个时间尺度</h2>
+<p>“LLM 训练流程”至少包含三个不同尺度。</p>
+<h3 id="项目尺度几周到几个月">项目尺度：几周到几个月</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>确定目标与预算
+</span></span><span style="display:flex;"><span>  -&gt; 准备数据和 tokenizer
+</span></span><span style="display:flex;"><span>  -&gt; 设计模型与并行策略
+</span></span><span style="display:flex;"><span>  -&gt; 小规模验证
+</span></span><span style="display:flex;"><span>  -&gt; 大规模预训练
+</span></span><span style="display:flex;"><span>  -&gt; 中期评测与故障恢复
+</span></span><span style="display:flex;"><span>  -&gt; SFT / 偏好对齐
+</span></span><span style="display:flex;"><span>  -&gt; 最终评测与发布
+</span></span></code></pre></div><h3 id="数据尺度一个-epoch-或若干万亿-token">数据尺度：一个 epoch 或若干万亿 token</h3>
+<p>数据被分片、打乱、采样和打包。训练器持续读取 batch，直到达到预定 token 或计算预算。</p>
+<h3 id="更新尺度几十到几千毫秒">更新尺度：几十到几千毫秒</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>读取 micro-batch
+</span></span><span style="display:flex;"><span>  -&gt; 前向传播
+</span></span><span style="display:flex;"><span>  -&gt; 计算 loss
+</span></span><span style="display:flex;"><span>  -&gt; 反向传播
+</span></span><span style="display:flex;"><span>  -&gt; 梯度同步与累积
+</span></span><span style="display:flex;"><span>  -&gt; 梯度裁剪
+</span></span><span style="display:flex;"><span>  -&gt; optimizer 更新
+</span></span><span style="display:flex;"><span>  -&gt; 学习率调度
+</span></span></code></pre></div><p>下面先讲项目尺度，再把镜头拉近到一次更新。</p>
+<h2 id="第零步训练前先定义训练什么">第零步：训练前先定义“训练什么”</h2>
+<p>训练不是先启动 GPU，再看能得到什么模型。至少要提前固定：</p>
+<ul>
+<li>模型结构：层数、隐藏维度、注意力头、FFN/MoE、词表和上下文长度；</li>
+<li>训练目标：自回归语言建模、掩码建模、SFT 或偏好目标；</li>
+<li>数据配方：语言、代码、数学和领域数据比例；</li>
+<li>预算：训练 token、GPU 时长、峰值显存和 checkpoint 频率；</li>
+<li>评测：验证损失、能力、安全和目标领域指标；</li>
+<li>退出条件：预算耗尽、验证集不再改善或出现不可接受的风险。</li>
+</ul>
+<p>参数量、数据量和计算量要一起规划。在固定计算预算下，一味扩大参数而不给足训练 token，可能得到“参数很多但训练不足”的模型。</p>
+<h2 id="第一步原始文本变成训练语料">第一步：原始文本变成训练语料</h2>
+<p>假设原始数据里有一句话：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>猫喜欢吃鱼。
+</span></span></code></pre></div><p>真实语料还会经历正文抽取、语言识别、质量过滤、精确与近似去重、隐私处理、评测集去污染和数据配比。最终训练器读取的不是网页，而是经过版本化的数据 shard。</p>
+<p>数据清洗不能由“看起来正常”验收。需要记录每个来源删除了多少文档、保留了多少 token，以及过滤规则对下游小模型有什么影响。更完整的数据工程可参见站内文章《LLM 预训练数据工程》。</p>
+<h2 id="第二步tokenizer-把文本映射为整数">第二步：Tokenizer 把文本映射为整数</h2>
+<p>为了便于演算，假设一个极小词表：</p>
+<table>
+<thead>
+<tr>
+<th>token</th>
+<th style="text-align:right">id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;bos&gt;</code></td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td><code>猫</code></td>
+<td style="text-align:right">12</td>
+</tr>
+<tr>
+<td><code>喜欢</code></td>
+<td style="text-align:right">35</td>
+</tr>
+<tr>
+<td><code>吃</code></td>
+<td style="text-align:right">48</td>
+</tr>
+<tr>
+<td><code>鱼</code></td>
+<td style="text-align:right">27</td>
+</tr>
+<tr>
+<td><code>。</code></td>
+<td style="text-align:right">6</td>
+</tr>
+<tr>
+<td><code>&lt;eos&gt;</code></td>
+<td style="text-align:right">2</td>
+</tr>
+</tbody>
+</table>
+<p>那么文本可能变成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>[1, 12, 35, 48, 27, 6, 2]
+</span></span></code></pre></div><p>真实 tokenizer 可能把“喜欢”切成一个或多个 token。模型只看到整数 id，不直接看到汉字。</p>
+<p>Tokenizer 还决定：</p>
+<ul>
+<li>词表大小 <span class="math-inline">(V)</span>；</li>
+<li>不同语言的压缩率；</li>
+<li>embedding 和输出层的尺寸；</li>
+<li>特殊 token 与对话模板；</li>
+<li>一个训练样本实际占多少 token。</li>
+</ul>
+<p>Tokenizer 一旦在大规模训练中途更换，id 与语义的对应关系就变了，通常不能当成普通配置热更新。</p>
+<h2 id="第三步切分packing-与-batch">第三步：切分、packing 与 batch</h2>
+<p>模型每次处理固定或受限长度的序列。假设上下文长度 <span class="math-inline">(T=6)</span>，可以构造：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>input_ids = [1, 12, 35, 48, 27, 6]
+</span></span><span style="display:flex;"><span>labels    = [12, 35, 48, 27, 6, 2]
+</span></span></code></pre></div><p>标签向左错一位，是因为每个位置都要预测下一个 token：</p>
+<table>
+<thead>
+<tr>
+<th>当前位置输入</th>
+<th>目标 token</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;bos&gt;</code></td>
+<td><code>猫</code></td>
+</tr>
+<tr>
+<td><code>猫</code></td>
+<td><code>喜欢</code></td>
+</tr>
+<tr>
+<td><code>猫 喜欢</code></td>
+<td><code>吃</code></td>
+</tr>
+<tr>
+<td><code>猫 喜欢 吃</code></td>
+<td><code>鱼</code></td>
+</tr>
+<tr>
+<td><code>猫 喜欢 吃 鱼</code></td>
+<td><code>。</code></td>
+</tr>
+<tr>
+<td><code>... 。</code></td>
+<td><code>&lt;eos&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>在 decoder-only 模型中，通常不需要真的保存两份错位数组；训练代码可以把 logits 的前 <span class="math-inline">(T-1)</span> 个位置与 input 的后 <span class="math-inline">(T-1)</span> 个 token 对齐。</p>
+<p>上表展示的是概念上的输入-目标对齐。实现可以在数据层提前 shift，也可以让 <code>labels</code> 先与原 token 序列同位置保存，再在计算 loss 时用 <code>logits[:, :-1]</code> 对齐 <code>labels[:, 1:]</code>。后文伪代码采用第二种，二者不能同时做，否则会重复错位。</p>
+<h3 id="多条短文本怎样装进一个序列">多条短文本怎样装进一个序列</h3>
+<p>如果每条样本都 padding 到最大长度，会浪费计算。packing 会把多条短文本装入一个训练序列：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>文档 A &lt;eos&gt; 文档 B &lt;eos&gt; 文档 C &lt;eos&gt;
+</span></span></code></pre></div><p>必须明确文档边界。若没有 EOS 或隔离 mask，模型会把两个不相关文档误认为自然连续文本。</p>
+<h3 id="一个-batch-的形状">一个 batch 的形状</h3>
+<p>设 micro-batch 有 <span class="math-inline">(B=4)</span> 条序列，每条长度 <span class="math-inline">(T=2048)</span>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>input_ids:      [4, 2048]
+</span></span><span style="display:flex;"><span>attention_mask: [4, 2048] 或可隐式生成
+</span></span><span style="display:flex;"><span>labels:         [4, 2048]
+</span></span></code></pre></div><p>这张量随后被送到 GPU。</p>
+<h2 id="第四步embedding-把-id-变成向量">第四步：Embedding 把 id 变成向量</h2>
+<p>模型有一个 embedding 矩阵：</p>
+<div class="math-display">\[
+E\in\mathbb{R}^{V\times d}
+\]</div>
+<p>其中 <span class="math-inline">(V)</span> 是词表大小，<span class="math-inline">(d)</span> 是隐藏维度。对每个 id 查表后：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>[B, T] -&gt; [B, T, d]
+</span></span></code></pre></div><p>如果 <span class="math-inline">(B=4,T=2048,d=4096)</span>，隐藏状态形状就是 <code>[4, 2048, 4096]</code>。</p>
+<p>同一个 token 初始总是查到同一个向量，但经过位置编码和多层上下文交互后，它在不同句子中的隐藏状态会不同。</p>
+<h2 id="第五步每个-transformer-block-做什么">第五步：每个 Transformer block 做什么</h2>
+<p>现代 decoder-only block 常采用 PreNorm：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>x = x + Attention(Norm(x))
+</span></span><span style="display:flex;"><span>x = x + MLP(Norm(x))
+</span></span></code></pre></div><p>一个 block 主要有两种计算。</p>
+<h3 id="1-causal-self-attention">1. Causal Self-Attention</h3>
+<p>线性投影得到 query、key、value：</p>
+<div class="math-display">\[
+Q=XW_Q,\qquad K=XW_K,\qquad V=XW_V
+\]</div>
+<p>单头注意力为：</p>
+<div class="math-display">\[
+\operatorname{Attention}(Q,K,V)=
+\operatorname{softmax}\left(\frac{QK^\top}{\sqrt{d_h}}+M\right)V
+\]</div>
+<p>因果 mask <span class="math-inline">(M)</span> 把未来位置设为负无穷，使位置 <span class="math-inline">(t)</span> 只能读取 <span class="math-inline">(\le t)</span> 的 token。否则模型训练时会偷看答案。</p>
+<h3 id="2-mlp--ffn">2. MLP / FFN</h3>
+<p>SwiGLU 形式常写成：</p>
+<div class="math-display">\[
+\operatorname{FFN}(x)=W_{\text{down}}
+\left(\operatorname{SiLU}(W_{\text{gate}}x)\odot W_{\text{up}}x\right)
+\]</div>
+<p>Attention 负责 token 间的信息交互，FFN 对每个 token 的表示做非线性变换。堆叠几十或上百个 block 后，张量形状通常仍是 <code>[B, T, d]</code>，但内容已被反复更新。</p>
+<h2 id="第六步隐藏状态变成词表-logits">第六步：隐藏状态变成词表 logits</h2>
+<p>最后一层输出经过归一化和语言模型头：</p>
+<div class="math-display">\[
+Z=HW_{\text{vocab}}^\top
+\]</div>
+<p>得到：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>hidden_states: [B, T, d]
+</span></span><span style="display:flex;"><span>logits:        [B, T, V]
+</span></span></code></pre></div><p><code>logits[b, t, :]</code> 是第 <span class="math-inline">(b)</span> 条序列在位置 <span class="math-inline">(t)</span> 对整个词表的未归一化分数。</p>
+<p>softmax 将 logits 转为概率：</p>
+<div class="math-display">\[
+p_j=\frac{e^{z_j}}{\sum_{k=1}^{V}e^{z_k}}
+\]</div>
+<p>训练时通常直接使用融合的 cross-entropy kernel，不必把完整概率张量长期保存。</p>
+<h2 id="第七步交叉熵怎样给模型打分">第七步：交叉熵怎样给模型打分</h2>
+<p>假设某个位置的正确 token 是“鱼”，为了演算只看三个候选：</p>
+<table>
+<thead>
+<tr>
+<th>token</th>
+<th style="text-align:right">模型概率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>鱼</td>
+<td style="text-align:right">0.70</td>
+</tr>
+<tr>
+<td>肉</td>
+<td style="text-align:right">0.20</td>
+</tr>
+<tr>
+<td>水</td>
+<td style="text-align:right">0.10</td>
+</tr>
+</tbody>
+</table>
+<p>该位置的负对数似然为：</p>
+<div class="math-display">\[
+\ell=-\log 0.70\approx 0.357
+\]</div>
+<p>如果模型只给正确 token 0.01 概率：</p>
+<div class="math-display">\[
+\ell=-\log 0.01\approx 4.605
+\]</div>
+<p>错误且自信的预测损失更大。整个 batch 的 loss 是所有有效目标 token 的平均或总和：</p>
+<div class="math-display">\[
+\mathcal{L}=-\frac{1}{N}\sum_{i=1}^{N}
+\log p_\theta(y_i\mid x_i)
+\]</div>
+<p>padding、被忽略的 prompt token 和无效位置不能计入 <span class="math-inline">(N)</span>。</p>
+<h3 id="logits-梯度的直觉">logits 梯度的直觉</h3>
+<p>对 softmax + cross-entropy，单个位置的 logits 梯度有一个漂亮形式：</p>
+<div class="math-display">\[
+\frac{\partial \ell}{\partial z_j}=p_j-\mathbf{1}[j=y]
+\]</div>
+<p>若正确 token“鱼”的概率是 0.70，它的梯度是 <span class="math-inline">(0.70-1=-0.30)</span>；“肉”的梯度是 0.20，“水”的梯度是 0.10。</p>
+<p>梯度下降会提高正确 token 的 logit，同时压低错误 token 的 logits。这就是“模型从答案中学习”的最局部解释。</p>
+<h2 id="第八步反向传播把责任分到每个参数">第八步：反向传播把责任分到每个参数</h2>
+<p>计算图记录了 logits 如何由 LM head、每层 FFN、Attention、Embedding 产生。链式法则把 loss 梯度从输出传回所有可训练参数：</p>
+<div class="math-display">\[
+\frac{\partial\mathcal{L}}{\partial W_l}
+=\frac{\partial\mathcal{L}}{\partial Z}
+\frac{\partial Z}{\partial H_L}
+\cdots
+\frac{\partial H_l}{\partial W_l}
+\]</div>
+<p>残差连接为梯度提供直接路径；归一化、初始化和学习率共同决定深层训练是否稳定。</p>
+<h3 id="一个参数更新的简单直觉">一个参数更新的简单直觉</h3>
+<p>假设某个权重：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>w = 0.5000
+</span></span><span style="display:flex;"><span>gradient = 0.2000
+</span></span><span style="display:flex;"><span>learning_rate = 0.001
+</span></span></code></pre></div><p>若用最简单的 SGD：</p>
+<div class="math-display">\[
+w' = w-\eta g=0.5000-0.001\times0.2=0.4998
+\]</div>
+<p>真实 LLM 常用 AdamW，它会维护梯度的一阶矩和二阶矩，再进行偏差修正与解耦权重衰减。因此上面的数字只解释“沿负梯度方向更新”，不是 AdamW 的完整计算。</p>
+<h2 id="第九步adamw-怎样更新参数">第九步：AdamW 怎样更新参数</h2>
+<p>对梯度 <span class="math-inline">(g_t)</span>：</p>
+<div class="math-display">\[
+m_t=\beta_1m_{t-1}+(1-\beta_1)g_t
+\]</div>
+<div class="math-display">\[
+v_t=\beta_2v_{t-1}+(1-\beta_2)g_t^2
+\]</div>
+<p>偏差修正后，简化更新为：</p>
+<div class="math-display">\[
+\theta_t=(1-\eta_t\lambda)\theta_{t-1}
+-\eta_t\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}
+\]</div>
+<p>一阶矩提供类似动量的平滑，二阶矩按历史梯度尺度调整每个参数的步幅。AdamW 的 weight decay 与把 L2 正则直接加进 Adam 损失并不等价。</p>
+<p>一次 <code>optimizer.step()</code> 完成后，模型参数发生微小变化。下一批文本将看到略有不同的模型。</p>
+<h2 id="第十步为什么要梯度累积">第十步：为什么要梯度累积</h2>
+<p>目标全局 batch 可能放不进显存。假设：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>每卡 micro-batch = 2 条序列
+</span></span><span style="display:flex;"><span>数据并行 GPU = 8
+</span></span><span style="display:flex;"><span>梯度累积步数 = 4
+</span></span></code></pre></div><p>则一次 optimizer update 对应：</p>
+<div class="math-display">\[
+B_{\text{global}}=2\times8\times4=64\text{ 条序列}
+\]</div>
+<p>若每条序列有 2048 个有效 token，则约为 131072 token/update。</p>
+<p>前 3 次 micro-step 只累加梯度，第 4 次才执行 optimizer update。日志里的 <code>step</code> 必须说明指 micro-step 还是 update step。</p>
+<p>当各 micro-batch 有效 token 数不同，不能简单平均它们的 mean loss；应按整个逻辑 batch 的有效 token 数加权。</p>
+<h2 id="第十一步多张-gpu-怎样得到同一个梯度">第十一步：多张 GPU 怎样得到同一个梯度</h2>
+<p>在 Distributed Data Parallel（DDP）中，每个数据并行 rank 保存一份模型，读取不同数据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>GPU 0: batch A -&gt; gradient g0
+</span></span><span style="display:flex;"><span>GPU 1: batch B -&gt; gradient g1
+</span></span><span style="display:flex;"><span>GPU 2: batch C -&gt; gradient g2
+</span></span><span style="display:flex;"><span>GPU 3: batch D -&gt; gradient g3
+</span></span></code></pre></div><p>反向传播期间通过 all-reduce 求和/平均：</p>
+<div class="math-display">\[
+g=\frac{1}{W}\sum_{r=1}^{W}g_r
+\]</div>
+<p>然后每个 rank 用相同梯度执行相同更新，参数继续保持一致。</p>
+<p>FSDP、ZeRO、tensor parallel、pipeline parallel 和 expert parallel 会进一步切分参数、梯度、优化器状态或计算，但数学目标仍是对同一个全局 batch 求梯度。</p>
+<h2 id="混合精度期间发生了什么">混合精度期间发生了什么</h2>
+<p>大模型训练常让矩阵乘使用 BF16/FP16/FP8 等低精度，让某些累积、归一化、softmax 或优化器状态保持更高精度。</p>
+<p>它不是把所有张量统一改成半精度。典型原因是：</p>
+<ul>
+<li>低精度矩阵乘吞吐更高；</li>
+<li>权重和激活占用更少显存与带宽；</li>
+<li>高精度累积避免小误差快速放大；</li>
+<li>FP16 可能需要 loss scaling 防止小梯度下溢；</li>
+<li>BF16 范围更大，但仍可能出现 inf/NaN。</li>
+</ul>
+<p>使用 gradient scaler 时，必须先 unscale 梯度，再做梯度裁剪。</p>
+<h2 id="activation-checkpointing-为什么能省显存">Activation checkpointing 为什么能省显存</h2>
+<p>反向传播需要前向中间激活。普通训练保存每层激活；activation checkpointing 只保存少数边界，在反向时重新计算其余激活。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>不重计算：更多显存，较少 FLOPs
+</span></span><span style="display:flex;"><span>重计算：   更少显存，更多 FLOPs
+</span></span></code></pre></div><p>它减少的是激活显存，不是 optimizer state。长序列训练常同时使用 activation checkpointing、FlashAttention 和模型状态分片。</p>
+<h2 id="一次更新的-pytorch-风格伪代码">一次更新的 PyTorch 风格伪代码</h2>
+<p>下面假设每个 micro-batch 有相同有效 token 数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>model<span style="color:#f92672">.</span>train()
+</span></span><span style="display:flex;"><span>optimizer<span style="color:#f92672">.</span>zero_grad(set_to_none<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> micro_step, batch <span style="color:#f92672">in</span> enumerate(loader):
+</span></span><span style="display:flex;"><span>    input_ids <span style="color:#f92672">=</span> batch[<span style="color:#e6db74">&#34;input_ids&#34;</span>]<span style="color:#f92672">.</span>to(device)  <span style="color:#75715e"># [B, T]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># labels 与 input_ids 同位置保存；不参与监督的位置已写成 -100。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 下面在 loss 中统一完成 next-token shift。</span>
+</span></span><span style="display:flex;"><span>    labels <span style="color:#f92672">=</span> batch[<span style="color:#e6db74">&#34;labels&#34;</span>]<span style="color:#f92672">.</span>to(device)        <span style="color:#75715e"># [B, T]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> autocast(dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>bfloat16):
+</span></span><span style="display:flex;"><span>        logits <span style="color:#f92672">=</span> model(input_ids)               <span style="color:#75715e"># [B, T, V]</span>
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> cross_entropy(
+</span></span><span style="display:flex;"><span>            logits[:, :<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>contiguous()<span style="color:#f92672">.</span>view(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, vocab_size),
+</span></span><span style="display:flex;"><span>            labels[:, <span style="color:#ae81ff">1</span>:]<span style="color:#f92672">.</span>contiguous()<span style="color:#f92672">.</span>view(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>            ignore_index<span style="color:#f92672">=-</span><span style="color:#ae81ff">100</span>,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> loss <span style="color:#f92672">/</span> grad_accum_steps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (micro_step <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> grad_accum_steps <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        global_norm <span style="color:#f92672">=</span> clip_grad_norm_(model<span style="color:#f92672">.</span>parameters(), <span style="color:#ae81ff">1.0</span>)
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>        scheduler<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>zero_grad(set_to_none<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><p>真实分布式代码还要处理通信、混合精度 scaler、变长 token 加权、无效 batch、checkpoint 和异常恢复。</p>
+<h2 id="一个完整训练任务怎样反复执行这些-step">一个完整训练任务怎样反复执行这些 step</h2>
+<p>假设要训练 7B 模型，预算 1T token，全局每次更新 2M 有效 token。理论更新次数约为：</p>
+<div class="math-display">\[
+\frac{10^{12}}{2\times10^6}=500000\text{ updates}
+\]</div>
+<p>每次更新都执行前向、反向和优化器更新。随着训练推进：</p>
+<ul>
+<li>训练 loss 总体下降，但不会严格单调；</li>
+<li>学习率先 warmup，再衰减；</li>
+<li>模型从局部字符和词法规律，逐渐学到结构、事实和任务模式；</li>
+<li>验证集按固定间隔评测；</li>
+<li>checkpoint 定期保存并做恢复演练；</li>
+<li>数据 loader 记录已消费 shard 和随机状态。</li>
+</ul>
+<p>训练不是“完整读完一篇文章再记住它”。每个 batch 只产生一次很小的统计更新，能力是海量更新共同形成的。</p>
+<h2 id="预训练之后为什么还要-sft">预训练之后为什么还要 SFT</h2>
+<p>预训练目标是预测互联网文本的下一个 token。它会让模型具备语言和知识能力，却不必然学会按照用户意图回答。</p>
+<p>SFT 仍使用 token-level cross-entropy，但输入变为对话模板：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&lt;system&gt;你是一个可靠的技术助手&lt;/system&gt;
+</span></span><span style="display:flex;"><span>&lt;user&gt;解释什么是梯度累积&lt;/user&gt;
+</span></span><span style="display:flex;"><span>&lt;assistant&gt;梯度累积是...&lt;/assistant&gt;
+</span></span></code></pre></div><p>常见做法只让 assistant 回答 token 参与 loss，system 和 user token 作为条件但标签设为 ignore。</p>
+<p>随后还可以进行 DPO、RLHF 或可验证奖励强化学习。这些阶段改变反馈形式，但底层依然包含模型采样、概率计算、梯度和参数更新。</p>
+<h2 id="训练中到底要观察什么">训练中到底要观察什么</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>train / validation loss</td>
+<td>拟合和泛化趋势</td>
+</tr>
+<tr>
+<td>learning rate</td>
+<td>scheduler 是否与 update 对齐</td>
+</tr>
+<tr>
+<td>gradient norm</td>
+<td>梯度尖峰、爆炸或异常平坦</td>
+</tr>
+<tr>
+<td>update / weight norm</td>
+<td>参数实际变化幅度</td>
+</tr>
+<tr>
+<td>tokens/s</td>
+<td>端到端吞吐</td>
+</tr>
+<tr>
+<td>padding ratio</td>
+<td>数据打包效率</td>
+</tr>
+<tr>
+<td>overflow / skipped steps</td>
+<td>混合精度稳定性</td>
+</tr>
+<tr>
+<td>每域 validation loss</td>
+<td>是否牺牲某种语言或领域</td>
+</tr>
+<tr>
+<td>GPU 与网络利用率</td>
+<td>计算、数据或通信瓶颈</td>
+</tr>
+</tbody>
+</table>
+<p>平均 loss 会掩盖局部问题。训练日志还应记录数据 shard、样本 ID 和各 rank 状态，以便从 loss spike 回溯到具体输入。</p>
+<h2 id="loss-突然爆炸时怎样排查">loss 突然爆炸时怎样排查</h2>
+<ol>
+<li>确认不是日志分母或 all-reduce 错误；</li>
+<li>检查当前 batch 是否乱码、全 mask、极端重复或数据损坏；</li>
+<li>定位第一个出现 inf/NaN 的层；</li>
+<li>检查学习率、gradient scaler 和裁剪顺序；</li>
+<li>检查恢复训练时 optimizer/scheduler 是否完整加载；</li>
+<li>从 spike 前 checkpoint 用相同数据顺序重放。</li>
+</ol>
+<p>梯度裁剪可以缓解偶发尖峰，但不能修复持续过高学习率或坏数据。</p>
+<h2 id="checkpoint-不是只有模型权重">checkpoint 不是只有模型权重</h2>
+<p>要实现真正可恢复训练，至少保存：</p>
+<ul>
+<li>模型参数；</li>
+<li>AdamW 一阶和二阶矩；</li>
+<li>scheduler 和 gradient scaler；</li>
+<li>全局 update、已见 token 数；</li>
+<li>数据 sampler 和 shard 游标；</li>
+<li>CPU/GPU 随机数状态；</li>
+<li>tokenizer、配置和代码版本；</li>
+<li>分布式分片元数据。</li>
+</ul>
+<p>只加载权重再继续跑，会丢失优化器动量和学习率时间轴，这更像开启一个新训练阶段。</p>
+<h2 id="三个常见误解">三个常见误解</h2>
+<h3 id="模型是在保存句子吗">模型是在保存句子吗</h3>
+<p>训练目标会让模型记住部分高频或重复文本，但参数主要编码的是跨样本统计结构。去重、隐私处理和记忆评测仍然必要。</p>
+<h3 id="每个参数都对应一个知识点吗">每个参数都对应一个知识点吗</h3>
+<p>知识通常分布在大量参数和激活模式中。同一个参数参与许多输入，不能把它直接命名为“某事实参数”。</p>
+<h3 id="loss-下降就证明模型更聪明吗">loss 下降就证明模型更聪明吗</h3>
+<p>loss 可能因为数据重复、泄漏或模板变简单而下降。必须结合独立验证集、去污染 benchmark 和真实任务评测。</p>
+<h2 id="总结">总结</h2>
+<p>一次 LLM 训练更新可以压缩成六件事：</p>
+<ol>
+<li>文本被 tokenizer 变成 id，并打包成 batch；</li>
+<li>Embedding 和 Transformer 把 <code>[B,T]</code> 变成 <code>[B,T,V]</code> 的 logits；</li>
+<li>交叉熵比较每个位置的预测与下一个 token；</li>
+<li>反向传播把误差分配到所有可训练参数；</li>
+<li>多卡同步和梯度累积形成全局梯度；</li>
+<li>AdamW 用很小的步幅更新参数。</li>
+</ol>
+<p>大模型能力并不是某一步突然出现的，而是几十万次更新对海量数据分布持续拟合的结果。理解这条链路后，训练配置中的 batch、sequence length、learning rate、precision 和并行策略就不再是孤立参数，而是同一个计算过程的不同控制面。</p>
+<h2 id="参考资料">参考资料</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a></li>
+<li><a href="https://arxiv.org/abs/2005.14165">Language Models are Few-Shot Learners</a></li>
+<li><a href="https://arxiv.org/abs/1711.05101">Decoupled Weight Decay Regularization</a></li>
+<li><a href="https://arxiv.org/abs/1710.03740">Mixed Precision Training</a></li>
+<li><a href="https://arxiv.org/abs/2203.15556">Training Compute-Optimal Large Language Models</a></li>
+<li><a href="https://arxiv.org/abs/2402.00838">OLMo: Accelerating the Science of Language Models</a></li>
+</ul>
+
+                </div>
+                <nav class="article-pagination" aria-label="相邻文章">
+                    
+                    <a class="article-page-link previous" href="../../aitech/rag-system-design/index.html">
+                        <span>上一篇</span>
+                        <strong>RAG 系统设计：从切分、检索到引用与评测</strong>
+                    </a>
+                    
+                    
+                    <a class="article-page-link next" href="../../aitech/attention-residuals-depth/index.html">
+                        <span>下一篇</span>
+                        <strong>残差注意力详解：从标准残差到 AttnRes 与 MoDA</strong>
+                    </a>
+                    
+                </nav>
+            </article>
+        </div>
+        
+
+    </main>
+    <footer class="page footer">
+    <span>&copy; 2026 Duolin Sun&#39; Blog</span>
+    <span>Powered by Hugo</span>
+</footer>
+
+</body>
+</html>

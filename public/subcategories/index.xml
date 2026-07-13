@@ -6,8 +6,29 @@
     <description>Recent content in Subcategories on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 12 Jul 2026 10:10:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 09:20:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/subcategories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM 基础技术</title>
+      <link>https://example.com/subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/</link>
+      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM最新技术</title>
+      <link>https://example.com/subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/</link>
+      <pubDate>Mon, 13 Jul 2026 09:10:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/llm%E6%9C%80%E6%96%B0%E6%8A%80%E6%9C%AF/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM训练</title>
+      <link>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</link>
+      <pubDate>Mon, 13 Jul 2026 09:00:00 +0800</pubDate>
+      <guid>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</guid>
+      <description></description>
+    </item>
     <item>
       <title>部署实践</title>
       <link>https://example.com/subcategories/%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5/</link>
@@ -27,20 +48,6 @@
       <link>https://example.com/subcategories/llm-%E5%AF%B9%E9%BD%90/</link>
       <pubDate>Sun, 12 Jul 2026 09:40:00 +0800</pubDate>
       <guid>https://example.com/subcategories/llm-%E5%AF%B9%E9%BD%90/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LLM 基础技术</title>
-      <link>https://example.com/subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/</link>
-      <pubDate>Sun, 12 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/subcategories/llm-%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>LLM训练</title>
-      <link>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</link>
-      <pubDate>Sun, 12 Jul 2026 09:20:00 +0800</pubDate>
-      <guid>https://example.com/subcategories/llm%E8%AE%AD%E7%BB%83/</guid>
       <description></description>
     </item>
     <item>
