@@ -54,6 +54,12 @@
                 {{ end }}
             {{ end }}
             {{ $topics = sort (uniq $topics) }}
+            {{ $unassignedPages := slice }}
+            {{ range $pages }}
+                {{ if not .Params.topics }}
+                    {{ $unassignedPages = $unassignedPages | append . }}
+                {{ end }}
+            {{ end }}
 
             {{ if eq .Data.Singular "subcategory" }}
             <div class="taxonomy-layout">
@@ -65,14 +71,22 @@
                         <a class="tertiary-nav-topic" href="{{ printf "#topic-%s" (urlize $topic) | safeURL }}">{{ $topic }}</a>
                         {{ range $pages }}
                         {{ if in .Params.topics $topic }}
-                        <a class="tertiary-nav-article" href="#post-{{ .File.UniqueID }}">{{ .Title }}</a>
+                        <a class="tertiary-nav-article" href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a>
                         {{ end }}
+                        {{ end }}
+                    </div>
+                    {{ end }}
+                    {{ if gt (len $unassignedPages) 0 }}
+                    <div class="tertiary-nav-group">
+                        <span class="tertiary-nav-topic">其他文章</span>
+                        {{ range $unassignedPages }}
+                        <a class="tertiary-nav-article" href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a>
                         {{ end }}
                     </div>
                     {{ end }}
                     {{ else }}
                     {{ range $pages }}
-                    <a class="tertiary-nav-article direct" href="#post-{{ .File.UniqueID }}">{{ .Title }}</a>
+                    <a class="tertiary-nav-article direct" href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a>
                     {{ else }}
                     <span class="tertiary-nav-empty">暂无文章</span>
                     {{ end }}
@@ -98,6 +112,26 @@
                                 <a class="read-more" href="{{ partial "internal-link.html" .RelPermalink }}">阅读全文</a>
                             </article>
                             {{ end }}
+                            {{ end }}
+                        </div>
+                    </section>
+                    {{ end }}
+                    {{ if gt (len $unassignedPages) 0 }}
+                    <section class="topic-section" id="topic-other">
+                        <h2 class="section-title">其他文章</h2>
+                        <div class="post-list">
+                            {{ range $unassignedPages }}
+                            <article class="post-item" id="post-{{ .File.UniqueID }}">
+                                <h2><a href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a></h2>
+                                <div class="meta">
+                                    <span class="date">{{ .Date.Format "2006-01-02" }}</span>
+                                    {{ range .Params.categories }}<span class="category">{{ . }}</span>{{ end }}
+                                    {{ range .Params.subcategories }}<span class="subcategory">{{ . }}</span>{{ end }}
+                                    {{ range .Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
+                                </div>
+                                <p>{{ .Summary }}</p>
+                                <a class="read-more" href="{{ partial "internal-link.html" .RelPermalink }}">阅读全文</a>
+                            </article>
                             {{ end }}
                         </div>
                     </section>

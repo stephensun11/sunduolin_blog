@@ -565,6 +565,12 @@ h3 {
   align-self: start;
 }
 
+.tertiary-nav {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
 .tertiary-nav,
 .article-toc-inner {
   padding: 20px;
@@ -938,6 +944,10 @@ h3 {
   .article-toc {
     position: static;
     max-height: none;
+  }
+
+  .tertiary-nav {
+    overflow: visible;
   }
 
   .article-toc nav {
