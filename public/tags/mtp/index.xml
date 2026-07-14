@@ -6,8 +6,15 @@
     <description>Recent content in MTP on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 10 Jul 2026 09:30:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/mtp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DeepSeek 全系模型详解：V1-V4 与 MLA、DSA</title>
+      <link>https://example.com/aitech/deepseek-model-evolution/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/deepseek-model-evolution/</guid>
+      <description>沿 DeepSeek V1、V2、V3、V3.2 到 V4 的主线，逐步推导 MLA、DeepSeekMoE、MTP、无辅助损失负载均衡、DSA、CSA/HCA、mHC 与 Muon，并厘清 R1 分支。</description>
+    </item>
     <item>
       <title>推测解码方法谱系：从 Medusa、EAGLE 到 DFlash 与 DSpark</title>
       <link>https://example.com/aitech/speculative-decoding-method-family/</link>

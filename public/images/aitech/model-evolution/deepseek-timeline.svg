@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" role="img" aria-labelledby="title desc">
+  <title id="title">DeepSeek 主线模型演进时间线</title>
+  <desc id="desc">从 DeepSeek LLM V1 到 DeepSeek V4，展示 MLA、DeepSeekMoE、MTP、DSA、CSA、HCA 与 mHC 等关键升级。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+    <style>
+      .title{font:700 32px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.sub{font:400 17px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#526174}.year{font:700 18px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#2563eb}.name{font:700 20px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.txt{font:400 15px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#415166}.tag{font:700 14px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#0f766e}.note{font:400 14px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#64748b}.card{fill:#fff;stroke:#cbd5e1;stroke-width:1.5}.node{fill:#fff;stroke:#2563eb;stroke-width:4}
+    </style>
+  </defs>
+  <rect width="1400" height="620" fill="#f7fafc"/>
+  <text class="title" x="64" y="58">DeepSeek：从高质量稠密模型到百万上下文稀疏系统</text>
+  <text class="sub" x="64" y="90">主线看架构，分支看能力：R1 是推理训练分支，不是 V4 的前置编号</text>
+  <line x1="92" y1="170" x2="1310" y2="170" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(45 0)">
+    <circle class="node" cx="55" cy="170" r="10"/>
+    <text class="year" x="18" y="142">2024.01</text>
+    <rect class="card" x="0" y="205" width="180" height="285" rx="6"/>
+    <text class="name" x="18" y="240">V1 / LLM</text>
+    <text class="tag" x="18" y="270">打牢稠密基线</text>
+    <text class="txt" x="18" y="302">7B / 67B</text>
+    <text class="txt" x="18" y="329">2T tokens</text>
+    <text class="txt" x="18" y="356">LLaMA 式骨干</text>
+    <text class="txt" x="18" y="383">67B 使用 GQA</text>
+    <text class="note" x="18" y="435">重点：数据、扩展律</text>
+    <text class="note" x="18" y="458">与中英双语能力</text>
+  </g>
+
+  <g transform="translate(240 0)">
+    <circle class="node" cx="55" cy="170" r="10"/>
+    <text class="year" x="18" y="142">2024.05</text>
+    <rect class="card" x="0" y="205" width="180" height="285" rx="6"/>
+    <text class="name" x="18" y="240">V2</text>
+    <text class="tag" x="18" y="270">效率架构成型</text>
+    <text class="txt" x="18" y="302">236B / 21B 激活</text>
+    <text class="txt" x="18" y="329">MLA 压缩 KV</text>
+    <text class="txt" x="18" y="356">DeepSeekMoE</text>
+    <text class="txt" x="18" y="383">128K 上下文</text>
+    <text class="note" x="18" y="435">训练与推理成本</text>
+    <text class="note" x="18" y="458">同时下降</text>
+  </g>
+
+  <g transform="translate(435 0)">
+    <circle class="node" cx="55" cy="170" r="10"/>
+    <text class="year" x="18" y="142">2024.09</text>
+    <rect class="card" x="0" y="205" width="180" height="285" rx="6"/>
+    <text class="name" x="18" y="240">V2.5</text>
+    <text class="tag" x="18" y="270">能力统一</text>
+    <text class="txt" x="18" y="302">通用 + 代码</text>
+    <text class="txt" x="18" y="329">对齐能力增强</text>
+    <text class="txt" x="18" y="356">接口模型合流</text>
+    <text class="note" x="18" y="435">主要是数据与</text>
+    <text class="note" x="18" y="458">后训练升级</text>
+  </g>
+
+  <g transform="translate(630 0)">
+    <circle class="node" cx="55" cy="170" r="10"/>
+    <text class="year" x="10" y="142">2024.12</text>
+    <rect class="card" x="0" y="205" width="180" height="285" rx="6"/>
+    <text class="name" x="18" y="240">V3 + R1</text>
+    <text class="tag" x="18" y="270">规模与推理</text>
+    <text class="txt" x="18" y="302">671B / 37B 激活</text>
+    <text class="txt" x="18" y="329">无辅助损失均衡</text>
+    <text class="txt" x="18" y="356">MTP / FP8</text>
+    <text class="txt" x="18" y="383">R1：GRPO 推理</text>
+    <text class="note" x="18" y="435">R1 是并行的</text>
+    <text class="note" x="18" y="458">推理训练分支</text>
+  </g>
+
+  <g transform="translate(825 0)">
+    <circle class="node" cx="55" cy="170" r="10"/>
+    <text class="year" x="18" y="142">2025.08</text>
+    <rect class="card" x="0" y="205" width="180" height="285" rx="6"/>
+    <text class="name" x="18" y="240">V3.1</text>
+    <text class="tag" x="18" y="270">模式与智能体</text>
+    <text class="txt" x="18" y="302">思考 / 非思考</text>
+    <text class="txt" x="18" y="329">工具调用增强</text>
+    <text class="txt" x="18" y="356">840B 续训 tokens</text>
+    <text class="note" x="18" y="435">架构延续 V3</text>
+    <text class="note" x="18" y="458">重点在续训</text>
+  </g>
+
+  <g transform="translate(1020 0)">
+    <circle class="node" cx="55" cy="170" r="10"/>
+    <text class="year" x="18" y="142">2025.12</text>
+    <rect class="card" x="0" y="205" width="180" height="285" rx="6"/>
+    <text class="name" x="18" y="240">V3.2</text>
+    <text class="tag" x="18" y="270">DSA 稀疏注意力</text>
+    <text class="txt" x="18" y="302">轻量索引器</text>
+    <text class="txt" x="18" y="329">Top-k token 选择</text>
+    <text class="txt" x="18" y="356">主注意力 O(Lk)</text>
+    <text class="note" x="18" y="435">从“存得少”走向</text>
+    <text class="note" x="18" y="458">“只读重要位置”</text>
+  </g>
+
+  <g transform="translate(1215 0)">
+    <circle cx="55" cy="170" r="12" fill="#0f766e" stroke="#fff" stroke-width="4"/>
+    <text class="year" x="18" y="142" fill="#0f766e">2026.04</text>
+    <rect x="0" y="205" width="180" height="285" rx="6" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/>
+    <text class="name" x="18" y="240">V4 Preview</text>
+    <text class="tag" x="18" y="270">百万上下文</text>
+    <text class="txt" x="18" y="302">CSA + HCA</text>
+    <text class="txt" x="18" y="329">mHC 残差连接</text>
+    <text class="txt" x="18" y="356">Muon + FP4 QAT</text>
+    <text class="txt" x="18" y="383">Flash / Pro</text>
+    <text class="note" x="18" y="435">压缩、稀疏与局部</text>
+    <text class="note" x="18" y="458">注意力协同</text>
+  </g>
+
+  <rect x="64" y="530" width="1272" height="52" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text class="sub" x="86" y="562">主线规律：V1 做强基础能力 → V2 压缩 KV 与稀疏专家 → V3 扩规模并稳定训练 → V3.2/V4 攻克超长上下文计算</text>
+</svg>

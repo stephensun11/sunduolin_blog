@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gated DeltaNet on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/gated-deltanet/</link>
+    <description>Recent content in Gated DeltaNet on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 13 Jul 2026 10:10:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/gated-deltanet/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Qwen 全系模型详解：从 Qwen 1 到 3.6</title>
+      <link>https://example.com/aitech/qwen-model-evolution/</link>
+      <pubDate>Mon, 13 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/aitech/qwen-model-evolution/</guid>
+      <description>系统梳理 Qwen 1、1.5、2、2.5、3、3-Next、3.5 与 3.6，推导 GQA、DCA、QK-Norm、Gated Attention、Gated DeltaNet、高稀疏 MoE、MTP 和原生多模态。</description>
+    </item>
+  </channel>
+</rss>

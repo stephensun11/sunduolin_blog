@@ -6,8 +6,169 @@
     <description>Recent content in Tags on Duolin Sun&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 13 Jul 2026 09:20:00 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 10:20:00 +0800</lastBuildDate>
     <atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GQA</title>
+      <link>https://example.com/tags/gqa/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/gqa/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>iRoPE</title>
+      <link>https://example.com/tags/irope/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/irope/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Knowledge Distillation</title>
+      <link>https://example.com/tags/knowledge-distillation/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/knowledge-distillation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Llama</title>
+      <link>https://example.com/tags/llama/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/llama/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MoE</title>
+      <link>https://example.com/tags/moe/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/moe/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Multimodal</title>
+      <link>https://example.com/tags/multimodal/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/multimodal/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>RLHF</title>
+      <link>https://example.com/tags/rlhf/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/rlhf/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>RoPE</title>
+      <link>https://example.com/tags/rope/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/tags/rope/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DCA</title>
+      <link>https://example.com/tags/dca/</link>
+      <pubDate>Mon, 13 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/dca/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Gated Attention</title>
+      <link>https://example.com/tags/gated-attention/</link>
+      <pubDate>Mon, 13 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/gated-attention/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Gated DeltaNet</title>
+      <link>https://example.com/tags/gated-deltanet/</link>
+      <pubDate>Mon, 13 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/gated-deltanet/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>QK-Norm</title>
+      <link>https://example.com/tags/qk-norm/</link>
+      <pubDate>Mon, 13 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/qk-norm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Qwen</title>
+      <link>https://example.com/tags/qwen/</link>
+      <pubDate>Mon, 13 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/qwen/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>YaRN</title>
+      <link>https://example.com/tags/yarn/</link>
+      <pubDate>Mon, 13 Jul 2026 10:10:00 +0800</pubDate>
+      <guid>https://example.com/tags/yarn/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CSA</title>
+      <link>https://example.com/tags/csa/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/csa/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DeepSeek</title>
+      <link>https://example.com/tags/deepseek/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/deepseek/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DSA</title>
+      <link>https://example.com/tags/dsa/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/dsa/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>HCA</title>
+      <link>https://example.com/tags/hca/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/hca/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>mHC</title>
+      <link>https://example.com/tags/mhc/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/mhc/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MLA</title>
+      <link>https://example.com/tags/mla/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/mla/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MTP</title>
+      <link>https://example.com/tags/mtp/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/mtp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Muon</title>
+      <link>https://example.com/tags/muon/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/muon/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>R1</title>
+      <link>https://example.com/tags/r1/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/tags/r1/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Expert Parallelism</title>
       <link>https://example.com/tags/expert-parallelism/</link>
@@ -27,13 +188,6 @@
       <link>https://example.com/tags/mixtral/</link>
       <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
       <guid>https://example.com/tags/mixtral/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>MoE</title>
-      <link>https://example.com/tags/moe/</link>
-      <pubDate>Mon, 13 Jul 2026 09:20:00 +0800</pubDate>
-      <guid>https://example.com/tags/moe/</guid>
       <description></description>
     </item>
     <item>
@@ -247,13 +401,6 @@
       <description></description>
     </item>
     <item>
-      <title>RLHF</title>
-      <link>https://example.com/tags/rlhf/</link>
-      <pubDate>Sun, 12 Jul 2026 09:40:00 +0800</pubDate>
-      <guid>https://example.com/tags/rlhf/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>SFT</title>
       <link>https://example.com/tags/sft/</link>
       <pubDate>Sun, 12 Jul 2026 09:40:00 +0800</pubDate>
@@ -454,13 +601,6 @@
       <link>https://example.com/tags/medusa/</link>
       <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
       <guid>https://example.com/tags/medusa/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>MTP</title>
-      <link>https://example.com/tags/mtp/</link>
-      <pubDate>Fri, 10 Jul 2026 09:30:00 +0800</pubDate>
-      <guid>https://example.com/tags/mtp/</guid>
       <description></description>
     </item>
     <item>
@@ -1017,13 +1157,6 @@
       <description></description>
     </item>
     <item>
-      <title>GQA</title>
-      <link>https://example.com/tags/gqa/</link>
-      <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
-      <guid>https://example.com/tags/gqa/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>MHA</title>
       <link>https://example.com/tags/mha/</link>
       <pubDate>Thu, 09 Jul 2026 10:00:00 +0800</pubDate>
@@ -1224,13 +1357,6 @@
       <link>https://example.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/</link>
       <pubDate>Mon, 06 Jul 2026 22:20:00 +0800</pubDate>
       <guid>https://example.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>RoPE</title>
-      <link>https://example.com/tags/rope/</link>
-      <pubDate>Mon, 06 Jul 2026 22:15:00 +0800</pubDate>
-      <guid>https://example.com/tags/rope/</guid>
       <description></description>
     </item>
     <item>

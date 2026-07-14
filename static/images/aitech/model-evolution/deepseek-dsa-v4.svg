@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 920" role="img" aria-labelledby="title desc">
+  <title id="title">DeepSeek 从 DSA 到 V4 混合注意力</title>
+  <desc id="desc">展示稠密注意力、DeepSeek Sparse Attention，以及 V4 的 CSA、HCA 与滑动窗口组合。</desc>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#64748b"/></marker>
+    <style>
+      .title{font:700 32px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.sub{font:400 17px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#526174}.h{font:700 22px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.label{font:700 16px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.txt{font:400 15px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#415166}.small{font:400 13px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#64748b}.formula{font:500 16px Consolas,'Microsoft YaHei',monospace;fill:#1e3a5f}.card{fill:#fff;stroke:#cbd5e1;stroke-width:1.5}.blue{fill:#eff6ff;stroke:#2563eb;stroke-width:1.8}.green{fill:#ecfdf5;stroke:#0f766e;stroke-width:1.8}.amber{fill:#fffbeb;stroke:#b45309;stroke-width:1.8}.pink{fill:#fff1f2;stroke:#be123c;stroke-width:1.8}.line{fill:none;stroke:#64748b;stroke-width:2;marker-end:url(#arr)}
+    </style>
+  </defs>
+  <rect width="1400" height="920" fill="#f7fafc"/>
+  <text class="title" x="62" y="58">从 DSA 到 V4：长上下文不再让每个 Query 读取全部历史</text>
+  <text class="sub" x="62" y="90">MLA 解决“每个位置存多少”，DSA/CSA/HCA 继续解决“每次计算读多少”</text>
+
+  <rect class="card" x="58" y="135" width="390" height="630" rx="6"/>
+  <text class="h" x="84" y="175">1. 稠密注意力</text>
+  <text class="txt" x="84" y="205">每个 Query 与全部 L 个历史位置打分</text>
+  <g transform="translate(105 250)">
+    <rect width="270" height="270" fill="#fff" stroke="#94a3b8"/>
+    <path d="M0 0H270M0 45H270M0 90H270M0 135H270M0 180H270M0 225H270M0 270H270M0 0V270M45 0V270M90 0V270M135 0V270M180 0V270M225 0V270M270 0V270" stroke="#cbd5e1"/>
+    <path d="M0 0L270 270L0 270Z" fill="#dbeafe" opacity="0.9"/>
+  </g>
+  <text class="label" x="240" y="555" text-anchor="middle">因果注意力矩阵</text>
+  <text class="formula" x="240" y="590" text-anchor="middle">计算量 O(L²)</text>
+  <text class="txt" x="84" y="630">优点：信息路径直接、实现成熟</text>
+  <text class="txt" x="84" y="658">问题：L 到百万级后成本难以承受</text>
+  <rect class="amber" x="84" y="688" width="338" height="52" rx="6"/>
+  <text class="small" x="253" y="720" text-anchor="middle">即使 KV 已被 MLA 压缩，打分仍可能是 L²</text>
+
+  <rect class="card" x="505" y="135" width="390" height="630" rx="6"/>
+  <text class="h" x="531" y="175">2. V3.2：DSA</text>
+  <text class="txt" x="531" y="205">廉价索引器先找候选，主注意力只读 Top-k</text>
+  <rect class="blue" x="555" y="245" width="290" height="68" rx="6"/>
+  <text class="label" x="700" y="273" text-anchor="middle">Lightning Indexer</text>
+  <text class="formula" x="700" y="297" text-anchor="middle">Iₜ,ₛ = Σ wⱼ ReLU(qⱼᵀkₛ)</text>
+  <path class="line" d="M700 313V354"/>
+  <rect class="amber" x="590" y="354" width="220" height="64" rx="6"/>
+  <text class="label" x="700" y="382" text-anchor="middle">Top-k 位置选择</text>
+  <text class="txt" x="700" y="405" text-anchor="middle">V3.2：k = 2048</text>
+  <path class="line" d="M700 418V460"/>
+  <rect class="green" x="555" y="460" width="290" height="76" rx="6"/>
+  <text class="label" x="700" y="490" text-anchor="middle">MLA 主注意力</text>
+  <text class="txt" x="700" y="516" text-anchor="middle">只对选中的 latent KV 精算</text>
+  <text class="formula" x="700" y="580" text-anchor="middle">主干：O(Lk)，k ≪ L</text>
+  <text class="txt" x="531" y="620">两阶段训练：</text>
+  <text class="txt" x="550" y="649">① 用稠密注意力分布监督索引器</text>
+  <text class="txt" x="550" y="678">② 切换稀疏路径，继续预训练</text>
+  <rect class="pink" x="531" y="700" width="338" height="40" rx="6"/>
+  <text class="small" x="700" y="725" text-anchor="middle">索引器自身仍扫全序列，但维度小、可用 FP8</text>
+
+  <rect x="952" y="135" width="390" height="630" rx="6" fill="#fff" stroke="#0f766e" stroke-width="2"/>
+  <text class="h" x="978" y="175">3. V4：三条记忆路径</text>
+  <text class="txt" x="978" y="205">用不同压缩率覆盖局部、精确检索与全局脉络</text>
+
+  <rect class="blue" x="990" y="245" width="314" height="100" rx="6"/>
+  <text class="label" x="1147" y="274" text-anchor="middle">Local Sliding Window</text>
+  <text class="txt" x="1147" y="302" text-anchor="middle">保留附近原始 KV</text>
+  <text class="small" x="1147" y="326" text-anchor="middle">负责词法、局部依赖、最近上下文</text>
+
+  <rect class="green" x="990" y="370" width="314" height="118" rx="6"/>
+  <text class="label" x="1147" y="400" text-anchor="middle">CSA：Compressed Sparse Attention</text>
+  <text class="txt" x="1147" y="428" text-anchor="middle">每 m 个 KV 压成一个块</text>
+  <text class="txt" x="1147" y="453" text-anchor="middle">再由 DSA 选择 Top-k 压缩块</text>
+  <text class="small" x="1147" y="477" text-anchor="middle">中等压缩率，保留可检索细节</text>
+
+  <rect class="amber" x="990" y="513" width="314" height="118" rx="6"/>
+  <text class="label" x="1147" y="543" text-anchor="middle">HCA：Highly Compressed Attention</text>
+  <text class="txt" x="1147" y="571" text-anchor="middle">m′ ≫ m，极强压缩</text>
+  <text class="txt" x="1147" y="596" text-anchor="middle">对少量摘要记忆保持稠密注意力</text>
+  <text class="small" x="1147" y="620" text-anchor="middle">负责稳定的全局信息通道</text>
+
+  <path class="line" d="M1147 345V365"/>
+  <path class="line" d="M1147 488V508"/>
+  <text class="formula" x="1147" y="686" text-anchor="middle">局部 + 稀疏检索 + 全局摘要</text>
+  <text class="txt" x="978" y="720">目标：把上下文扩到 1M，同时压低</text>
+  <text class="txt" x="978" y="744">单 token FLOPs 与 KV Cache。</text>
+
+  <rect x="58" y="805" width="1284" height="70" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text class="label" x="82" y="836">一句话记忆</text>
+  <text class="txt" x="190" y="836">MLA 压缩“存储表示”，DSA 稀疏“读取位置”，V4 再用不同压缩尺度组织长期记忆；三者解决的是同一条长上下文链路上的不同瓶颈。</text>
+</svg>

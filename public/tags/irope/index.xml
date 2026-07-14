@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iRoPE on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/irope/</link>
+    <description>Recent content in iRoPE on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 13 Jul 2026 10:20:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/irope/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Llama 全系模型详解：从 LLaMA 1 到 Llama 4</title>
+      <link>https://example.com/aitech/llama-model-evolution/</link>
+      <pubDate>Mon, 13 Jul 2026 10:20:00 +0800</pubDate>
+      <guid>https://example.com/aitech/llama-model-evolution/</guid>
+      <description>详细梳理 LLaMA 1、Llama 2、3、3.1、3.2、3.3 与 4，解释 RMSNorm、SwiGLU、RoPE、GQA、RLHF、剪枝蒸馏、视觉 Cross-Attention、MoE、Early Fusion、iRoPE 与 MetaP。</description>
+    </item>
+  </channel>
+</rss>

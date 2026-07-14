@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Llama 1 到 Llama 3.3 的架构演进</title>
+  <desc id="desc">展示 Llama 稠密解码器骨干的稳定组成，以及 MHA 到 GQA、词表和上下文长度的代际变化。</desc>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#64748b"/></marker>
+    <style>
+      .title{font:700 32px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.sub{font:400 17px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#526174}.h{font:700 22px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.label{font:700 16px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.txt{font:400 15px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#415166}.small{font:400 13px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#64748b}.formula{font:500 16px Consolas,'Microsoft YaHei',monospace;fill:#1e3a5f}.card{fill:#fff;stroke:#cbd5e1;stroke-width:1.5}.blue{fill:#eff6ff;stroke:#2563eb;stroke-width:1.8}.green{fill:#ecfdf5;stroke:#0f766e;stroke-width:1.8}.amber{fill:#fffbeb;stroke:#b45309;stroke-width:1.8}.line{fill:none;stroke:#64748b;stroke-width:2;marker-end:url(#arr)}
+    </style>
+  </defs>
+  <rect width="1400" height="900" fill="#f7fafc"/>
+  <text class="title" x="62" y="58">为什么 Llama 1、2、3 看起来很像，能力却能跨代增长？</text>
+  <text class="sub" x="62" y="90">骨干只做少量、可验证的改动；数据量、tokenizer、上下文训练和对齐配方承担了更多升级</text>
+
+  <rect class="card" x="58" y="135" width="410" height="690" rx="6"/>
+  <text class="h" x="84" y="178">稳定不变的 Decoder Block</text>
+  <rect class="blue" x="128" y="220" width="270" height="58" rx="6"/>
+  <text class="label" x="263" y="255" text-anchor="middle">输入隐藏状态 xₗ</text>
+  <path class="line" d="M263 278V318"/>
+  <rect class="green" x="128" y="318" width="270" height="58" rx="6"/>
+  <text class="label" x="263" y="353" text-anchor="middle">RMSNorm</text>
+  <path class="line" d="M263 376V416"/>
+  <rect class="blue" x="128" y="416" width="270" height="74" rx="6"/>
+  <text class="label" x="263" y="447" text-anchor="middle">Causal Self-Attention</text>
+  <text class="small" x="263" y="474" text-anchor="middle">Q/K 使用 RoPE</text>
+  <path class="line" d="M263 490V530"/>
+  <rect class="amber" x="128" y="530" width="270" height="58" rx="6"/>
+  <text class="label" x="263" y="565" text-anchor="middle">Residual Add</text>
+  <path class="line" d="M263 588V628"/>
+  <rect class="green" x="128" y="628" width="270" height="58" rx="6"/>
+  <text class="label" x="263" y="663" text-anchor="middle">RMSNorm</text>
+  <path class="line" d="M263 686V726"/>
+  <rect class="blue" x="128" y="726" width="270" height="58" rx="6"/>
+  <text class="label" x="263" y="761" text-anchor="middle">SwiGLU FFN + Residual</text>
+  <text class="small" x="84" y="806">Pre-Norm、无 bias 的线性层设计总体延续。</text>
+
+  <rect class="card" x="505" y="135" width="837" height="690" rx="6"/>
+  <text class="h" x="531" y="178">真正变化的四条轴</text>
+
+  <text class="label" x="531" y="232">1. 注意力：MHA → 局部 GQA → 全系 GQA</text>
+  <rect class="blue" x="531" y="258" width="220" height="92" rx="6"/>
+  <text class="label" x="641" y="288" text-anchor="middle">LLaMA 1</text><text class="txt" x="641" y="316" text-anchor="middle">所有尺寸 MHA</text><text class="small" x="641" y="338" text-anchor="middle">每组 Q 有独立 K/V</text>
+  <path class="line" d="M751 304H800"/>
+  <rect class="amber" x="800" y="258" width="220" height="92" rx="6"/>
+  <text class="label" x="910" y="288" text-anchor="middle">Llama 2</text><text class="txt" x="910" y="316" text-anchor="middle">70B 使用 GQA</text><text class="small" x="910" y="338" text-anchor="middle">服务大模型更省 KV</text>
+  <path class="line" d="M1020 304H1069"/>
+  <rect class="green" x="1069" y="258" width="220" height="92" rx="6"/>
+  <text class="label" x="1179" y="288" text-anchor="middle">Llama 3+</text><text class="txt" x="1179" y="316" text-anchor="middle">所有尺寸 GQA</text><text class="small" x="1179" y="338" text-anchor="middle">统一推理扩展性</text>
+
+  <text class="label" x="531" y="407">2. Tokenizer：32K SentencePiece → 128K tiktoken BPE</text>
+  <rect class="blue" x="531" y="431" width="758" height="62" rx="6"/>
+  <text class="txt" x="910" y="457" text-anchor="middle">更大的词表改善多语言与代码切分，一个词平均需要更少 token</text>
+  <text class="small" x="910" y="481" text-anchor="middle">同样的上下文窗口能装下更多有效文本，也降低训练与推理步数</text>
+
+  <text class="label" x="531" y="548">3. 上下文：2K → 4K → 8K → 128K</text>
+  <line x1="560" y1="604" x2="1260" y2="604" stroke="#94a3b8" stroke-width="4" marker-end="url(#arr)"/>
+  <circle cx="600" cy="604" r="10" fill="#2563eb"/><text class="txt" x="600" y="637" text-anchor="middle">L1 2K</text>
+  <circle cx="790" cy="604" r="10" fill="#2563eb"/><text class="txt" x="790" y="637" text-anchor="middle">L2 4K</text>
+  <circle cx="980" cy="604" r="10" fill="#2563eb"/><text class="txt" x="980" y="637" text-anchor="middle">L3 8K</text>
+  <circle cx="1210" cy="604" r="12" fill="#0f766e"/><text class="txt" x="1210" y="637" text-anchor="middle">L3.1+ 128K</text>
+
+  <text class="label" x="531" y="694">4. 训练目标：Base 预测下一个 token → 可用的对话与工具模型</text>
+  <rect class="amber" x="531" y="720" width="758" height="76" rx="6"/>
+  <text class="txt" x="910" y="748" text-anchor="middle">Llama 2 引入系统化 SFT / RLHF；Llama 3 系列扩大合成数据、拒绝采样、DPO 与工具数据</text>
+  <text class="small" x="910" y="777" text-anchor="middle">模型“更会用”并不一定意味着 Transformer block 发生了变化</text>
+
+  <text class="small" x="62" y="866">阅读版本时，先问：骨干是否改变？若没有，再追踪 tokenizer、训练 token、上下文续训、后训练与部署格式。</text>
+</svg>

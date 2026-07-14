@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 650" role="img" aria-labelledby="title desc">
+  <title id="title">Llama 系列模型演进时间线</title>
+  <desc id="desc">从 LLaMA 1 到 Llama 4，展示长训练、GQA、128K tokenizer、长上下文、小模型剪枝蒸馏、视觉适配与原生多模态 MoE。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#64748b"/></marker>
+    <style>
+      .title{font:700 32px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.sub{font:400 17px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#526174}.date{font:700 17px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#2563eb}.name{font:700 20px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.tag{font:700 14px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#0f766e}.txt{font:400 14px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#415166}.note{font:400 13px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#64748b}.card{fill:#fff;stroke:#cbd5e1;stroke-width:1.5}.node{fill:#fff;stroke:#2563eb;stroke-width:4}
+    </style>
+  </defs>
+  <rect width="1480" height="650" fill="#f7fafc"/>
+  <text class="title" x="62" y="58">Llama：从经典稠密 Decoder 到原生多模态 MoE</text>
+  <text class="sub" x="62" y="90">前三代刻意保持骨干简洁，把收益押在数据、规模与后训练；第四代才进行架构级跃迁</text>
+  <line x1="88" y1="168" x2="1404" y2="168" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(30)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="33" y="140">2023.02</text>
+    <rect class="card" x="0" y="203" width="188" height="300" rx="6"/>
+    <text class="name" x="18" y="238">LLaMA 1</text><text class="tag" x="18" y="268">训练范式</text>
+    <text class="txt" x="18" y="300">7B - 65B Dense</text><text class="txt" x="18" y="326">MHA / 2K</text>
+    <text class="txt" x="18" y="352">RMSNorm + SwiGLU</text><text class="txt" x="18" y="378">RoPE / 32K 词表</text>
+    <text class="note" x="18" y="435">小模型用更多 token</text><text class="note" x="18" y="458">也能达到高性价比</text>
+  </g>
+  <g transform="translate(230)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="33" y="140">2023.07</text>
+    <rect class="card" x="0" y="203" width="188" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Llama 2</text><text class="tag" x="18" y="268">对话与开放</text>
+    <text class="txt" x="18" y="300">7B / 13B / 70B</text><text class="txt" x="18" y="326">2T tokens / 4K</text>
+    <text class="txt" x="18" y="352">70B 使用 GQA</text><text class="txt" x="18" y="378">SFT + RLHF</text>
+    <text class="note" x="18" y="435">Chat、安全奖励模型</text><text class="note" x="18" y="458">与 Ghost Attention</text>
+  </g>
+  <g transform="translate(430)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="33" y="140">2024.04</text>
+    <rect class="card" x="0" y="203" width="188" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Llama 3</text><text class="tag" x="18" y="268">数据与词表</text>
+    <text class="txt" x="18" y="300">8B / 70B Dense</text><text class="txt" x="18" y="326">15T+ tokens</text>
+    <text class="txt" x="18" y="352">128K tokenizer</text><text class="txt" x="18" y="378">全系 GQA / 8K</text>
+    <text class="note" x="18" y="435">骨干保守，数据工程</text><text class="note" x="18" y="458">和后训练大幅升级</text>
+  </g>
+  <g transform="translate(630)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="33" y="140">2024.07</text>
+    <rect class="card" x="0" y="203" width="188" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Llama 3.1</text><text class="tag" x="18" y="268">规模与长上下文</text>
+    <text class="txt" x="18" y="300">新增 Dense 405B</text><text class="txt" x="18" y="326">8B / 70B 同步升级</text>
+    <text class="txt" x="18" y="352">128K / 8 种语言</text><text class="txt" x="18" y="378">工具调用</text>
+    <text class="note" x="18" y="435">大模型作教师，</text><text class="note" x="18" y="458">合成数据与蒸馏</text>
+  </g>
+  <g transform="translate(830)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="33" y="140">2024.09</text>
+    <rect class="card" x="0" y="203" width="188" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Llama 3.2</text><text class="tag" x="18" y="268">边缘端与视觉</text>
+    <text class="txt" x="18" y="300">文本：1B / 3B</text><text class="txt" x="18" y="326">视觉：11B / 90B</text>
+    <text class="txt" x="18" y="352">剪枝 + 知识蒸馏</text><text class="txt" x="18" y="378">视觉 Cross-Attn</text>
+    <text class="note" x="18" y="435">不是统一尺寸升级，</text><text class="note" x="18" y="458">而是场景扩展</text>
+  </g>
+  <g transform="translate(1030)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="33" y="140">2024.12</text>
+    <rect class="card" x="0" y="203" width="188" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Llama 3.3</text><text class="tag" x="18" y="268">70B 实用化</text>
+    <text class="txt" x="18" y="300">70B Instruct</text><text class="txt" x="18" y="326">128K / GQA</text>
+    <text class="txt" x="18" y="352">15T+ tokens</text><text class="txt" x="18" y="378">多语言 / 工具调用</text>
+    <text class="note" x="18" y="435">主要是数据与</text><text class="note" x="18" y="458">后训练优化</text>
+  </g>
+  <g transform="translate(1230)">
+    <circle cx="70" cy="168" r="12" fill="#0f766e" stroke="#fff" stroke-width="4"/><text class="date" x="33" y="140" fill="#0f766e">2025.04</text>
+    <rect x="0" y="203" width="218" height="300" rx="6" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/>
+    <text class="name" x="18" y="238">Llama 4</text><text class="tag" x="18" y="268">架构跃迁</text>
+    <text class="txt" x="18" y="300">Scout / Maverick MoE</text><text class="txt" x="18" y="326">17B 激活 / 16 或 128 专家</text>
+    <text class="txt" x="18" y="352">Early Fusion 多模态</text><text class="txt" x="18" y="378">iRoPE / 10M 上下文</text>
+    <text class="note" x="18" y="435">Behemoth 教师：</text><text class="note" x="18" y="458">近 2T / 288B 激活</text>
+  </g>
+
+  <rect x="62" y="542" width="1356" height="66" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text class="sub" x="86" y="582">最重要的阅读线索：LLaMA 1-3.3 的核心骨干高度连续，收益主要来自数据和后训练；Llama 4 才同时切换到 MoE、Early Fusion 与 iRoPE。</text>
+</svg>

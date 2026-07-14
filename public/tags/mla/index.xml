@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MLA on Duolin Sun&#39; Blog</title>
+    <link>https://example.com/tags/mla/</link>
+    <description>Recent content in MLA on Duolin Sun&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 13 Jul 2026 10:00:00 +0800</lastBuildDate>
+    <atom:link href="https://example.com/tags/mla/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DeepSeek 全系模型详解：V1-V4 与 MLA、DSA</title>
+      <link>https://example.com/aitech/deepseek-model-evolution/</link>
+      <pubDate>Mon, 13 Jul 2026 10:00:00 +0800</pubDate>
+      <guid>https://example.com/aitech/deepseek-model-evolution/</guid>
+      <description>沿 DeepSeek V1、V2、V3、V3.2 到 V4 的主线，逐步推导 MLA、DeepSeekMoE、MTP、无辅助损失负载均衡、DSA、CSA/HCA、mHC 与 Muon，并厘清 R1 分支。</description>
+    </item>
+  </channel>
+</rss>

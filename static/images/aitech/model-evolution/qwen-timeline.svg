@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 650" role="img" aria-labelledby="title desc">
+  <title id="title">Qwen 系列模型演进时间线</title>
+  <desc id="desc">从 Qwen 1 到 Qwen 3.6，展示 GQA、长上下文、思考模式、Gated Attention、Gated DeltaNet、稀疏 MoE 与原生多模态等升级。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#64748b"/></marker>
+    <style>
+      .title{font:700 32px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.sub{font:400 17px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#526174}.date{font:700 17px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#2563eb}.name{font:700 20px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#172033}.tag{font:700 14px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#0f766e}.txt{font:400 14px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#415166}.note{font:400 13px 'Segoe UI','Microsoft YaHei',sans-serif;fill:#64748b}.card{fill:#fff;stroke:#cbd5e1;stroke-width:1.5}.node{fill:#fff;stroke:#2563eb;stroke-width:4}
+    </style>
+  </defs>
+  <rect width="1600" height="650" fill="#f7fafc"/>
+  <text class="title" x="62" y="58">Qwen：从统一语言骨干到混合注意力、多模态与智能体</text>
+  <text class="sub" x="62" y="90">同一个版本号可能同时包含 Dense、MoE、Coder、Math、VL、Thinking 等分支，先辨骨干，再辨后训练目标</text>
+  <line x1="82" y1="168" x2="1525" y2="168" stroke="#94a3b8" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(28)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="32" y="140">2023.08</text>
+    <rect class="card" x="0" y="203" width="184" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Qwen 1</text><text class="tag" x="18" y="268">双语基座</text>
+    <text class="txt" x="18" y="300">1.8B - 72B Dense</text><text class="txt" x="18" y="326">MHA / 152K 词表</text>
+    <text class="txt" x="18" y="352">RoPE + SwiGLU</text><text class="txt" x="18" y="378">SFT + PPO</text>
+    <text class="note" x="18" y="435">代码、数学、工具</text><text class="note" x="18" y="458">分支开始出现</text>
+  </g>
+  <g transform="translate(223)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="32" y="140">2024.02</text>
+    <rect class="card" x="0" y="203" width="184" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Qwen1.5</text><text class="tag" x="18" y="268">工程生态</text>
+    <text class="txt" x="18" y="300">0.5B - 110B</text><text class="txt" x="18" y="326">全尺寸 32K</text>
+    <text class="txt" x="18" y="352">32B/110B 用 GQA</text><text class="txt" x="18" y="378">首个公开 MoE</text>
+    <text class="note" x="18" y="435">原生 Transformers</text><text class="note" x="18" y="458">量化与部署更完善</text>
+  </g>
+  <g transform="translate(418)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="32" y="140">2024.06</text>
+    <rect class="card" x="0" y="203" width="184" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Qwen2</text><text class="tag" x="18" y="268">全系 GQA</text>
+    <text class="txt" x="18" y="300">Dense + 57B-A14B</text><text class="txt" x="18" y="326">DCA + YaRN</text>
+    <text class="txt" x="18" y="352">约 7T tokens</text><text class="txt" x="18" y="378">30 种语言</text>
+    <text class="note" x="18" y="435">长上下文与 MoE</text><text class="note" x="18" y="458">进入主线架构</text>
+  </g>
+  <g transform="translate(613)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="32" y="140">2024.09</text>
+    <rect class="card" x="0" y="203" width="184" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Qwen2.5</text><text class="tag" x="18" y="268">数据与能力</text>
+    <text class="txt" x="18" y="300">最多 18T tokens</text><text class="txt" x="18" y="326">128K / 29+ 语言</text>
+    <text class="txt" x="18" y="352">Coder / Math 强化</text><text class="txt" x="18" y="378">JSON 与指令跟随</text>
+    <text class="note" x="18" y="435">骨干变化小，</text><text class="note" x="18" y="458">训练配方变化大</text>
+  </g>
+  <g transform="translate(808)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="32" y="140">2025.04</text>
+    <rect class="card" x="0" y="203" width="184" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Qwen3</text><text class="tag" x="18" y="268">统一思考模式</text>
+    <text class="txt" x="18" y="300">Dense + MoE</text><text class="txt" x="18" y="326">36T / 119 语言</text>
+    <text class="txt" x="18" y="352">QK-Norm / 无 QKV bias</text><text class="txt" x="18" y="378">Think / No-think</text>
+    <text class="note" x="18" y="435">注意：这里仍是</text><text class="note" x="18" y="458">标准 GQA</text>
+  </g>
+  <g transform="translate(1003)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="32" y="140">2025.09</text>
+    <rect class="card" x="0" y="203" width="184" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Qwen3-Next</text><text class="tag" x="18" y="268">混合注意力</text>
+    <text class="txt" x="18" y="300">80B / 3B 激活</text><text class="txt" x="18" y="326">Gated DeltaNet</text>
+    <text class="txt" x="18" y="352">Gated Attention</text><text class="txt" x="18" y="378">512 专家 / MTP</text>
+    <text class="note" x="18" y="435">3 线性层 + 1</text><text class="note" x="18" y="458">全注意力层循环</text>
+  </g>
+  <g transform="translate(1198)">
+    <circle class="node" cx="70" cy="168" r="10"/><text class="date" x="32" y="140">2026.02</text>
+    <rect class="card" x="0" y="203" width="184" height="300" rx="6"/>
+    <text class="name" x="18" y="238">Qwen3.5</text><text class="tag" x="18" y="268">原生多模态</text>
+    <text class="txt" x="18" y="300">Early Fusion</text><text class="txt" x="18" y="326">混合骨干延续</text>
+    <text class="txt" x="18" y="352">201 种语言</text><text class="txt" x="18" y="378">百万级扩展上下文</text>
+    <text class="note" x="18" y="435">文本、图像、视频</text><text class="note" x="18" y="458">进入同一主干</text>
+  </g>
+  <g transform="translate(1393)">
+    <circle cx="70" cy="168" r="12" fill="#0f766e" stroke="#fff" stroke-width="4"/><text class="date" x="32" y="140" fill="#0f766e">2026.04</text>
+    <rect x="0" y="203" width="184" height="300" rx="6" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/>
+    <text class="name" x="18" y="238">Qwen3.6</text><text class="tag" x="18" y="268">智能体与代码</text>
+    <text class="txt" x="18" y="300">35B-A3B / 27B</text><text class="txt" x="18" y="326">同代混合架构</text>
+    <text class="txt" x="18" y="352">仓库级编码增强</text><text class="txt" x="18" y="378">保留历史思考状态</text>
+    <text class="note" x="18" y="435">主要升级训练与</text><text class="note" x="18" y="458">Agent 实用性</text>
+  </g>
+
+  <rect x="62" y="542" width="1476" height="66" rx="6" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text class="sub" x="86" y="582">架构分水岭：Qwen2 把 GQA 普及到全系；Qwen3 统一推理模式；Qwen3-Next 才切入 Gated DeltaNet + Gated Attention；Qwen3.5 再原生融合视觉。</text>
+</svg>
