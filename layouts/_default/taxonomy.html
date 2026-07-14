@@ -63,33 +63,23 @@
 
             {{ if eq .Data.Singular "subcategory" }}
             <div class="taxonomy-layout">
-                <aside class="tertiary-nav">
-                    <h2>三级目录</h2>
-                    {{ if gt (len $topics) 0 }}
-                    {{ range $topic := $topics }}
-                    <div class="tertiary-nav-group">
-                        <a class="tertiary-nav-topic" href="{{ printf "#topic-%s" (urlize $topic) | safeURL }}">{{ $topic }}</a>
-                        {{ range $pages }}
-                        {{ if in .Params.topics $topic }}
-                        <a class="tertiary-nav-article" href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a>
-                        {{ end }}
-                        {{ end }}
-                    </div>
-                    {{ end }}
-                    {{ if gt (len $unassignedPages) 0 }}
-                    <div class="tertiary-nav-group">
-                        <span class="tertiary-nav-topic">其他文章</span>
-                        {{ range $unassignedPages }}
-                        <a class="tertiary-nav-article" href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a>
-                        {{ end }}
-                    </div>
-                    {{ end }}
-                    {{ else }}
+                <aside class="tertiary-nav" data-nav-version="20260714b">
+                    <h2>文章导航（{{ len $pages }}）</h2>
                     {{ range $pages }}
                     <a class="tertiary-nav-article direct" href="{{ partial "internal-link.html" .RelPermalink }}">{{ .Title }}</a>
                     {{ else }}
                     <span class="tertiary-nav-empty">暂无文章</span>
                     {{ end }}
+                    {{ if gt (len $topics) 0 }}
+                    <div class="tertiary-nav-group">
+                        <span class="tertiary-nav-topic">主题分组</span>
+                        {{ range $topic := $topics }}
+                        <a class="tertiary-nav-article" href="{{ printf "#topic-%s" (urlize $topic) | safeURL }}">{{ $topic }}</a>
+                        {{ end }}
+                        {{ if gt (len $unassignedPages) 0 }}
+                        <a class="tertiary-nav-article" href="#topic-other">其他文章</a>
+                        {{ end }}
+                    </div>
                     {{ end }}
                 </aside>
                 <div class="topic-list">

@@ -23,7 +23,11 @@
                     {{- end -}}
                 {{- end -}}
                 {{- if $shouldRender }}
-                <a href="{{ partial "internal-link.html" $child.URL }}">{{ $child.Name }}</a>
+                {{- $childURL := partial "internal-link.html" $child.URL -}}
+                {{- if eq $child.Name "LLM 基础技术" -}}
+                    {{- $childURL = printf "%s?rev=20260714b" $childURL | safeURL -}}
+                {{- end }}
+                <a href="{{ $childURL }}">{{ $child.Name }}</a>
                 {{- end }}
                 {{- end }}
             </div>
